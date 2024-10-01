@@ -20,6 +20,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#register_modal">Register</button>
 					<input type="submit" name="submit" value="Login" class="btn btn-primary">
 				</div>
 			</form>
@@ -49,6 +50,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#login_modal">Back to Login</button>
 					<input type="submit" name="submit" value="Create Account" class="btn btn-primary">
 				</div>
 			</form>

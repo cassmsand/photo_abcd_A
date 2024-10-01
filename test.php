@@ -15,14 +15,14 @@ $CURRENT_PAGE = "Test";
 <?php include("includes/navigation.php");?>
 
 <div>
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#login">Login Test</button>
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#login_modal">Login Test</button>
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#register_modal">Register Test</button>
 </div>
 
-<div class="modal fade" id="login">
+<div class="modal fade" id="login_modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			
-			<form id="login-form" class="collapse.show multi-collapse">
+			<form id="login-form">
 				<div class="modal-header">
 					<h3>Login</h3>
 				</div>
@@ -37,12 +37,18 @@ $CURRENT_PAGE = "Test";
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-toggle="collapse" data-target=".multi-collapse">Register Test</button>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#register_modal">Register Test</button>
 					<input type="submit" name="submit" value="Login" class="btn btn-primary">
 				</div>
 			</form>
+		</div>
+	</div>
+</div>
 
-			<form id="register-form" class="collapse multi-collapse">
+<div class="modal fade" id="register_modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form id="register-form">
 				<div class="modal-header">
 					<h3>Register</h3>
 				</div>
@@ -61,10 +67,10 @@ $CURRENT_PAGE = "Test";
 					</div>
 				</div>
 				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#login-form">Back to Login</button>
 					<input type="submit" name="submit" value="Create Account" class="btn btn-primary">
 				</div>
 			</form>
-
 		</div>
 	</div>
 </div>
