@@ -1,6 +1,7 @@
 <?php include("includes/a_config.php");
 $conn = OpenCon();
-echo "Connected Successfully"
+echo "Connected Successfully";
+$CURRENT_PAGE = "Index";
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,12 +20,12 @@ echo "Connected Successfully"
     <h3> Users List:</h3>
     <?php
     if ($conn) {
-        $sql = "SELECT ID, fName, lName FROM User";
+        $sql = "SELECT user_id, email FROM users";
         $result = $conn->query($sql);
         if ($result) {
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    echo "ID: " . htmlspecialchars($row['ID']) . " - Name: " . htmlspecialchars($row['fName']) . " - Last Name: " . htmlspecialchars($row['lName']) . "<br>";
+                    echo "User ID: " . htmlspecialchars($row['user_id']) . " - Email: " . htmlspecialchars($row['email']) . "<br>";
                 }
             } else {
                 echo "No users found.";

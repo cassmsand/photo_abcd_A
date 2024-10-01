@@ -1,4 +1,6 @@
-<?php include("includes/a_config.php");?>
+<?php include("includes/a_config.php");
+$CURRENT_PAGE = "Blogs";
+?>
 <!DOCTYPE html>
 <html>
 <head>
