@@ -19,7 +19,7 @@
         $servername = "localhost";
         $username = "root";
         $password = "";
-        $dbname = "dummy_database";
+        $dbname = "photos_abcd";
 
         $conn = new mysqli($servername, $username, $password, $dbname) or die("Connection failed: %s\n". $conn -> error);
         return $conn;
