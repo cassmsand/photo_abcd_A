@@ -13,12 +13,7 @@
 
 <div class="container" id="main-content">
 	<h1>Blogs</h1>
-	<div class="blog-container" id="blog-content">
-		<?php 
-		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/apples.jpg';?> 
-		<?php $blankIcon = '../photo_abcd_A/images/blankicon.jpg';?>
-		
+
 		<!DOCTYPE html> 
 		<html lang="en"> 
 		<head> 
@@ -29,276 +24,91 @@
 
 		</head> 
 		<body> 
-		<div class="user-container" id="user-content">
-			<img src="<?php echo $blankIcon; ?>"
-				alt="user-photo" 
-				class="user">
-			<p class="user-text">INSERT USERNAME HERE</p>
-			<button class="user-button">⚪ ⚪ ⚪</button>
-		</div>	
-		<h2>A is for Apples</h2> 
-		<img src="<?php echo $imagePath; ?>"
-			width="750" 
-			height="auto"
-			alt="apples"
-			class="resizable-image">
+			<div id="postsContainer">
+			</div>
 		</body> 
-		<p style="text-align: center;">APPLES APPLES APPLES</p>
 		</html> 
-	</div>
-	<hr>
-	<div class="blog-container" id="blog-content">
-		<?php 
-		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/bananas.jpg'; // Update this path to your image 
-		?> 
-		
-		<!DOCTYPE html> 
-		<html lang="en"> 
-		<head> 
-			<meta charset="UTF-8"> 
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-			<title>Bananas</title> 
-			<link href="blogs.css" rel="stylesheet" type="text/css">
 
-		</head> 
-		<body> 
-		
-		<h2>B is for Bananas</h2> 
-		<img src="<?php echo $imagePath; ?>"
-			width="750" 
-			height="auto"
-			alt="bananas"
-			class="resizable-image">
-		</body> 
-		<p style="text-align: center;">BANANAS BANANAS BANANAS</p>
-		</html> 
-	</div>
-	<hr>
-	<div class="blog-container" id="blog-content">
-		<?php 
-		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/clementines.jpeg'; // Update this path to your image 
-		?> 
-		
-		<!DOCTYPE html> 
-		<html lang="en"> 
-		<head> 
-			<meta charset="UTF-8"> 
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-			<title>Clementines</title> 
-			<link href="blogs.css" rel="stylesheet" type="text/css">
+	<script>
+		const blogPosts = [
+        	{userName: 'INSERT USERNAME HERE', userIcon: '../photo_abcd_A/images/blankicon.jpg', image: '../photo_abcd_A/images/apples.jpg', title: 'A is for Apple', description: 'APPLE APPLE APPLE'},
+			{userName: 'INSERT USERNAME HERE', userIcon: '../photo_abcd_A/images/blankicon.jpg', image: '../photo_abcd_A/images/bananas.jpg', title: 'B is for Banana', description: 'BANANA BANANA BANANA'},
+			{userName: 'INSERT USERNAME HERE', userIcon: '../photo_abcd_A/images/blankicon.jpg', image: '../photo_abcd_A/images/clementines.jpeg', title: 'C is for Clementine', description: 'CLEMENTINE CLEMENTINE CLEMENTINE'},
+			{userName: 'INSERT USERNAME HERE', userIcon: '../photo_abcd_A/images/blankicon.jpg', image: '../photo_abcd_A/images/dragonfruit.jpg', title: 'D if for Dragonfruit', description: 'DRAGONFRUIT DRAGONFRUIT DRAGONFRUIT'},
+			{userName: 'INSERT USERNAME HERE', userIcon: '../photo_abcd_A/images/blankicon.jpg', image: '../photo_abcd_A/images/eggplant.jpg', title: 'E is for Eggplant', description: 'EGGPLANT EGGPLANT EGGPLANT'},
+			{userName: 'INSERT USERNAME HERE', userIcon: '../photo_abcd_A/images/blankicon.jpg', image: '../photo_abcd_A/images/fig.jpg', title: 'F is for Fig', description: 'FIG FIG FIG'},
+			{userName: 'INSERT USERNAME HERE', userIcon: '../photo_abcd_A/images/blankicon.jpg', image: '../photo_abcd_A/images/grapefruit.jpg', title: 'G is for Grapefruit', description: 'GRAPEFRUIT GRAPEFRUIT GRAPEFRUIT'},
+			{userName: 'INSERT USERNAME HERE', userIcon: '../photo_abcd_A/images/blankicon.jpg', image: '../photo_abcd_A/images/honeydew.jpg', title: 'H is for Honeydew', description: 'HONEYDEW HONEYDEW HONEYDEW'},
+			{userName: 'INSERT USERNAME HERE', userIcon: '../photo_abcd_A/images/blankicon.jpg', image: '../photo_abcd_A/images/icaco.jpg', title: 'I is for Icaco', description: 'ICACO ICACO ICACO'},
+			{userName: 'INSERT USERNAME HERE', userIcon: '../photo_abcd_A/images/blankicon.jpg', image: '../photo_abcd_A/images/jackfruit.jpg', title: 'J is for Jackfruit', description: 'JACKFRUIT JACKFRUIT JACKFRUIT'}
+    	];
 
-		</head> 
-		<body> 
-		
-		<h2>C is for Clementines</h2> 
-		<img src="<?php echo $imagePath; ?>"
-			width="750" 
-			height="auto"
-			alt="clementines"
-			class="resizable-image">
-		</body> 
-		<p style="text-align: center;">CLEMENTINES CLEMENTINES CLEMENTINES</p>
-		</html> 
-	</div>
-	<hr>
-	<div class="blog-container" id="blog-content">
-		<?php 
-		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/dragonfruit.jpg'; // Update this path to your image 
-		?> 
-		
-		<!DOCTYPE html> 
-		<html lang="en"> 
-		<head> 
-			<meta charset="UTF-8"> 
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-			<title>Dragonfruit</title> 
-			<link href="blogs.css" rel="stylesheet" type="text/css">
+		const postsContainer = document.getElementById('postsContainer');
+		const buttontext = '⚪ ⚪ ⚪';
 
-		</head> 
-		<body> 
-		
-		<h2>D is for Dragon Fruit</h2> 
-		<img src="<?php echo $imagePath; ?>"
-			width="750" 
-			height="auto"
-			alt="dragon fruit"
-			class="resizable-image">
-		</body> 
-		<p style="text-align: center;">DRAGON FRUIT DRAGON FRUIT DRAGON FRUIT</p>
-		</html> 
-	</div>
-	<hr>
-	<div class="blog-container" id="blog-content">
-		<?php 
-		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/eggplant.jpg'; // Update this path to your image 
-		?> 
-		
-		<!DOCTYPE html> 
-		<html lang="en"> 
-		<head> 
-			<meta charset="UTF-8"> 
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-			<title>Eggplant</title> 
-			<link href="blogs.css" rel="stylesheet" type="text/css">
+		blogPosts.forEach(post => {
+				// Create a new blog post container
+				const blogContainer = document.createElement('div');
+				blogContainer.className = 'blog-container'; // Add class for styling
 
-		</head> 
-		<body> 
-		
-		<h2>E is for Eggplant</h2> 
-		<img src="<?php echo $imagePath; ?>"
-			width="750" 
-			height="auto"
-			alt="eggplant"
-			class="resizable-image">
-		</body> 
-		<p style="text-align: center;">EGGPLANT EGGPLANT EGGPLANT </p>
-		</html> 
-	</div>
-	<hr>
-	<div class="blog-container" id="blog-content">
-		<?php 
-		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/fig.jpg'; // Update this path to your image 
-		?> 
-		
-		<!DOCTYPE html> 
-		<html lang="en"> 
-		<head> 
-			<meta charset="UTF-8"> 
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-			<title>Fig</title> 
-			<link href="blogs.css" rel="stylesheet" type="text/css">
+				// Create blog user container
+				const blogUserContainer = document.createElement('div');
+				blogUserContainer.className = 'blog-user-container';
+				
+				// Create the user image
+				const userImage = document.createElement('img');
+				userImage.src = post.userIcon;
+				userImage.alt = 'User Image';
+				userImage.className = 'blog-user-image';
 
-		</head> 
-		<body> 
-		
-		<h2>F is for Fig</h2> 
-		<img src="<?php echo $imagePath; ?>"
-			width="750" 
-			height="auto"
-			alt="fig"
-			class="resizable-image">
-		</body> 
-		<p style="text-align: center;">FIG FIG FIG</p>
-		</html> 
-	</div>
-	<hr>
-	<div class="blog-container" id="blog-content">
-		<?php 
-		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/grapefruit.jpg'; // Update this path to your image 
-		?> 
-		
-		<!DOCTYPE html> 
-		<html lang="en"> 
-		<head> 
-			<meta charset="UTF-8"> 
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-			<title>Fig</title> 
-			<link href="blogs.css" rel="stylesheet" type="text/css">
+				// Create the username
+				const username = document.createElement('p');
+				username.className = 'blog-username';
+				username.textContent = post.userName;
 
-		</head> 
-		<body> 
-		
-		<h2>G is for Grapefruit</h2> 
-		<img src="<?php echo $imagePath; ?>"
-			width="750" 
-			height="auto"
-			alt="grapefruit"
-			class="resizable-image">
-		</body> 
-		<p style="text-align: center;">GRAPEFRUIT GRAPEFRUIT GRAPEFRUIT</p>
-		</html> 
-	</div>
-	<hr>
-	<div class="blog-container" id="blog-content">
-		<?php 
-		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/honeydew.jpg'; // Update this path to your image 
-		?> 
-		
-		<!DOCTYPE html> 
-		<html lang="en"> 
-		<head> 
-			<meta charset="UTF-8"> 
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-			<title>Fig</title> 
-			<link href="blogs.css" rel="stylesheet" type="text/css">
+				// Create the user button
+				const userbutton = document.createElement('button');
+				userbutton.className = 'blog-userbutton';
+				userbutton.textContent = buttontext;
 
-		</head> 
-		<body> 
-		
-		<h2>H is for Honeydew</h2> 
-		<img src="<?php echo $imagePath; ?>"
-			width="750" 
-			height="auto"
-			alt="honeydew"
-			class="resizable-image">
-		</body> 
-		<p style="text-align: center;">HONEYDEW HONEYDEW HONEYDEW</p>
-		</html> 
-	</div>
-	<hr>
-	<div class="blog-container" id="blog-content">
-		<?php 
-		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/icaco.jpg'; // Update this path to your image 
-		?> 
-		
-		<!DOCTYPE html> 
-		<html lang="en"> 
-		<head> 
-			<meta charset="UTF-8"> 
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-			<title>Fig</title> 
-			<link href="blogs.css" rel="stylesheet" type="text/css">
+				// Create the blog title
+				const blogTitle = document.createElement('h2');
+				blogTitle.className = 'blog-title';
+				blogTitle.textContent = post.title;
 
-		</head> 
-		<body> 
-		
-		<h2>I is for Icaco</h2> 
-		<img src="<?php echo $imagePath; ?>"
-			width="750" 
-			height="auto"
-			alt="icaco"
-			class="resizable-image">
-		</body> 
-		<p style="text-align: center;">ICACO ICACO ICACO</p>
-		</html> 
-	</div>
-	<hr>
-	<div class="blog-container" id="blog-content">
-		<?php 
-		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/jackfruit.jpg'; // Update this path to your image 
-		?> 
-		
-		<!DOCTYPE html> 
-		<html lang="en"> 
-		<head> 
-			<meta charset="UTF-8"> 
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-			<title>Fig</title> 
-			<link href="blogs.css" rel="stylesheet" type="text/css">
+				// Create an image container for the image and text
+				const imageContainer = document.createElement('div');
+				imageContainer.className = 'image-container';
 
-		</head> 
-		<body> 
-		
-		<h2>J for Jackfruit</h2> 
-		<img src="<?php echo $imagePath; ?>"
-			width="750" 
-			height="auto"
-			alt="jackfruit"
-			class="resizable-image">
-		</body> 
-		<p style="text-align: center;">JACKFRUIT JACKFRUIT JACKFRUIT</p>
-		</html> 
-	</div>
-	<hr>				
+				// Create the image element
+				const img = document.createElement('img');
+				img.src = post.image;
+				img.alt = 'Blog Image';
+				img.className = 'blog-photo';
+
+				// Create a text element for the blog post description
+				const blogDescription = document.createElement('p');
+				blogDescription.className = 'blog-description';
+				blogDescription.textContent = post.description;
+
+				const blogSeperator = document.createElement('hr');
+				blogSeperator.className = 'blog-seperator';
+
+				blogUserContainer.appendChild(userImage);
+				blogUserContainer.appendChild(username);
+				blogUserContainer.appendChild(userbutton);
+
+				imageContainer.appendChild(img);
+
+				blogContainer.appendChild(blogUserContainer);
+				blogContainer.appendChild(blogTitle);
+				blogContainer.appendChild(imageContainer);
+				blogContainer.appendChild(blogDescription);
+
+				postsContainer.appendChild(blogContainer);
+				postsContainer.appendChild(blogSeperator);
+			});
+	</script>
 </div>
 
 <?php include("includes/footer.php");?>
