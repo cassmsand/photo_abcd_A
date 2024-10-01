@@ -9,16 +9,15 @@
 <?php include("includes/design-top.php");?>
 <?php include("includes/navigation.php");?>
 
+<?php $blankIcon = '../photo_abcd_A/images/blankicon.jpg';?>
+
 <div class="container" id="main-content">
 	<h1>Blogs</h1>
-	<p style="text-align: left;">Blog content goes here.</p>
-
-	<hr>
-	<div class="container" id="blog-content">
+	<div class="blog-container" id="blog-content">
 		<?php 
 		// You can use PHP to set the image source dynamically if needed 
-		$imagePath = '../photo_abcd_A/images/apples.jpg'; // Update this path to your image 
-		?> 
+		$imagePath = '../photo_abcd_A/images/apples.jpg';?> 
+		<?php $blankIcon = '../photo_abcd_A/images/blankicon.jpg';?>
 		
 		<!DOCTYPE html> 
 		<html lang="en"> 
@@ -30,7 +29,13 @@
 
 		</head> 
 		<body> 
-		
+		<div class="user-container" id="user-content">
+			<img src="<?php echo $blankIcon; ?>"
+				alt="user-photo" 
+				class="user">
+			<p class="user-text">INSERT USERNAME HERE</p>
+			<button class="user-button">⚪ ⚪ ⚪</button>
+		</div>	
 		<h2>A is for Apples</h2> 
 		<img src="<?php echo $imagePath; ?>"
 			width="750" 
@@ -42,7 +47,7 @@
 		</html> 
 	</div>
 	<hr>
-	<div class="container" id="blog-content">
+	<div class="blog-container" id="blog-content">
 		<?php 
 		// You can use PHP to set the image source dynamically if needed 
 		$imagePath = '../photo_abcd_A/images/bananas.jpg'; // Update this path to your image 
@@ -70,7 +75,7 @@
 		</html> 
 	</div>
 	<hr>
-	<div class="container" id="blog-content">
+	<div class="blog-container" id="blog-content">
 		<?php 
 		// You can use PHP to set the image source dynamically if needed 
 		$imagePath = '../photo_abcd_A/images/clementines.jpeg'; // Update this path to your image 
@@ -98,7 +103,7 @@
 		</html> 
 	</div>
 	<hr>
-	<div class="container" id="blog-content">
+	<div class="blog-container" id="blog-content">
 		<?php 
 		// You can use PHP to set the image source dynamically if needed 
 		$imagePath = '../photo_abcd_A/images/dragonfruit.jpg'; // Update this path to your image 
@@ -126,7 +131,7 @@
 		</html> 
 	</div>
 	<hr>
-	<div class="container" id="blog-content">
+	<div class="blog-container" id="blog-content">
 		<?php 
 		// You can use PHP to set the image source dynamically if needed 
 		$imagePath = '../photo_abcd_A/images/eggplant.jpg'; // Update this path to your image 
@@ -154,7 +159,7 @@
 		</html> 
 	</div>
 	<hr>
-	<div class="container" id="blog-content">
+	<div class="blog-container" id="blog-content">
 		<?php 
 		// You can use PHP to set the image source dynamically if needed 
 		$imagePath = '../photo_abcd_A/images/fig.jpg'; // Update this path to your image 
@@ -182,7 +187,7 @@
 		</html> 
 	</div>
 	<hr>
-	<div class="container" id="blog-content">
+	<div class="blog-container" id="blog-content">
 		<?php 
 		// You can use PHP to set the image source dynamically if needed 
 		$imagePath = '../photo_abcd_A/images/grapefruit.jpg'; // Update this path to your image 
@@ -210,7 +215,7 @@
 		</html> 
 	</div>
 	<hr>
-	<div class="container" id="blog-content">
+	<div class="blog-container" id="blog-content">
 		<?php 
 		// You can use PHP to set the image source dynamically if needed 
 		$imagePath = '../photo_abcd_A/images/honeydew.jpg'; // Update this path to your image 
@@ -238,7 +243,7 @@
 		</html> 
 	</div>
 	<hr>
-	<div class="container" id="blog-content">
+	<div class="blog-container" id="blog-content">
 		<?php 
 		// You can use PHP to set the image source dynamically if needed 
 		$imagePath = '../photo_abcd_A/images/icaco.jpg'; // Update this path to your image 
@@ -266,7 +271,7 @@
 		</html> 
 	</div>
 	<hr>
-	<div class="container" id="blog-content">
+	<div class="blog-container" id="blog-content">
 		<?php 
 		// You can use PHP to set the image source dynamically if needed 
 		$imagePath = '../photo_abcd_A/images/jackfruit.jpg'; // Update this path to your image 
@@ -294,12 +299,6 @@
 		</html> 
 	</div>
 	<hr>				
-		
-
-	<p>
-		Blog content goes here.</p>
-	<p>
-		Blog content goes here.</p>
 </div>
 
 <?php include("includes/footer.php");?>

@@ -25,4 +25,37 @@ hr {
     text-align: center;
     margin-top: 0px;
     border: 2px solid black;
-    }
+}
+
+.user {
+    width: 100px;
+    height: auto;
+    display: block;
+    margin-left: 20px;
+}
+
+.blog-container {
+    width: 75%;
+    height: auto;
+    border-radius: 10px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.user-container {
+    display: flex;
+    align-items: center;
+}
+
+.user-text {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.user-button {
+    width: auto;
+    height: auto;
+    margin-right: 20px;
+    border: none;
+    background-color: transparent;
+}
