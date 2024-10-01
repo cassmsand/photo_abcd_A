@@ -9,18 +9,9 @@
 	  <li class="nav-item">
 	    <a class="nav-link <?php if ($CURRENT_PAGE == "Blogs") {?>active<?php }?>" href="blogs.php">Blogs</a>
 	  </li>
-	  <li class="nav-item">
-	    <a class="nav-link <?php if ($CURRENT_PAGE == "Sign Up") {?>active<?php }?>" href="signup.php">Sign Up</a>
-	  </li>
-	  <li class="nav-item">
-	    <a class="nav-link <?php if ($CURRENT_PAGE == "Log In") {?>active<?php }?>" href="login.php">Log In</a>
-	  </li>
-	  <li class="nav-item">
-	    <a class="nav-link <?php if ($CURRENT_PAGE == "Test") {?>active<?php }?>" href="test.php">Test</a>
-	  </li>
 	  <li>
 	    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#login_modal">
-			Login Modal
+			Login
 		</button>
 	  </li>
 	</ul>
