@@ -1,4 +1,3 @@
-// This file pulls blog information from the database into web application
 <?php
 include("includes/a_config.php");
 
@@ -7,6 +6,11 @@ $conn = OpenCon();
 // Get blog post information
 $sql = "SELECT blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter FROM blogs";
 $result = $conn->query($sql);
+
+if (!$result) {
+    // Log or display the error (for debugging)
+    die("Error executing query: " . $conn->error);
+}
 
 $blogPosts = array();
 
@@ -21,4 +25,5 @@ header('Content-Type: application/json');
 echo json_encode($blogPosts);
 
 $conn->close();
+
 ?>

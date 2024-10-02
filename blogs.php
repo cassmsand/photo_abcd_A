@@ -35,7 +35,7 @@ $CURRENT_PAGE = "Blogs";
                     blogUserContainer.className = 'blog-user-container';
 
                     const userImage = document.createElement('img');
-                    userImage.src = '<?php echo $blankIcon; ?>';
+                    userImage.src = '../photo_abcd_A/images/blankicon.jpg';
                     userImage.alt = 'User Image';
                     userImage.className = 'blog-user-image';
 
