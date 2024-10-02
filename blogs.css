@@ -67,3 +67,14 @@ p {
 .blog-seperator {
     border-color:blue;
 }
+
+.image-container {
+    display: flex; /* Align items horizontally */
+    align-items: center; /* Center items vertically */
+}
+
+.left-arrow, .right-arrow {
+    font-size: 24px; /* Increase size of the arrows */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    margin: 0 10px; /* Add some spacing around the arrows */
+}
