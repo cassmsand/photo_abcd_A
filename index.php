@@ -41,29 +41,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php include("includes/navigation.php");?>
 
 <div class="container" id="main-content">
-	<h2>Welcome to Photo ABCD!</h2>
-	<p>Welcome content goes here.</p>
-
-    <h3> Users List:</h3>
-    <?php
-    if ($conn) {
-        $sql = "SELECT user_id, email FROM users";
-        $result = $conn->query($sql);
-        if ($result) {
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "User ID: " . htmlspecialchars($row['user_id']) . " - Email: " . htmlspecialchars($row['email']) . "<br>";
-                }
-            } else {
-                echo "No users found.";
-            }
-        } else {
-            echo "Error";
-        }
-    }
-    ?>
-
+    <h3>Public Blogs</h3>
+    <div class="row row-cols-4 gx-0 gap-4" id="blog-row" style="width: 1800px;"></div>
 </div>
+
+<script>
+    fetch('get_blog_posts.php')
+        .then(response => response.json())
+        .then(blogPosts => {
+            const blogRow = document.getElementById('blog-row');
+            
+            blogPosts.forEach(post => {
+                // Card Class
+                const blogCard = document.createElement("div");
+                blogCard.className = "card w-90";
+
+                // Header
+                const cardHeader = document.createElement("div");
+                cardHeader.className = "card-header";
+
+                const cardTitle = document.createElement("h4");
+                cardTitle.className = "card-title";
+                cardTitle.textContent = post.title;
+
+                cardHeader.appendChild(cardTitle);
+                
+                // Body
+                const cardBody = document.createElement("div");
+                cardBody.className = "card-body";
+
+                const cardImage = document.createElement("img");
+                cardImage.className = "card-img";
+                cardImage.style = "object-fit: cover; height:15vw ; width: 100%;";
+                cardImage.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}.jpg`;
+
+                cardBody.appendChild(cardImage);
+
+                // Footer
+                const cardFooter = document.createElement("div");
+                cardFooter.className = "card-footer";
+
+                const cardEmail = document.createElement("p");
+                cardEmail.className = "card-text";
+                cardEmail.textContent = post.creator_email;
+
+                cardFooter.appendChild(cardEmail);
+
+                // Append Blog Card
+                blogCard.appendChild(cardHeader);
+                blogCard.appendChild(cardBody);
+                blogCard.appendChild(cardFooter);
+
+                blogRow.appendChild(blogCard);
+
+            });
+        })
+        .catch(error => console.error('Error fetching blog posts:', error));
+</script>
 
 <?php include("includes/footer.php");?>
 
