@@ -3,9 +3,9 @@ $conn = OpenCon();
 $CURRENT_PAGE = "Index";
 ?>
 <!--
-The code below (12-30) will add new user based on the register paramters in the login-register_modal.
+The code below (12-30) will add new user based on the register parameters in the login-register_modal.
 
-It will also execute again if the page is reloaded so we
+It will also execute again if the page is reloaded, so we
 probably need to put this code into a method or something.
 -->
 
@@ -18,22 +18,83 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $sql = "INSERT INTO users (email, password) VALUES (?,?)";
 
-    if ($stmt = $conn-> prepare($sql)) {
-        $stmt-> bind_param("ss", $email, $hashed_pw);
-        if ($stmt-> execute()) {
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("ss", $email, $hashed_pw);
+        if ($stmt->execute()) {
             echo "User registered";
-        }
-        else{
+        } else {
             echo "Error: " . $stmt->error;
         }
         $stmt->close();
     }
-}?>
+}
+?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<?php include("includes/head-tag-contents.php");?>
+    <?php include("includes/head-tag-contents.php");?>
+    <style>
+        .container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            padding: 10px;
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .card-footer {
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+
+        .card-text {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .card-img {
+                height: 150px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -42,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <div class="container" id="main-content">
     <h3>Public Blogs</h3>
-    <div class="row row-cols-4 gx-0 gap-4" id="blog-row" style="width: 1800px;"></div>
+    <div class="row" id="blog-row"></div>
 </div>
 
 <script>
@@ -50,13 +111,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .then(response => response.json())
         .then(blogPosts => {
             const blogRow = document.getElementById('blog-row');
-            
-            blogPosts.forEach(post => {
-                // Card Class
-                const blogCard = document.createElement("div");
-                blogCard.className = "card w-90";
 
-                // Header
+            blogPosts.forEach(post => {
+                const blogCard = document.createElement("div");
+                blogCard.className = "card";
+
                 const cardHeader = document.createElement("div");
                 cardHeader.className = "card-header";
 
@@ -65,19 +124,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 cardTitle.textContent = post.title;
 
                 cardHeader.appendChild(cardTitle);
-                
-                // Body
+
                 const cardBody = document.createElement("div");
                 cardBody.className = "card-body";
 
                 const cardImage = document.createElement("img");
                 cardImage.className = "card-img";
-                cardImage.style = "object-fit: cover; height:15vw ; width: 100%;";
                 cardImage.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}.jpg`;
 
                 cardBody.appendChild(cardImage);
 
-                // Footer
                 const cardFooter = document.createElement("div");
                 cardFooter.className = "card-footer";
 
@@ -87,13 +143,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 cardFooter.appendChild(cardEmail);
 
-                // Append Blog Card
                 blogCard.appendChild(cardHeader);
                 blogCard.appendChild(cardBody);
                 blogCard.appendChild(cardFooter);
-
                 blogRow.appendChild(blogCard);
-
             });
         })
         .catch(error => console.error('Error fetching blog posts:', error));
