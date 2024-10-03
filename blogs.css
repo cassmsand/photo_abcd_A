@@ -50,6 +50,7 @@ p {
     display: flex;
     justify-content: center;
     margin: 0 auto;
+    align-items: center;
 }
 
 .blog-photo {
@@ -68,10 +69,6 @@ p {
     border-color:blue;
 }
 
-.image-container {
-    display: flex; /* Align items horizontally */
-    align-items: center; /* Center items vertically */
-}
 
 .left-arrow, .right-arrow {
     font-size: 24px; /* Increase size of the arrows */
