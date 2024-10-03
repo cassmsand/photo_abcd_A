@@ -23,7 +23,7 @@
             $password = "";
             $dbname = "photos_abcd";
         } else {
-            $servername = "photo-a.jasthi.com";
+            $servername = "localhost";
             $username = "icsbinco_photo_a_db_user";
             $password = "ZIE9aD9ZSZ";
             $dbname = "icsbinco_photo_a_db";
