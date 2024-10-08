@@ -2,10 +2,11 @@
 <html>
 <body>
 
+<!-- VVV Login Modal VVV -->
 <div class="modal fade" id="login_modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form id="login-form">
+			<form id="login-form" action="actions/login.php">
 				<div class="modal-header">
 					<h3>Login</h3>
 				</div>
@@ -28,10 +29,16 @@
 	</div>
 </div>
 
+
+<!--
+ VVV Registration Modal VVV 
+
+ References the new-register.php.
+ -->
 <div class="modal fade" id="register_modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
-		<form id="register-form" action="index.php" method="POST" onsubmit="return validatePasswords()">
+		<form id="register-form" action="actions/new-register.php" method="POST" onsubmit="return validatePasswords()">
 				<div class="modal-header">
 					<h3>Register</h3>
 				</div>
@@ -51,10 +58,18 @@
                         	Passwords do not match
 						</div>
 					</div>
+					<div class="form-group">
+						<label>First Name</label>
+						<input type="text" name="fname" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Last Name</label>
+						<input type="text" name="lname" class="form-control" required>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#login_modal">Back to Login</button>
-					<input type="submit" name="submit" value="Create Account" class="btn btn-primary">
+					<input type="submit" name="new-register" value="Create Account" class="btn btn-primary">
 				</div>
 			</form>
 		</div>

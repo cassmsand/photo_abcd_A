@@ -1,16 +1,15 @@
-<?php include("includes/a_config.php");
+<?php
+session_start();
 $CURRENT_PAGE = "Blogs";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include("includes/head-tag-contents.php");?>
+
     <link href="blogs.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-
-<?php include("includes/design-top.php");?>
-<?php include("includes/navigation.php");?>
+<?php include("includes/top-bar.php");?>
 
 <?php $blankIcon = '../photo_abcd_A/images/blankicon.jpg';?>
 
@@ -21,7 +20,7 @@ $CURRENT_PAGE = "Blogs";
 
     <script>
         // Fetch data from the backend API
-        fetch('get_blog_posts.php')
+        fetch('actions/get-blogs.php')
             .then(response => response.json())
             .then(blogPosts => {
                 const postsContainer = document.getElementById('postsContainer');
@@ -119,7 +118,8 @@ $CURRENT_PAGE = "Blogs";
 
 </div>
 
-<?php include("includes/footer.php");?>
-
 </body>
+<footer>
+<?php include("includes/footer.php");?>
+</footer>
 </html>

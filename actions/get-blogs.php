@@ -1,10 +1,19 @@
 <?php
-include("includes/a_config.php");
+session_start();
+include_once("../includes/db-conn.php");
 
-$conn = OpenCon();
+// If there is a user logged in 
+if (isset($_SESSION['current_user_email'])) {
+    $user_email = $_SESSION['current_user_email'];
+    $attributes = implode(',', array('blog_id', 'title', 'description', 'event_date', 'creation_date', 'modification_date', 'privacy_filter'));
+    $where = "WHERE creator_email = '{$user_email}'";
+} else {
+    $attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter';
+    $where = "WHERE privacy_filter = 'public'";
+}
 
-// Get blog post information
-$sql = "SELECT blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter FROM blogs";
+$sql = "SELECT $attributes FROM blogs $where";
+
 $result = $conn->query($sql);
 
 if (!$result) {
@@ -14,7 +23,7 @@ if (!$result) {
 
 $blogPosts = array();
 
-// Show all the results in the database table
+// Show rows if any are found. (If the query.result is > 0)
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         // Get the images for the blog post
