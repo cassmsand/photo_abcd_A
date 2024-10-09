@@ -1,19 +1,24 @@
-<?php $CURRENT_PAGE = "About";?>
 <!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
+<html lang="en">
 
-<?php include("includes/top-bar.php");?>
+	<?php include("includes/head-tag-contents.php");?>
 
-<div class="container" id="main-content">
-	<h2>About Us</h2>
-	<p>About us information goes here.</p>
-	<p>About us information goes here.</p>
-	<p>About us information goes here.</p>
-</div>
+	<body>
+		<?php include("includes/top-bar.php");?>
+		
+		<section>
+			<div class="container">
+				<h2>About Us</h2>
+				<p>About us information goes here.</p>
+				<p>About us information goes here.</p>
+				<p>About us information goes here.</p>
+			</div>
+		</section>
 
-<?php include("includes/footer.php");?>
-</body>
+		<footer>
+			<?php include("includes/footer.php");?>
+		</footer>
+
+	</body>
+
 </html>

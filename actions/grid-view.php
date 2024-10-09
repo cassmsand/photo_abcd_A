@@ -1,8 +1,8 @@
 <html>
-
 <head>
     <link rel="stylesheet" href="blog-grid.css">
 </head>
+
 <body>
     <?php 
         if (isset($_SESSION['current_user_email'])) {
@@ -11,40 +11,38 @@
             $header = "Public Blogs";
         }
         if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');}
-        
     ?>
-    
-    <h3><?php echo $header;?></h3>
-    <div class="modal fade" id="card-modal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+    <section> 
+        <div class="modal fade" id="card-modal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
 
-                <div class="modal-header">
-                    <h3 id='card-modal-title'></h3>
-                </div>
+                    <div class="modal-header">
+                        <h3 id='card-modal-title'></h3>
+                    </div>
 
-                <div class="modal-body">
-                    <!-- Need to handle multiple page functionality -->
-                    <img src="" alt="" id='card-modal-img' class="img-fluid">
-                    <p class="lead" id='card-modal-desc'></p>
-                </div>
-                <div class="modal-footer">
+                    <div class="modal-body">
+                        <!-- Need to handle multiple page functionality -->
+                        <img src="" alt="" id='card-modal-img' class="img-fluid">
+                        <p class="lead" id='card-modal-desc'></p>
+                    </div>
+                    <div class="modal-footer">
 
-                    <p id='card-modal-email'></p>
-
-                    <ul class="pagination" id='card-modal-img-nav'>
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-
-                        <button type="button" class="btn btn-primary">Edit</button>
-                    
+                        <p id='card-modal-email'></p>
+                        
+                        <ul class="pagination" id='card-modal-img-nav'>
+                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                            <button type="button" class="btn btn-primary">Edit</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    </section>
+    
+    <h3><?php echo $header;?></h3>
     <div class="row" id="blog-row"></div>
 
     <script type="text/javascript">

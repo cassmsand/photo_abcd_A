@@ -31,7 +31,7 @@ include_once("includes/db-conn.php");
 // If there is a user logged in 
 if (isset($_SESSION['current_user_email'])) {
     $user_email = $_SESSION['current_user_email'];
-    $attributes = implode(',', array('blog_id', 'title', 'description', 'event_date', 'creation_date', 'modification_date', 'privacy_filter'));
+    $attributes = implode(',', array('blog_id', 'creator_email', 'title', 'description', 'event_date', 'creation_date', 'modification_date', 'privacy_filter'));
     $where = "WHERE creator_email = '{$user_email}'";
 } else {
     $attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter';
