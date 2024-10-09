@@ -1,3 +1,8 @@
+<?php
+
+session_start();
+$CURRENT_PAGE = "Blogs";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,15 +20,24 @@
         <div class="container" id="main-content">
             <h1>Blogs</h1>
 
-            <div id="postsContainer"></div>
+    <!-- Search Form -->
+    <div id="searchContainer">
+        <input type="text" id="searchInput" placeholder="Search by title...">
+        <input type="date" id="startDate" placeholder="Start Date">
+        <input type="date" id="endDate" placeholder="End Date">
+        <button id="searchButton">Search</button>
+    </div>
 
-            <script>
-                // Fetch data from the backend API
-                fetch('actions/get-blogs.php')
-                    .then(response => response.json())
-                    .then(blogPosts => {
-                        const postsContainer = document.getElementById('postsContainer');
-                        const buttontext = '⚪ ⚪ ⚪';
+    <div id="postsContainer"></div>
+
+    <script>
+        // Function to fetch blog posts
+        const fetchBlogs = (title = '', startDate = '', endDate = '') => {
+            fetch(`actions/get-blogs.php?title=${title}&start_date=${startDate}&end_date=${endDate}`)
+                .then(response => response.json())
+                .then(blogPosts => {
+                    const postsContainer = document.getElementById('postsContainer');
+                    postsContainer.innerHTML = ''; // Clear previous posts
 
                         blogPosts.forEach(post => {
                             const blogContainer = document.createElement('div');
@@ -41,9 +55,9 @@
                             username.className = 'blog-username';
                             username.textContent = post.creator_email;
 
-                            const userbutton = document.createElement('button');
-                            userbutton.className = 'blog-userbutton';
-                            userbutton.textContent = buttontext;
+                    const userbutton = document.createElement('button');
+                    userbutton.className = 'blog-userbutton';
+                    userbutton.textContent = '⚪ ⚪ ⚪';
 
                             const blogTitle = document.createElement('h2');
                             blogTitle.className = 'blog-title';
@@ -108,12 +122,35 @@
                             blogContainer.appendChild(imageContainer);
                             blogContainer.appendChild(blogDescription);
 
-                            postsContainer.appendChild(blogContainer);
-                            postsContainer.appendChild(blogSeparator);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching blog posts:', error));
-            </script>
+                    postsContainer.appendChild(blogContainer);
+                    postsContainer.appendChild(blogSeparator);
+                });
+            })
+            .catch(error => console.error('Error fetching blog posts:', error));
+        };
+
+        // Initial fetch to show all blogs
+        fetchBlogs();
+
+        // Search button event listener
+        document.getElementById('searchButton').addEventListener('click', () => {
+            const title = document.getElementById('searchInput').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            fetchBlogs(title, startDate, endDate);
+        });
+
+        // Key press event listener for search input
+        document.getElementById('searchInput').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') { // Check if Enter key is pressed
+                event.preventDefault(); // Prevent form submission if inside a form
+                const title = document.getElementById('searchInput').value;
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                fetchBlogs(title, startDate, endDate);
+            }
+        });
+    </script>
 
         </div>
         </section>

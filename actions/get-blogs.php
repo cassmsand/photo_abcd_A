@@ -2,6 +2,11 @@
 session_start();
 include_once("../includes/db-conn.php");
 
+// Init search values
+$title = isset($_GET['title']) ? $_GET['title'] : '';
+$startDate = isset($_GET['start_date']) ? $_GET['start_date'] : '';
+$endDate = isset($_GET['end_date']) ? $_GET['end_date'] : '';
+
 // If there is a user logged in 
 if (isset($_SESSION['current_user_email'])) {
     $user_email = $_SESSION['current_user_email'];
@@ -10,6 +15,16 @@ if (isset($_SESSION['current_user_email'])) {
 } else {
     $attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter';
     $where = "WHERE privacy_filter = 'public'";
+}
+
+if (!empty($title)) {
+    $where .= " AND title LIKE '" . $conn->real_escape_string($title) . "%'"; // Match titles starting with the letter, could be modified to include other search requests
+}
+if (!empty($startDate)) {
+    $where .= " AND event_date >= '" . $conn->real_escape_string($startDate) . "'"; //Searches based on event date not creation date
+}
+if (!empty($endDate)) {
+    $where .= " AND event_date <= '" . $conn->real_escape_string($endDate) . "'";
 }
 
 $sql = "SELECT $attributes FROM blogs $where";
