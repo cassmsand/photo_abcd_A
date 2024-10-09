@@ -1,17 +1,20 @@
-<title><?php print $PAGE_TITLE;?></title>
+<head>
+    <?php
+        // Handle connection
+        require_once("includes/db-conn.php");
+        session_start();  
+    ?>
 
-<?php if ($CURRENT_PAGE == "Index") { ?>
-	<meta name="description" content="" />
-	<meta name="keywords" content="" /> 
-<?php } ?>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-<style>
-	#main-content {
-		margin-top:20px;
-	}
-	.footer {
-		font-size: 14px;
-		text-align: center;
-	}
-</style>
+    <title><?php print $PAGE_TITLE;?></title>
+
+    <?php if ($CURRENT_PAGE == "Index") { ?>
+        <meta name="description" content="" />
+        <meta name="keywords" content="" /> 
+    <?php } ?>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="home.css">
+</head>
