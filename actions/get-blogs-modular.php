@@ -1,6 +1,14 @@
 <!--
-    Structure:
-    blogs [pair-index] [table/image array] [table attribute or image source]
+    Array Structure:
+    $blogs[]
+        [array pair] 
+            [table]
+                [attributes array]
+            [image pair]
+                [blog/image directory]
+                [directory file array]
+                    [filename index]
+    
 
     Example:
     $blogs [0] ['table'] ['title']
@@ -39,15 +47,18 @@ if (!$result) {
     die("Error executing query: " . $conn->error);
 }
 
-// Array of Blog Data & Blog Image pairs
-// Images = Do validation testing at new-blog.php
+// Array of Blog & Image data pairs
 $blogs = array();
 
 // Show rows if any are found. (If the query.result is > 0)
 if ($result->num_rows > 0) {
     while($table_row = $result->fetch_assoc()) {
-        // Get Images
-        $blog_images = array_values(array_diff(scandir("../photo_abcd_A/images/{$table_row['blog_id']}/"), array('..', '.')));
+        // Image directory
+        $blog_dir = "../photo_abcd_A/images/{$table_row['blog_id']}/";
+        // Image array of directory.
+        $img_names = array_values(array_diff(scandir($blog_dir), array('..', '.')));
+        // Bind directory and image array.
+        $blog_images = array('dir' => $blog_dir, 'img_names' => $img_names);
 
         // Bind blog info and images
         $blog_pair = array('table' => $table_row, 'images' => $blog_images);

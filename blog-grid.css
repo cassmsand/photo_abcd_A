@@ -52,6 +52,51 @@
     color: #6c757d;
 }
 
+/*
+Modal
+*/
+.modal#card-modal {
+    --bs-modal-max-width: 1400px;
+    --bs-modal-width: 1000px;
+    justify-items: center;
+}
+
+.modal-dialogue-centered {
+    padding: 10px;
+}
+
+.modal-header {
+    padding: 10px;
+}
+
+.modal-content {
+    padding: 10px;
+    justify-items: center;
+}
+
+.modal-body {
+    padding: 10px;
+}
+
+img#card-modal-img {
+    padding: 10px;
+    width: 100%;
+    height: 800px;
+    object-fit: cover;
+}
+
+#card-modal-footer {
+    padding: 10px;
+}
+
+#card-modal-email {
+    padding: 10px;
+}
+
+.pagination {
+    justify-items: center;
+}
+
 @media (max-width: 768px) {
     .card-img {
         height: 150px;
