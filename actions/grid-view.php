@@ -122,6 +122,8 @@
 
             // Image Array
             const images = pair.images;
+
+            // Image Source
             const img_src = `${images.dir}${images.img_names[0]}`;
             
             document.getElementById('card-modal-title').innerHTML = title;

@@ -1,9 +1,3 @@
-.container {
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
 .row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

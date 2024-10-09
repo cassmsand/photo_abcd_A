@@ -1,24 +1,24 @@
 
 <header>
-    <div style="padding: 4rem 2rem; margin-bottom: 2rem; background-color: #e9ecef;">
-        <h1>Photo ABCD.</h1>
+    <div class='container-fluid' id='main-top'>
+        <h1 class="display-4" id='main-top-text'>Photo ABCD.</h1>
     </div>
 </header>
 
 <nav>
-    <div class="container">
-        <ul class="nav nav-pills">
+    <div class='container-fluid' id='main-nav'>
+        <ul class="nav nav-pills justify-content-center">
             <li class="nav-item">
                 <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="../photo_abcd_A/index.php">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="../photo_abcd_A/about.php">About Us</a>
+                <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="../photo_abcd_A/about.php">About</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?php if ($CURRENT_PAGE == "Blogs") {?>active<?php }?>" href="../photo_abcd_A/blogs.php">Blogs</a>
             </li>
-            <li>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#login_modal">Login</button>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" data-target="#login_modal">Login</a>
             </li>
         </ul>
     </div>
