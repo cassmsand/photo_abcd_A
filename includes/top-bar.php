@@ -6,8 +6,7 @@
     <div class="header">
         <div style="padding: 4rem 2rem; margin-bottom: 2rem; background-color: #e9ecef;">
             <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-                <h1>Photo ABCD.</h1>
-
+                <img src="../photo_abcd_A/images/photoABCDLogo.png" alt="Photo ABCD Logo" width="150px" height=auto style= "display: block; border-radius: 25%; object-fit: cover"></img>
                 <ul class="nav nav-pills" style= "float: right; width: 400px; padding: 10px;">
                     <li class="nav-item">
                         <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="../photo_abcd_A/index.php">Home</a>
