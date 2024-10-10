@@ -37,7 +37,6 @@ $CURRENT_PAGE = "Blogs";
     </div>
 
     <div id="postsContainer"></div>
-
             <script>
                 // Function to fetch blog posts with sorting
                 const fetchBlogs = (title = '', startDate = '', endDate = '', sortOrder = 'asc') => {
@@ -85,33 +84,42 @@ $CURRENT_PAGE = "Blogs";
                                 rightArrow.style.display = 'none';
 
                                 const img = document.createElement('img');
-                                img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}.jpg`;
+                                img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}_0.jpg`;
                                 img.alt = 'Blog Image';
                                 img.className = 'blog-photo';
 
-                                let currentImageIndex = 0;
-                                let images = [];
+                                fetch(`actions/count-files.php?blog_id=${post.blog_id}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const fileCount = data.fileCount;
+                                        if (fileCount > 1) {
+                                            leftArrow.style.display = 'inline';
+                                            rightArrow.style.display = 'inline';
+                                        }
 
-                                if (post.images.length > 0) {
-                                    img.src = `../photo_abcd_A/images/${post.blog_id}/${post.images[0]}`;
+                                        currentImageIndex = 0;
 
-                                    // Show arrows only if there's more than one image
-                                    if (post.images.length > 1) {
-                                        leftArrow.style.display = 'inline';
-                                        rightArrow.style.display = 'inline';
-                                    }
-                                }
+                                        // Left arrow click event
+                                        leftArrow.addEventListener('click', () => {
+                                            currentImageIndex--;
+                                            if (currentImageIndex < 0) {
+                                                currentImageIndex = fileCount-1;
+                                            }
+                                            img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}_${currentImageIndex}.jpg`;
+                                            
+                                        });
 
-                                leftArrow.addEventListener('click', () => {
-                                    currentImageIndex = (currentImageIndex - 1 + post.images.length) % post.images.length;
-                                    img.src = `../photo_abcd_A/images/${post.blog_id}/${post.images[currentImageIndex]}`;
-                                });
-
-                                rightArrow.addEventListener('click', () => {
-                                    currentImageIndex = (currentImageIndex + 1) % post.images.length;
-                                    img.src = `../photo_abcd_A/images/${post.blog_id}/${post.images[currentImageIndex]}`;
-                                });
-
+                                        // Right arrow click event
+                                        rightArrow.addEventListener('click', () => {
+                                            currentImageIndex++;
+                                            if (currentImageIndex == fileCount) {
+                                                currentImageIndex = 0; // Reset to zero if it reaches fileCount
+                                            }
+                                            img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}_${currentImageIndex}.jpg`;
+                                        });
+                                    })
+                                    .catch(error => console.error('Error fetching file count:', error));
+ 
                                 const blogDescription = document.createElement('p');
                                 blogDescription.className = 'blog-description';
                                 blogDescription.textContent = post.description;
