@@ -6,19 +6,20 @@
     <div class="header">
         <div style="padding: 4rem 2rem; margin-bottom: 2rem; background-color: #e9ecef;">
             <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-                <img src="../photo_abcd_A/images/photoABCDLogo.png" alt="Photo ABCD Logo" width="150px" height=auto style= "display: block; border-radius: 25%; object-fit: cover"></img>
-                <ul class="nav nav-pills" style= "float: right; width: 400px; padding: 10px;">
+                <img src="../photo_abcd_A/images/photoABCDLogo.png" alt="Photo ABCD Logo" width="150px" height=auto style= "border:3px solid #000000; display: block; border-radius: 25%; object-fit: cover"></img>
+                <!-- display: block; border-radius: 25%; object-fit: cover -->
+                <ul class="nav nav-pills" style= "float: right; width: 500px; padding: 10px;">
                     <li class="nav-item">
-                        <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="../photo_abcd_A/index.php">Home</a>
+                        <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="../photo_abcd_A/index.php" style="font-size: 1.2rem; padding: 10px 20px;">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="../photo_abcd_A/about.php">About Us</a>
+                        <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="../photo_abcd_A/about.php" style="font-size: 1.2rem; padding: 10px 20px;">About Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php if ($CURRENT_PAGE == "Blogs") {?>active<?php }?>" href="../photo_abcd_A/blogs.php">Blogs</a>
+                        <a class="nav-link <?php if ($CURRENT_PAGE == "Blogs") {?>active<?php }?>" href="../photo_abcd_A/blogs.php" style="font-size: 1.2rem; padding: 10px 20px;">Blogs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-toggle="modal" data-target="#login_modal">Login</a>
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#login_modal" style="font-size: 1.2rem; padding: 10px 20px;">Login</a>
                     </li>   
                 </ul>
             </div>    
