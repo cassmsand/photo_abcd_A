@@ -4,11 +4,10 @@
 </head>
 <body>
     <div class="header">
-        <div style="padding: 4rem 2rem; margin-bottom: 2rem; background-color: #e9ecef;">
+        <div style="padding: 4rem 2rem; margin-bottom: 2rem; background-color: #; background-image: url('../photo_abcd_A/images/banner.png'); background-size: cover; background-position: center;">
             <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
                 <img src="../photo_abcd_A/images/photoABCDLogo.png" alt="Photo ABCD Logo" width="150px" height=auto style= "border:3px solid #000000; display: block; border-radius: 25%; object-fit: cover"></img>
-                <!-- display: block; border-radius: 25%; object-fit: cover -->
-                <ul class="nav nav-pills" style= "float: right; width: 500px; padding: 10px;">
+                <ul class="nav nav-pills" style= "float: right; padding: 10px; background-color: white; border-radius: 30px; object-fit: cover">
                     <li class="nav-item">
                         <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="../photo_abcd_A/index.php" style="font-size: 1.2rem; padding: 10px 20px;">Home</a>
                     </li>
