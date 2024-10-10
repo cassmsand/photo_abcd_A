@@ -5,12 +5,26 @@
 
 <body>
     <?php 
-        if (isset($_SESSION['current_user_email'])) {
-            $header = "Your Blogs";
-        } else {
-            $header = "Public Blogs";
+        include('actions/get-blogs-modular.php');
+        
+        switch($_SESSION['blog_display']) {
+            case 'public':
+                $header = 'Public Blogs';
+                break;
+
+            case 'self':
+                $header = 'Your Blogs';
+                break;
+
+            case 'select':
+                $header = 'Other Users Blogs';
+                break;
+
+            case 'test':
+                $header = 'Other Users Blogs';
+                break;
         }
-        if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');}
+        
     ?>
     <section> 
         <div class="modal fade" id="card-modal">
@@ -28,7 +42,7 @@
                     </div>
                     <div class="modal-footer">
 
-                        <p id='card-modal-email'></p>
+                        <a href='#' id='card-modal-email'></a>
                         
                         <ul class="pagination" id='card-modal-img-nav'>
                             <li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -52,9 +66,47 @@
         </select>
     </div>
 
+    <div class="btn-group" id='all-func'>
+        <a href="actions/public-view.php" class="btn btn-primary">Public Blogs</a>
+        <a id='your-blogs' href="actions/self-view.php" class="btn btn-primary">Your Blogs</a>
+        <a href="actions/test-view.php" class="btn btn-primary">Get Alice Blogs</a>
+
+        <a id='new-blogs' href="#" class="btn btn-primary" data-toggle="modal" data-target="#new-blog-modal">Create New Blog</a>
+
+    </div>
+
     <div class="row" id="blog-row"></div>
 
     <script type="text/javascript">
+
+        <?php 
+        if (!isset($_SESSION['current_user_email'])) {
+            $type = 'guest';
+        } else {
+            $type = 'user';
+        }
+        ?>
+
+        type = '<?php print $type?>';
+
+        const yourBlogs = document.getElementById('your-blogs');
+        const newBlog = document.getElementById('new-blogs');
+
+
+        switch (type) {
+            case 'guest':
+                yourBlogs.style = 'display: none';
+                newBlog.style = 'display: none';
+                break;
+            
+            case 'user':
+                yourBlogs.style = 'display: inline';
+                newBlog.style = 'display: inline';
+                break;
+
+        }
+
+
         const blogs = <?php echo $_GET['blog_pairs']; ?>;
         const blogRow = document.getElementById('blog-row');
 
@@ -153,6 +205,22 @@
             document.getElementById('card-modal-img').setAttribute('src', img_src);
             document.getElementById('card-modal-desc').innerHTML = description;
             document.getElementById('card-modal-email').innerHTML = email;
+            document.getElementById('card-modal-email').onclick = function() {
+                $.ajax({
+                    type: 'GET',
+                    url: 'actions/get-blogs-modular.php',
+                    data: {
+                        select_user: email
+                    },
+                    cache: false,
+                    success: function () {
+                        console.log(success);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr);
+                    }
+                });
+            };
 
             // Find a way to work an index with this.
             pagenav = document.getElementById('card-modal-img-nav');
