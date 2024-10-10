@@ -41,34 +41,57 @@
             </div>
         </div>
     </section>
-    
+
     <h3><?php echo $header;?></h3>
+
+    <div>
+        <label for="sortOrder">Sort By:</label>
+        <select id="sortOrder">
+            <option value="asc">Alphabetically (A-Z)</option>
+            <option value="desc">Alphabetically (Z-A)</option>
+        </select>
+    </div>
+
     <div class="row" id="blog-row"></div>
 
     <script type="text/javascript">
         const blogs = <?php echo $_GET['blog_pairs']; ?>;
         const blogRow = document.getElementById('blog-row');
 
-        blogs.forEach(pair => {
-            // Blog Row Attributes
-            const table = pair.table;
-            
-            const blog_id = table.blog_id;
-            const email = table.creator_email;
-            const title = table.title;
+        function displaySortedBlogs(sortOrder = 'asc') {
+            blogRow.innerHTML = ''; // Clear the container
 
-            const description = table.description;
-            const event_date = table.event_date;
-            const creation_date = table.creation_date;
-            const modification_date = table.modification_date;
-            const privacy_filter = table.privacy_filter;
+            // Sort blogs based on title in ascending or descending order
+            blogs.sort((a, b) => {
+                const titleA = a.table.title.toLowerCase();
+                const titleB = b.table.title.toLowerCase();
+                if (sortOrder === 'asc') {
+                    return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
+                } else {
+                    return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
+                }
+            });
 
-            // Image Array
-            const images = pair.images;
-            const img_src = `${images.dir}${images.img_names[0]}`;
-            createCard(blogRow, title, email, img_src, blog_id, pair);
-        });
-        
+            blogs.forEach(pair => {
+                // Blog Row Attributes
+                const table = pair.table;
+
+                const blog_id = table.blog_id;
+                const email = table.creator_email;
+                const title = table.title;
+
+                const description = table.description;
+                const event_date = table.event_date;
+                const creation_date = table.creation_date;
+                const modification_date = table.modification_date;
+                const privacy_filter = table.privacy_filter;
+
+                // Image Array
+                const images = pair.images;
+                const img_src = `${images.dir}${images.img_names[0]}`;
+                createCard(blogRow, title, email, img_src, blog_id, pair);
+            });
+        }
         function createCard(container, title, email, img, id, pair) {
             const card = document.createElement("div");
             card.className='card';
@@ -104,7 +127,7 @@
             card.appendChild(cardHeader);
             card.appendChild(cardBody);
             card.appendChild(cardFooter);
-            
+
             // Attach to container.
             container.appendChild(card);
         }
@@ -125,16 +148,23 @@
 
             // Image Source
             const img_src = `${images.dir}${images.img_names[0]}`;
-            
+
             document.getElementById('card-modal-title').innerHTML = title;
             document.getElementById('card-modal-img').setAttribute('src', img_src);
             document.getElementById('card-modal-desc').innerHTML = description;
             document.getElementById('card-modal-email').innerHTML = email;
-            
+
             // Find a way to work an index with this.
             pagenav = document.getElementById('card-modal-img-nav');
         }
-        
+        displaySortedBlogs();
+
+        // Event listener for sort order change
+        document.getElementById('sortOrder').addEventListener('change', (event) => {
+            const sortOrder = event.target.value;
+            displaySortedBlogs(sortOrder);
+        });
+
     </script>
 </body>
 </html>

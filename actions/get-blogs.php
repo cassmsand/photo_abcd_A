@@ -6,8 +6,9 @@ include_once("../includes/db-conn.php");
 $title = isset($_GET['title']) ? $_GET['title'] : '';
 $startDate = isset($_GET['start_date']) ? $_GET['start_date'] : '';
 $endDate = isset($_GET['end_date']) ? $_GET['end_date'] : '';
+$sortOrder = isset($_GET['sort_order']) && strtolower($_GET['sort_order']) === 'desc' ? 'DESC' : 'ASC'; // Default to ASC
 
-// If there is a user logged in 
+// If there is a user logged in
 if (isset($_SESSION['current_user_email'])) {
     $user_email = $_SESSION['current_user_email'];
     $attributes = implode(',', array('blog_id', 'title', 'description', 'event_date', 'creation_date', 'modification_date', 'privacy_filter'));
@@ -17,17 +18,19 @@ if (isset($_SESSION['current_user_email'])) {
     $where = "WHERE privacy_filter = 'public'";
 }
 
+// Apply search filters based on the user's input
 if (!empty($title)) {
-    $where .= " AND title LIKE '" . $conn->real_escape_string($title) . "%'"; // Match titles starting with the letter, could be modified to include other search requests
+    $where .= " AND title LIKE '" . $conn->real_escape_string($title) . "%'"; // Match titles starting with the input
 }
 if (!empty($startDate)) {
-    $where .= " AND event_date >= '" . $conn->real_escape_string($startDate) . "'"; //Searches based on event date not creation date
+    $where .= " AND event_date >= '" . $conn->real_escape_string($startDate) . "'";
 }
 if (!empty($endDate)) {
     $where .= " AND event_date <= '" . $conn->real_escape_string($endDate) . "'";
 }
 
-$sql = "SELECT $attributes FROM blogs $where";
+// Modify SQL query to add ORDER BY clause for sorting alphabetically by title
+$sql = "SELECT $attributes FROM blogs $where ORDER BY title $sortOrder";
 
 $result = $conn->query($sql);
 
@@ -38,12 +41,12 @@ if (!$result) {
 
 $blogPosts = array();
 
-// Show rows if any are found. (If the query.result is > 0)
+// Process query results
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         // Get the images for the blog post
         $blog_id = $row['blog_id'];
-        $imageDir = "../photo_abcd_A/images/$blog_id/"; 
+        $imageDir = "../photo_abcd_A/images/$blog_id/";
         $images = array();
 
         if (is_dir($imageDir)) {
@@ -52,7 +55,7 @@ if ($result->num_rows > 0) {
             foreach ($imageFiles as $file) {
                 // Only include jpg and png files
                 if (preg_match('/\.(jpg|jpeg|png)$/i', $file)) {
-                    $images[] = $file; 
+                    $images[] = $file;
                 }
             }
         }
