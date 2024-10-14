@@ -5,7 +5,9 @@ $CURRENT_PAGE = "MyBlogs";
 
 <!DOCTYPE html>
 <html lang="en">
-	<?php include("includes/head-tag-contents.php");?>
+
+	<title><?php print "My Blogs";?></title>
+
 	<body>
 		<?php include("includes/top-bar.php");?>
 		<div class="container" id='main-body'>
@@ -16,5 +18,4 @@ $CURRENT_PAGE = "MyBlogs";
         </div>
 		<?php include("includes/footer.php");?>
 	</body>
-
 </html>
