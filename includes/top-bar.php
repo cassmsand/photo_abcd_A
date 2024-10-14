@@ -15,10 +15,6 @@
                         <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php" style="font-size: 1.2rem; padding: 10px 20px;">About Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php if ($CURRENT_PAGE == "Blogs") {?>active<?php }?>" href="blogs.php" style="font-size: 1.2rem; padding: 10px 20px;">Blogs</a>
-                    </li>
-
-                    <li class="nav-item">
                         <a id='log-button' class="nav-link" style="font-size: 1.2rem; padding: 10px 20px;"></a>
                     </li>  
 
