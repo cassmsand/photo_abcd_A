@@ -16,9 +16,6 @@ $CURRENT_PAGE = "Index";
     <body>
         <?php include("includes/top-bar.php");?>
         <?php include("includes/blogs.php");?>
-    </body>
-
-    <footer>
         <?php include("includes/footer.php");?>
-    </footer>
+    </body>
 </html>
