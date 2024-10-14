@@ -15,13 +15,14 @@
     <!-- Search Form -->
     <div id="searchContainer">
         <input type="text" id="searchInput" placeholder="Search by title...">
-        <input type="date" id="startDate" placeholder="Start Date">
+        <label for="startDate">Sort by creation date:</label>
+        <input type="date" id="startDate" placeholder="Start Date" style="margin-left: 5px;">
         <input type="date" id="endDate" placeholder="End Date">
         <button id="searchButton">Search</button>
     </div>
 
     <div id="sortContainer">
-        <label for="sortOrder">Sort By:</label>
+        <label for="sortOrder">Display:</label>
         <select id="sortOrder">
             <option value="asc">Alphabetically (A-Z)</option>
             <option value="desc">Alphabetically (Z-A)</option>

@@ -8,25 +8,22 @@ $startDate = isset($_GET['start_date']) ? $_GET['start_date'] : '';
 $endDate = isset($_GET['end_date']) ? $_GET['end_date'] : '';
 $sortOrder = isset($_GET['sort_order']) && strtolower($_GET['sort_order']) === 'desc' ? 'DESC' : 'ASC'; // Default to ASC
 
-// If there is a user logged in
-if (isset($_SESSION['current_user_email'])) {
-    $user_email = $_SESSION['current_user_email'];
-    $attributes = implode(',', array('blog_id', 'title', 'description', 'event_date', 'creation_date', 'modification_date', 'privacy_filter'));
-    $where = "WHERE creator_email = '{$user_email}'";
-} else {
-    $attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter';
-    $where = "WHERE privacy_filter = 'public'";
-}
+$attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter';
+$where = "WHERE privacy_filter = 'public'";
+
 
 // Apply search filters based on the user's input
+// Title sort
 if (!empty($title)) {
     $where .= " AND title LIKE '" . $conn->real_escape_string($title) . "%'"; // Match titles starting with the input
 }
+
+// Creation Date range sort
 if (!empty($startDate)) {
-    $where .= " AND event_date >= '" . $conn->real_escape_string($startDate) . "'";
+    $where .= " AND creation_date >= '" . $conn->real_escape_string($startDate) . "'";
 }
 if (!empty($endDate)) {
-    $where .= " AND event_date <= '" . $conn->real_escape_string($endDate) . "'";
+    $where .= " AND creation_date <= '" . $conn->real_escape_string($endDate) . "'";
 }
 
 // Modify SQL query to add ORDER BY clause for sorting alphabetically by title
