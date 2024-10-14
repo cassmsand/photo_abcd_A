@@ -16,7 +16,7 @@
                     </li>
                     <?php if (isset($_SESSION['current_user_email'])): ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="my-blogs.php" style="font-size: 1.2rem; padding: 10px 20px;">My Blogs</a>
+                            <a class="nav-link <?php if ($CURRENT_PAGE == "MyBlogs") {?>active<?php }?>" href="my-blogs.php" style="font-size: 1.2rem; padding: 10px 20px;">My Blogs</a>
                         </li>
                     <?php endif; ?>
                     <li class="nav-item">

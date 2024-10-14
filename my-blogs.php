@@ -1,3 +1,8 @@
+<?php
+session_start();
+$CURRENT_PAGE = "MyBlogs";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<?php include("includes/head-tag-contents.php");?>
