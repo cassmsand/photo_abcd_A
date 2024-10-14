@@ -9,11 +9,16 @@
                 <img src="../photo_abcd_A/images/photoABCDLogo.png" alt="Photo ABCD Logo" width="150px" height=auto style= "border:3px solid #000000; display: block; border-radius: 25%; object-fit: cover"></img>
                 <ul class="nav nav-pills" style= "float: right; padding: 10px; background-color: white; border-radius: 30px; object-fit: cover">
                     <li class="nav-item">
-                        <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="index.php" style="font-size: 1.2rem; padding: 10px 20px;">Blogs</a>
+                        <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="index.php" style="font-size: 1.2rem; padding: 10px 20px;">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php" style="font-size: 1.2rem; padding: 10px 20px;">About Us</a>
                     </li>
+                    <?php if (isset($_SESSION['current_user_email'])): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="includes/my_blogs.php" style="font-size: 1.2rem; padding: 10px 20px;">My Blogs</a>
+                        </li>
+                    <?php endif; ?>
                     <li class="nav-item">
                         <a id='log-button' class="nav-link" style="font-size: 1.2rem; padding: 10px 20px;"></a>
                     </li>  
@@ -62,4 +67,3 @@
     </script>
 
 </body>
-

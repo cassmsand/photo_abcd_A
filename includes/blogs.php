@@ -10,7 +10,7 @@
     
         <section>
         <div class="container" id="main-content">
-            <h1>Blogs</h1>
+            <h1>Home</h1>
 
     <!-- Search Form -->
     <div id="searchContainer">
