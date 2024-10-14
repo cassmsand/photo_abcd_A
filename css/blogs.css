@@ -4,11 +4,6 @@ h2 {
     text-align: center;
 }
 
-p {
-    text-align: center;
-    text-align: left;
-}
-
 .blog-container {
     width: 75%;
     height: auto;
@@ -20,6 +15,7 @@ p {
 .blog-user-container {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .blog-user-image {
@@ -32,16 +28,15 @@ p {
 }
 
 .blog-username {
-    flex: 1;
     margin-left: 20px;
+    display: block;
+    text-align: center; 
 }
 
-.blog-userbutton {
-    width: auto;
-    height: auto;
-    margin-right: 20px;
-    border: none;
-    background-color: transparent;
+.blog-creation-date {
+    margin-left: 5px;
+    display: block;
+    text-align: center;
 }
 
 .image-container {

@@ -54,9 +54,30 @@
                                 username.className = 'blog-username';
                                 username.textContent = post.creator_email;
 
-                                const userbutton = document.createElement('button');
-                                userbutton.className = 'blog-userbutton';
-                                userbutton.textContent = '⚪ ⚪ ⚪';
+                                function formatCreationDate(dateString) {
+                                    const date = new Date(dateString);
+                                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                                    const day = String(date.getDate()).padStart(2, '0');
+                                    const year = date.getFullYear();
+                                    return `${month}/${day}/${year}`;
+                                }
+
+                                function formatCreationTime(dateString) {
+                                    const date = new Date(dateString);
+                                    let hours = date.getHours();
+                                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                                    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+                                    // Convert to 12-hour format
+                                    hours = hours % 12;
+                                    hours = hours ? String(hours).padStart(2, '0') : '12';
+
+                                    return `${hours}:${minutes} ${ampm}`;
+                                }
+
+                                const creationDate = document.createElement('p');
+                                creationDate.className = 'blog-creation-date';
+                                creationDate.textContent = '◦ ' + formatCreationDate(post.creation_date) + ' ◦ ' + formatCreationTime(post.creation_date);
 
                                 const blogTitle = document.createElement('h2');
                                 blogTitle.className = 'blog-title';
@@ -127,7 +148,7 @@
 
                                 blogUserContainer.appendChild(userImage);
                                 blogUserContainer.appendChild(username);
-                                blogUserContainer.appendChild(userbutton);
+                                blogUserContainer.appendChild(creationDate);
                                 imageContainer.appendChild(leftArrow);
                                 imageContainer.appendChild(img);
                                 imageContainer.appendChild(rightArrow);
