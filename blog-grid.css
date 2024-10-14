@@ -5,6 +5,36 @@
     justify-items: center;
 }
 
+#header-title {
+    text-align: center;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.container#sort-row {
+    display: grid;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-items: center;
+}
+
+#all-func {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#sort-drop {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .card {
     width: 100%;
     max-width: 350px;
@@ -12,6 +42,7 @@
     border-radius: 8px;
     overflow: hidden;
     background-color: #fff;
+    padding: 0px;
 }
 
 .card-header {

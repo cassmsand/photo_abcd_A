@@ -56,23 +56,28 @@
         </div>
     </section>
 
-    <h3><?php echo $header;?></h3>
-
-    <div>
-        <label for="sortOrder">Sort By:</label>
-        <select id="sortOrder">
-            <option value="asc">Alphabetically (A-Z)</option>
-            <option value="desc">Alphabetically (Z-A)</option>
-        </select>
+    <div id="header-title">
+        <h1><?php echo $header;?></h1>
     </div>
 
-    <div class="btn-group" id='all-func'>
-        <a href="actions/public-view.php" class="btn btn-primary">Public Blogs</a>
-        <a id='your-blogs' href="actions/self-view.php" class="btn btn-primary">Your Blogs</a>
-        <a href="actions/test-view.php" class="btn btn-primary">Get Alice Blogs</a>
+    <div class="container" id="sort-row">
 
-        <a id='new-blogs' href="#" class="btn btn-primary" data-toggle="modal" data-target="#new-blog-modal">Create New Blog</a>
+        <div class="btn-group" id='all-func'>
+            <a href="actions/public-view.php" class="btn btn-primary">Public Blogs</a>
+            <a id='your-blogs' href="actions/self-view.php" class="btn btn-primary">Your Blogs</a>
+            <a href="actions/test-view.php" class="btn btn-primary">Get Alice Blogs</a>
 
+            <a id='new-blogs' href="#" class="btn btn-primary" data-toggle="modal" data-target="#new-blog-modal">Create New Blog</a>
+
+        </div>
+
+        <div id="sort-drop">
+            <label for="sortOrder">Sort By:</label>
+            <select id="sortOrder">
+                <option value="asc">Alphabetically (A-Z)</option>
+                <option value="desc">Alphabetically (Z-A)</option>
+            </select>
+        </div>
     </div>
 
     <div class="row" id="blog-row"></div>

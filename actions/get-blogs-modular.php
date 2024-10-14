@@ -64,24 +64,6 @@ function getBlogs() {
     
 }
 
-function getBlogsOld() {
-    if (isset($_SESSION['current_user_email'])) {
-        // SELECT blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter WHERE creator_email = '{$user_email}'
-    
-        $user_email = $_SESSION['current_user_email'];
-        $attributes = implode(',', array('blog_id', 'creator_email', 'title', 'description', 'event_date', 'creation_date', 'modification_date', 'privacy_filter'));
-        $where = "WHERE creator_email = '{$user_email}'";
-    } else {
-        // SELECT blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter WHERE privacy_filter = 'public'
-    
-        $attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter';
-        $where = "WHERE privacy_filter = 'public'";
-    }
-
-    $sql = "SELECT $attributes FROM blogs $where";
-    return $sql;
-}
-
 $sql = getBlogs();
 
 $result = $conn->query($sql);
