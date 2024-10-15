@@ -15,14 +15,14 @@ $CURRENT_PAGE = "MyBlogs";
     <?php include("includes/top-bar.php"); ?>
     <div class="container" id='main-body'>
         <h2>My Blogs</h2>
-        <p>My Blogs information goes here.</p>
 
         <!-- Button to open the modal -->
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newBlogModal">
-            Add New Blog
+            Create New Blog
         </button>
         <!-- Include the modal from new-blog-modal.php -->
         <?php include("includes/new-blog-modal.php"); ?>
+
         <script>
             const actionType = 'get-my-blogs'; // Set action to fetch my blogs
         </script>
