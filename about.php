@@ -1,3 +1,7 @@
+<?php
+session_start();
+$CURRENT_PAGE = "About";
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<?php include("includes/head-tag-contents.php");?>
