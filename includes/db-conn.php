@@ -20,20 +20,4 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-
-    switch (basename($_SERVER["SCRIPT_NAME"])) {
-        case "about.php":
-            $CURRENT_PAGE = "About"; 
-            $PAGE_TITLE = "About Us";
-            break;
-        case "blogs.php":
-            $CURRENT_PAGE = "Blogs"; 
-            $PAGE_TITLE = "View Blogs";
-            break;
-        default:
-            $CURRENT_PAGE = "Index";
-            $PAGE_TITLE = "Welcome to my homepage!";
-    }
-    
-    
 ?>
