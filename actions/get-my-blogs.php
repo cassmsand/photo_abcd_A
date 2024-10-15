@@ -10,7 +10,7 @@ $sortOrder = isset($_GET['sort_order']) && strtolower($_GET['sort_order']) === '
 
 $attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter';
 // Need to edit this line to dynimically get the logged in user email
-$where = "WHERE creator_email = 'alice@example.com'";
+$where = "WHERE creator_email = '{$_SESSION['current_user_email']}'";
 
 
 // Apply search filters based on the user's input
