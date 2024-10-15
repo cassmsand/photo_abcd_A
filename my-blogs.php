@@ -21,9 +21,12 @@ $CURRENT_PAGE = "MyBlogs";
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newBlogModal">
             Add New Blog
         </button>
-
         <!-- Include the modal from new-blog-modal.php -->
         <?php include("includes/new-blog-modal.php"); ?>
+        <script>
+            const actionType = 'get-my-blogs'; // Set action to fetch my blogs
+        </script>
+        <?php include ("includes/blogs.php"); ?>
     </div>
 
     <?php include("includes/footer.php"); ?>

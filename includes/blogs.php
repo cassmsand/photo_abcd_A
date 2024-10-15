@@ -1,39 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <link href="css/blogs.css" rel="stylesheet" type="text/css">
-    </head>
+<head>
+    <link href="css/blogs.css" rel="stylesheet" type="text/css">
+</head>
 
-    <body>
-        <?php $blankIcon = '../photo_abcd_A/images/blankicon.jpg';?>
-    
-        <section>
+<body>
+    <?php $blankIcon = '../photo_abcd_A/images/blankicon.jpg'; ?>
+
+    <section>
         <div class="container" id="main-content">
-            <h1>Home</h1>
 
-    <!-- Search Form -->
-    <div id="searchContainer">
-        <input type="text" id="searchInput" placeholder="Search by title...">
-        <label for="startDate">Sort by creation date:</label>
-        <input type="date" id="startDate" placeholder="Start Date" style="margin-left: 5px;">
-        <input type="date" id="endDate" placeholder="End Date">
-        <button id="searchButton">Search</button>
-    </div>
+            <!-- Search Form -->
+            <div id="searchContainer">
+                <input type="text" id="searchInput" placeholder="Search by title...">
+                <label for="startDate">Sort by creation date:</label>
+                <input type="date" id="startDate" placeholder="Start Date" style="margin-left: 5px;">
+                <input type="date" id="endDate" placeholder="End Date">
+                <button id="searchButton">Search</button>
+            </div>
 
-    <div id="sortContainer">
-        <label for="sortOrder">Display:</label>
-        <select id="sortOrder">
-            <option value="asc">Alphabetically (A-Z)</option>
-            <option value="desc">Alphabetically (Z-A)</option>
-        </select>
-    </div>
+            <div id="sortContainer">
+                <label for="sortOrder">Display:</label>
+                <select id="sortOrder">
+                    <option value="asc">Alphabetically (A-Z)</option>
+                    <option value="desc">Alphabetically (Z-A)</option>
+                </select>
+            </div>
 
-    <div id="postsContainer"></div>
+            <div id="postsContainer"></div>
             <script>
                 // Function to fetch blog posts with sorting
-                const fetchBlogs = (title = '', startDate = '', endDate = '', sortOrder = 'asc') => {
-                    fetch(`actions/get-blogs.php?title=${title}&start_date=${startDate}&end_date=${endDate}&sort_order=${sortOrder}`)
+                const fetchBlogs = (actionType, title = '', startDate = '', endDate = '', sortOrder = 'asc') => {
+                    fetch(`actions/${actionType}.php?title=${title}&start_date=${startDate}&end_date=${endDate}&sort_order=${sortOrder}`)
                         .then(response => response.json())
                         .then(blogPosts => {
                             const postsContainer = document.getElementById('postsContainer');
@@ -111,20 +110,19 @@
                                             rightArrow.style.display = 'inline';
                                         }
 
-                                        currentImageIndex = 0;
+                                        let currentImageIndex = 0;
 
                                         // Left arrow click event
                                         leftArrow.addEventListener('click', () => {
                                             currentImageIndex--;
                                             if (currentImageIndex < 0) {
-                                                currentImageIndex = fileCount-1;
+                                                currentImageIndex = fileCount - 1;
                                                 img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}_${currentImageIndex}.jpg`;
                                             } else if (currentImageIndex == 0) {
                                                 img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}.jpg`;
                                             } else {
                                                 img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}_${currentImageIndex}.jpg`;
                                             }
-                                            
                                         });
 
                                         // Right arrow click event
@@ -139,7 +137,7 @@
                                         });
                                     })
                                     .catch(error => console.error('Error fetching file count:', error));
- 
+
                                 const blogDescription = document.createElement('p');
                                 blogDescription.className = 'blog-description';
                                 blogDescription.textContent = post.description;
@@ -165,18 +163,16 @@
                         .catch(error => console.error('Error fetching blog posts:', error));
                 };
 
-
-                fetchBlogs();
-
+                // Initial fetch with default action
+                fetchBlogs(actionType);
 
                 document.getElementById('searchButton').addEventListener('click', () => {
                     const title = document.getElementById('searchInput').value;
                     const startDate = document.getElementById('startDate').value;
                     const endDate = document.getElementById('endDate').value;
                     const sortOrder = document.getElementById('sortOrder').value;
-                    fetchBlogs(title, startDate, endDate, sortOrder);
+                    fetchBlogs(actionType, title, startDate, endDate, sortOrder);
                 });
-
 
                 document.getElementById('searchInput').addEventListener('keydown', (event) => {
                     if (event.key === 'Enter') {
@@ -185,7 +181,7 @@
                         const startDate = document.getElementById('startDate').value;
                         const endDate = document.getElementById('endDate').value;
                         const sortOrder = document.getElementById('sortOrder').value;
-                        fetchBlogs(title, startDate, endDate, sortOrder);
+                        fetchBlogs(actionType, title, startDate, endDate, sortOrder);
                     }
                 });
 
@@ -195,12 +191,12 @@
                     const startDate = document.getElementById('startDate').value;
                     const endDate = document.getElementById('endDate').value;
                     const sortOrder = document.getElementById('sortOrder').value;
-                    fetchBlogs(title, startDate, endDate, sortOrder);
+                    fetchBlogs(actionType, title, startDate, endDate, sortOrder);
                 });
             </script>
 
         </div>
-        </section>
-        
-    </body>
+    </section>
+
+</body>
 </html>

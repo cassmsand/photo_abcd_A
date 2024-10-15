@@ -10,11 +10,15 @@ $CURRENT_PAGE = "Index";
     <?php include("includes/head-tag-contents.php");?>
 
     <head>
-        <link href="blogs.css" rel="stylesheet" type="text/css">
+        <link href="css/blogs.css" rel="stylesheet" type="text/css">
     </head>
 
     <body>
         <?php include("includes/top-bar.php");?>
+        <h2>Home</h2>
+        <script>
+            const actionType = 'get-blogs'; // Set action to fetch my blogs
+        </script>
         <?php include("includes/blogs.php");?>
         <?php include("includes/footer.php");?>
     </body>
