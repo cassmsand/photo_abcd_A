@@ -38,6 +38,15 @@
                             const postsContainer = document.getElementById('postsContainer');
                             postsContainer.innerHTML = ''; // Clear previous posts
 
+                            if (blogPosts.message) {
+                                // Display a no-results message
+                                const noResultsMessage = document.createElement('p');
+                                noResultsMessage.textContent = blogPosts.message; // "No blogs found"
+                                noResultsMessage.className = 'no-results-message'; // Add any CSS class if needed
+                                postsContainer.appendChild(noResultsMessage);
+                                return; // Stop further processing
+                            }
+
                             blogPosts.forEach(post => {
                                 const blogContainer = document.createElement('div');
                                 blogContainer.className = 'blog-container';

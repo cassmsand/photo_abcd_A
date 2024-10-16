@@ -13,11 +13,11 @@ $where = "WHERE privacy_filter = 'public'";
 
 
 // Apply search filters based on the user's input
-// Title sort
+// Title/Description sort
 if (!empty($title)) {
-    $where .= " AND title LIKE '" . $conn->real_escape_string($title) . "%'"; // Match titles starting with the input
+    $searchTerm = $conn->real_escape_string($title);
+    $where .= " AND (title LIKE '%" . $searchTerm . "%' OR description LIKE '%" . $searchTerm . "%')"; // Match words in title or description
 }
-
 // Creation Date range sort
 if (!empty($startDate)) {
     $where .= " AND creation_date >= '" . $conn->real_escape_string($startDate) . "'";
@@ -61,6 +61,10 @@ if ($result->num_rows > 0) {
         $row['images'] = $images;
         $blogPosts[] = $row;
     }
+}else {
+    // Send a response indicating no blogs were found
+    echo json_encode(['message' => 'No matching blogs found']);
+    exit;
 }
 
 header('Content-Type: application/json');
