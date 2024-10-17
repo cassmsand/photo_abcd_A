@@ -26,7 +26,7 @@ $CURRENT_PAGE = "MyBlogs";
         <script>
             const actionType = 'get-my-blogs'; // Set action to fetch my blogs
         </script>
-        <?php include ("includes/blogs.php"); ?>
+        <?php include ("actions/my-blogs-grid.php"); ?>
     </div>
 
     <?php include("includes/footer.php"); ?>
