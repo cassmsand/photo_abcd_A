@@ -28,8 +28,8 @@ if (isset($_GET['email']) && isset($_GET['password'])) {
             $_SESSION['current_user_last_name'] = $last_name;
             $_SESSION['current_user_role'] = $role;
 
-            // Redirect to the index page
-            header("Location: ../index.php");
+            // Redirect to the my-blogs page
+            header("Location: ../my-blogs.php");
             exit();
         } else {
             // Incorrect password
