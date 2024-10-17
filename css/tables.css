@@ -1,0 +1,38 @@
+h2 {
+    text-align: center;
+}
+
+#main-body {
+    margin: 20px;
+}
+.usersTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+.usersTable th {
+    padding: 10px;
+    text-align: left;
+}
+.usersTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.usersTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.blogsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+.blogsTable th {
+    padding: 10px;
+    text-align: left;
+}
+.blogsTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.blogsTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
