@@ -35,13 +35,6 @@
                 </select>
             </div>
 
-            <div class="dropdown">
-                <button class="options-button">...</button> 
-                <div class="dropdown-content">
-                    <a href="#">Edit</a>
-                    <a href="#">Delete</a>
-                </div>
-            </div>
 
             <!-- Posts Container for Grid -->
             <div id="postsContainer" class="grid-container"></div>
