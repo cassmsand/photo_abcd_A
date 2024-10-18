@@ -1,15 +1,16 @@
 <?php
 session_start();
 $CURRENT_PAGE = "AdminDashboard";
+include_once("../includes/db-conn.php");
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-	<?php include("includes/head-tag-contents.php");?>
+		<?php include("includes/head-tag-contents.php");?>
 
 	<head>
-        <link href="css/blogs.css" rel="stylesheet" type="text/css">
-        <link href="cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" type="text/css">
+		<link href="css/tables.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
     </head>
 	<body>
 		<?php include("includes/top-bar.php");?>
