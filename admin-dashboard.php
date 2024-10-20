@@ -68,6 +68,7 @@ include_once("../includes/db-conn.php");
 							<?php } ?>
 							</tbody>
 						</table>
+						<button id="userButton">Edit User Role</button>
 					</div>
 				</section>
 				</br>
