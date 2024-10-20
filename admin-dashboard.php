@@ -117,7 +117,17 @@ include_once("../includes/db-conn.php");
 			<script>
 				$(document).ready(function() {
 					$('#usersTable').DataTable();
-					$('#blogsTable').DataTable(); // Combined initialization
+					$('#blogsTable').DataTable();
+
+					const usersTable = new DataTable('#usersTable');
+
+					usersTable.on('click', 'tbody tr', function (e) {
+						e.currentTarget.classList.toggle('selected');
+					});
+					
+					document.querySelector('#button').addEventListener('click', function () {
+						alert(table.rows('.selected').data().length + ' row(s) selected');
+					});
 				});
 			</script>
 			<?php include("includes/footer.php");?>
