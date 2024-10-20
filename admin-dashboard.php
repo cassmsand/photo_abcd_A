@@ -28,9 +28,6 @@ include_once("../includes/db-conn.php");
 					?>
 					<div class="tableContainer">
 						<h3>Users</h3>
-						<?php if (isset($_SESSION['current_selected_user_row'])): ?>
-							<button type="button">Click Me!</button>
-                    	<?php endif; ?>
 						<table id="usersTable" class="display">
 							<thead>
 								<tr id="header">
@@ -131,8 +128,6 @@ include_once("../includes/db-conn.php");
 						} else {
 							$('#usersTable tbody tr').removeClass('selected');
 							$(this).addClass('selected');
-							<?php $_SESSION['current_selected_user_row'] = $(this).addClass('selected') ?>
-
 						}
 					});
 
