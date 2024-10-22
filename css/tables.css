@@ -2,37 +2,37 @@ h2 {
     text-align: center;
 }
 
-#main-body {
-    margin: 20px;
-}
-.usersTable {
+.tableContainer {
     width: 100%;
-    border-collapse: collapse;
-}
-.usersTable th {
-    padding: 10px;
-    text-align: left;
-}
-.usersTable th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-.usersTable tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgb(233, 247, 249);
+    border-radius: 10px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    overflow-x:scroll;
 }
 
-.blogsTable {
+#usersTable, #blogsTable, #countsTable {
     width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
     border-collapse: collapse;
+    background-color:white;
 }
-.blogsTable th {
-    padding: 10px;
+
+#usersTable thead tr#header, #blogsTable thead tr#header, #countsTable thead tr#header {
+    background-color: rgb(73, 100, 181);
+    color: white;
+}
+
+#usersTable td, #usersTable th, #blogsTable td, #blogsTable th, #countsTable td, #countsTable th {
+    font-size: 12px;
+    border: 1px solid #ddd;
     text-align: left;
 }
-.blogsTable th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-.blogsTable tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+
+button {
+    display: inline-block;
+    margin: 0 auto;
 }
