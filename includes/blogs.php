@@ -1,3 +1,7 @@
+<?php
+$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'] . '/photo_abcd_A/';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +10,7 @@
 </head>
 
 <body>
-    <?php $blankIcon = '../photo_abcd_A/images/blankicon.jpg'; ?>
+    <?php $blankIcon = $base_url . 'images/blankicon.jpg'; ?>
 
     <section>
         <div class="container" id="main-content">
@@ -57,7 +61,7 @@
                                 blogUserContainer.className = 'blog-user-container';
 
                                 const userImage = document.createElement('img');
-                                userImage.src = '../photo_abcd_A/images/blankicon.jpg';
+                                userImage.src = '<?php echo $blankIcon; ?>';
                                 userImage.alt = 'User Image';
                                 userImage.className = 'blog-user-image';
 
@@ -108,7 +112,7 @@
                                 rightArrow.style.display = 'none';
 
                                 const img = document.createElement('img');
-                                img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}.jpg`;
+                                img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '.jpg';
                                 img.alt = 'Blog Image';
                                 img.className = 'blog-photo';
 
@@ -128,11 +132,11 @@
                                             currentImageIndex--;
                                             if (currentImageIndex < 0) {
                                                 currentImageIndex = fileCount - 1;
-                                                img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}_${currentImageIndex}.jpg`;
+                                                img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '_' + currentImageIndex + '.jpg';
                                             } else if (currentImageIndex == 0) {
-                                                img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}.jpg`;
+                                                img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '.jpg';
                                             } else {
-                                                img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}_${currentImageIndex}.jpg`;
+                                                img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '_' + currentImageIndex + '.jpg';
                                             }
                                         });
 
@@ -141,9 +145,9 @@
                                             currentImageIndex++;
                                             if (currentImageIndex == fileCount) {
                                                 currentImageIndex = 0; // Reset to zero if it reaches fileCount
-                                                img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}.jpg`;
+                                                img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '.jpg';
                                             } else {
-                                                img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}_${currentImageIndex}.jpg`;
+                                                img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '_' + currentImageIndex + '.jpg';
                                             }
                                         });
                                     })
