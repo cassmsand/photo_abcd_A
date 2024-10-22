@@ -1,3 +1,12 @@
+<?php
+    $host = $_SERVER['HTTP_HOST'];
+    $is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
+    
+    // If the server is localhost, include 'photo_abcd_A' in the base URL
+    $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A/' : '/');
+    $blankIcon = $base_url . 'images/blankicon.jpg';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,8 +15,6 @@
 </head>
 
 <body>
-    <?php $blankIcon = '../photo_abcd_A/images/blankicon.jpg'; ?>
-
     <section>
         <div class="container" id="main-content">
 
@@ -39,6 +46,8 @@
             <!-- Posts Container for Grid -->
             <div id="postsContainer" class="grid-container"></div>
             <script>
+                const baseUrl = '<?php echo $base_url; ?>';
+
                 const fetchBlogs = (actionType, title = '', startDate = '', endDate = '', sortOrder = 'asc') => {
                     fetch(`actions/${actionType}.php?title=${title}&start_date=${startDate}&end_date=${endDate}&sort_order=${sortOrder}`)
                         .then(response => response.json())
@@ -62,7 +71,7 @@
                                 blogUserContainer.className = 'blog-user-container';
 
                                 const userImage = document.createElement('img');
-                                userImage.src = '../photo_abcd_A/images/blankicon.jpg';
+                                userImage.src = baseUrl + 'images/blankicon.jpg';
                                 userImage.alt = 'User Image';
                                 userImage.className = 'blog-user-image';
 
@@ -79,7 +88,7 @@
                                 blogTitle.textContent = post.title;
 
                                 const img = document.createElement('img');
-                                img.src = `../photo_abcd_A/images/${post.blog_id}/${post.blog_id}.jpg`;
+                                img.src = baseUrl + `images/${post.blog_id}/${post.blog_id}.jpg`;
                                 img.alt = 'Blog Image';
                                 img.className = 'blog-photo';
 
@@ -155,6 +164,7 @@
                     const sortOrder = document.getElementById('sortOrder').value;
                     fetchBlogs('get-my-blogs', title, startDate, endDate, sortOrder);
                 });
+
                 document.addEventListener('DOMContentLoaded', () => {
                     // Toggle the dropdown menu visibility when the button is clicked
                     document.addEventListener('click', function (event) {
@@ -183,6 +193,3 @@
 
 </body>
 </html>
-
-
-
