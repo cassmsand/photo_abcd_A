@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
+                    <button type="button" class="btn btn-primary" onclick="saveUserChanges()">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -52,7 +52,7 @@
 </div>
 
 <script>
-function saveChanges() {
+function saveUserChanges() {
     const formData = {
         email: document.getElementById('editEmail').innerText,
         firstName: document.getElementById('editFirstName').value,
