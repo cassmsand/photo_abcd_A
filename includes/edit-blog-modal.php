@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<div id="editBlogModal" class="modal" style="display: none;">
+<div id="editBlogModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="editBlogForm">
@@ -32,15 +32,15 @@
                     </div>
                     <div class="form-group">
                         <label>Event Date</label>
-                        <input type="date" name="eventDate" id="editEventDate" class="form-control" required>
+                        <input type="datetime-local" name="eventDate" id="editEventDate" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Creation Date</label>
-                        <input type="date" name="creationDate" id="editCreationDate" class="form-control" required>
+                        <input type="datetime-local" name="creationDate" id="editCreationDate" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Modification Date</label>
-                        <input type="date" name="modificationDate" id="editModificationDate" class="form-control" required>
+                        <input type="datetime-local" name="modificationDate" id="editModificationDate" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="privacyFilter">Privacy Filter:</label>
