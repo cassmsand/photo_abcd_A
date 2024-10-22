@@ -44,12 +44,46 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal">Save Changes</button>
+                    <button type="button" class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+function saveChanges() {
+    const formData = {
+        email: document.getElementById('editEmail').innerText,
+        firstName: document.getElementById('editFirstName').value,
+        lastName: document.getElementById('editLastName').value,
+        password: document.getElementById('editPassword').value,
+        active: document.getElementById('editActive').value,
+        role: document.getElementById('editRole').value
+    };
+
+    // AJAX request
+    fetch('actions/update-user.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('User updated successfully!');
+            location.reload();
+        } else {
+            alert('Error updating user: ' + data.message);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+</script>
 
 </body>
 </html>

@@ -2,6 +2,13 @@
 session_start();
 $CURRENT_PAGE = "AdminDashboard";
 include_once("../includes/db-conn.php");
+
+$base_url = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/photo_abcd_A/';
+
+if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_role']) || $_SESSION['current_user_role'] !== 'admin') {
+    header('Location: ' . $base_url . 'index.php');
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
