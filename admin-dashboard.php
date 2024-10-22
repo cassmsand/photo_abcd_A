@@ -127,6 +127,7 @@ include_once("../includes/db-conn.php");
 						</table>
 						<button id="editBlogButton">Edit Blog</button>
 						<button id="removeBlogButton">Remove Blog</button>
+						<?php include("includes/edit-blog-modal.php");?>
 					</div>
 				</section>
 				</br>
@@ -196,7 +197,7 @@ include_once("../includes/db-conn.php");
 						}
 					});
 
-					// Click listener for the Edit button
+					// Click listener for the Edit user button
 					$('#editUserButton').on('click', function() {
 						const selectedRow = $('#usersTable tbody tr.selected');
 
@@ -212,7 +213,7 @@ include_once("../includes/db-conn.php");
 						const active = selectedRow.find('td:eq(4)').text(); // Active
 						const role = selectedRow.find('td:eq(5)').text(); // Role
 
-						// Populate the form fields in the modal
+						// Fill in fields in the modal
 						$('#editEmail').text(email);
 						$('#editFirstName').val(firstName);
 						$('#editLastName').val(lastName);
@@ -230,6 +231,37 @@ include_once("../includes/db-conn.php");
 							$('#blogsTable tbody tr').removeClass('selected');
 							$(this).addClass('selected');
 						}
+					});
+
+					// Click listener for the Edit blog button
+					$('#editBlogButton').on('click', function() {
+						const selectedRow = $('#blogsTable tbody tr.selected');
+
+						if (selectedRow.length === 0) {
+							alert('Please select a blog to edit.');
+							return;
+						}
+
+						const blogId = selectedRow.find('td:eq(0)').text(); // Blog ID
+						const creatorEmail = selectedRow.find('td:eq(1)').text(); // Creator Email
+						const title = selectedRow.find('td:eq(2)').text(); // Title
+						const description = selectedRow.find('td:eq(3)').text(); // Description
+						const eventDate = selectedRow.find('td:eq(4)').text(); // Event Date
+						const creationDate = selectedRow.find('td:eq(5)').text(); // Creation Date
+						const modificationDate = selectedRow.find('td:eq(6)').text(); // Modification Date
+						const privacyFilter = selectedRow.find('td:eq(7)').text(); // Privacy Filter
+
+						// Fill in form fields in the modal
+						$('#editBlogId').text(blogId);
+						$('#editCreatorEmail').text(creatorEmail);
+						$('#editTitle').val(title);
+						$('#editDescription').val(description);
+						$('#editEventDate').val(eventDate);
+						$('#editCreationDate').val(creationDate);
+						$('#editModificationDate').val(modificationDate);
+						$('#editPrivacyFilter').val(privacyFilter);
+
+						$('#editBlogModal').modal('show'); // If using Bootstrap
 					});
 
 					countsTable.on('click', 'tbody tr', function (e) {
