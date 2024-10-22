@@ -1,8 +1,6 @@
-<script>
-        <?php
-            session_start();
-            session_destroy();
-            header("Location: ../index.php");
-            exit;
-        ?>
-</script>
+<?php
+    session_start();
+    session_destroy();
+    header("Location: ../index.php");
+    exit;
+?>
