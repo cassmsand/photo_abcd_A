@@ -137,6 +137,7 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 						<button id="editBlogButton">Edit Blog</button>
 						<button id="deleteBlogButton">Delete Blog</button>
 						<?php include("includes/edit-blog-modal.php");?>
+						<?php include("includes/delete-blog-modal.php");?>
 					</div>
 				</section>
 				</br>
@@ -278,7 +279,7 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 						const privacyFilter = selectedRow.find('td:eq(7)').text(); // Privacy Filter
 
 						// Fill in form fields in the modal
-						$('#editBlogId').text(blogId);
+						$('#BlogId').text(blogId);
 						$('#editCreatorEmail').text(creatorEmail);
 						$('#editTitle').val(title);
 						$('#editDescription').val(description);
@@ -288,6 +289,29 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 						$('#editPrivacyFilter').val(privacyFilter);
 
 						$('#editBlogModal').modal('show');
+					});
+
+					// Click listener for the Delete blog button
+					$('#deleteBlogButton').on('click', function() {
+						const selectedRow = $('#blogsTable tbody tr.selected');
+
+						if (selectedRow.length === 0) {
+							alert('Please select a blog to delete.');
+							return;
+						}
+
+						const blogId = selectedRow.find('td:eq(0)').text(); // Blog ID
+						const creatorEmail = selectedRow.find('td:eq(1)').text(); // Creator Email
+						const title = selectedRow.find('td:eq(2)').text(); // Title
+						const description = selectedRow.find('td:eq(3)').text(); // Description
+
+						// Fill in form fields in the modal
+						$('#deleteBlogId').text(blogId);
+						$('#deleteCreatorEmail').text(creatorEmail);
+						$('#deleteTitle').text(title);
+						$('#deleteDescription').text(description);
+					
+						$('#deleteBlogModal').modal('show');
 					});
 
 					countsTable.on('click', 'tbody tr', function (e) {
