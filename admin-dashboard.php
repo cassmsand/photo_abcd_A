@@ -261,7 +261,7 @@ include_once("../includes/db-conn.php");
 						$('#editModificationDate').val(modificationDate);
 						$('#editPrivacyFilter').val(privacyFilter);
 
-						$('#editBlogModal').modal('show'); // If using Bootstrap
+						$('#editBlogModal').modal('show');
 					});
 
 					countsTable.on('click', 'tbody tr', function (e) {
