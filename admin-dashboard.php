@@ -53,6 +53,19 @@ include_once("../includes/db-conn.php");
 										}
 									}
 
+									// Function to format active value into a string value
+									function formatActive($activeValue) {
+										try {
+											if ($activeValue == "0") {
+												return "Not Active";
+											} else if ($activeValue == "1") {
+												return "Active";
+											}
+										} catch (Exception $e) {
+											return "Invalid Active Value";
+										}
+									}
+
 									while($row = $result->fetch_assoc()) {
 								?>
 										<tr>
@@ -60,7 +73,7 @@ include_once("../includes/db-conn.php");
 											<td><?php echo $row['first_name']; ?></td>
 											<td><?php echo $row['last_name']; ?></td>
 											<td><?php echo $row['password']; ?></td>
-											<td><?php echo $row['active']; ?></td>
+											<td><?php echo formatActive($row['active']); ?></td>
 											<td><?php echo $row['role']; ?></td>
 											<td><?php echo formatDateTime($row['created_time']); ?></td>
 											<td><?php echo formatDateTime($row['modified_time']); ?></td>
@@ -70,6 +83,7 @@ include_once("../includes/db-conn.php");
 						</table>
 						<button id="editUserButton">Edit User</button>
 						<button id="removeUserButton">Remove User</button>
+						<?php include("includes/edit-user-modal.php");?>
 					</div>
 				</section>
 				</br>
@@ -180,6 +194,33 @@ include_once("../includes/db-conn.php");
 							$('#usersTable tbody tr').removeClass('selected');
 							$(this).addClass('selected');
 						}
+					});
+
+					// Click listener for the Edit button
+					$('#editUserButton').on('click', function() {
+						const selectedRow = $('#usersTable tbody tr.selected');
+
+						if (selectedRow.length === 0) {
+							alert('Please select a user to edit.');
+							return;
+						}
+
+						const email = selectedRow.find('td:eq(0)').text(); // Email
+						const firstName = selectedRow.find('td:eq(1)').text(); // First Name
+						const lastName = selectedRow.find('td:eq(2)').text(); // Last Name
+						const password = selectedRow.find('td:eq(3)').text(); // Password
+						const active = selectedRow.find('td:eq(4)').text(); // Active
+						const role = selectedRow.find('td:eq(5)').text(); // Role
+
+						// Populate the form fields in the modal
+						$('#editEmail').text(email);
+						$('#editFirstName').val(firstName);
+						$('#editLastName').val(lastName);
+						$('#editPassword').val(password);
+						$('#active').val(active);
+						$('#role').val(role);
+
+						$('#editUserModal').modal('show'); // If using Bootstrap
 					});
 
 					blogsTable.on('click', 'tbody tr', function (e) {
