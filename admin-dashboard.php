@@ -47,7 +47,7 @@ include_once("../includes/db-conn.php");
 									function formatDateTime($dateString) {
 										try {
 											$date = new DateTime($dateString);
-											return $date->format('m/d/Y h:i A');
+											return $date->format('m-d-Y h:i A');
 										} catch (Exception $e) {
 											return "Invalid Date";
 										}
