@@ -1,5 +1,9 @@
 <?php
-$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'] . '/photo_abcd_A/';
+$host = $_SERVER['HTTP_HOST'];
+$is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
+
+// If the server is localhost, include 'photo_abcd_A' in the base URL
+$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A/' : '/');
 ?>
 
 <!DOCTYPE html>
