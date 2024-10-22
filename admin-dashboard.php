@@ -90,8 +90,9 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 							</tbody>
 						</table>
 						<button id="editUserButton">Edit User</button>
-						<button id="removeUserButton">Remove User</button>
+						<button id="deleteUserButton">Delete User</button>
 						<?php include("includes/edit-user-modal.php");?>
+						<?php include("includes/delete-user-modal.php");?>
 					</div>
 				</section>
 				</br>
@@ -134,7 +135,7 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 							</tbody>
 						</table>
 						<button id="editBlogButton">Edit Blog</button>
-						<button id="removeBlogButton">Remove Blog</button>
+						<button id="deleteBlogButton">Delete Blog</button>
 						<?php include("includes/edit-blog-modal.php");?>
 					</div>
 				</section>
@@ -229,7 +230,24 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 						$('#active').val(active);
 						$('#role').val(role);
 
-						$('#editUserModal').modal('show'); // If using Bootstrap
+						$('#editUserModal').modal('show');
+					});
+
+					// Click listener for the Delete user button
+					$('#deleteUserButton').on('click', function() {
+						const selectedRow = $('#usersTable tbody tr.selected');
+
+						if (selectedRow.length === 0) {
+							alert('Please select a user to delete.');
+							return;
+						}
+
+						const email = selectedRow.find('td:eq(0)').text(); // Email
+
+						// Fill in fields in the modal
+						$('#deleteEmail').text(email);
+
+						$('#deleteUserModal').modal('show');
 					});
 
 					blogsTable.on('click', 'tbody tr', function (e) {
