@@ -1,7 +1,7 @@
 <?php
 include_once("includes/db-conn.php");
 
-$CURRENT_PAGE = "Alphabet Book";
+$CURRENT_PAGE = "ABook";
 
 ?>
 <!DOCTYPE html>
