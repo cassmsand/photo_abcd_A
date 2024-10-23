@@ -6,9 +6,6 @@ $is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
 $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A/' : '/');
 ?>
 
-<head>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-</head>
 <body>
     <div class="header">
         <div style="padding: 4rem 2rem; margin-bottom: 2rem; background-color: #; background-image: url('<?php echo $base_url; ?>images/banner.png'); background-size: cover; background-position: center;">

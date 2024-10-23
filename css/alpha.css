@@ -1,0 +1,118 @@
+.container#book-bar {
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 260px;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #ddf4f0;
+    align-content: start;
+    justify-content: center;
+}
+
+#book-bar-row {
+    padding: 10px;
+    max-height: 280px;
+    gap: 20px;
+}
+
+.card.bar-card {
+    padding: 0px;
+    min-width: 180px;
+    min-height: 180px;
+    max-width: 180px;
+    max-height: 180px;
+}
+
+.card.bar-card#new-book {
+    padding: 0px;
+    margin: auto;
+    min-width: 120px;
+    min-height: 120px;
+    max-width: 120px;
+    max-height: 120px;
+}
+
+#book-content {
+    margin-top: 20px;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #ddf4f0;
+}
+
+.card-img#blank {
+    margin-top: 40px;
+    max-width: 100px;
+    height: 80px;
+    
+}
+
+.card-body {
+    justify-content: center;
+    align-content: center;
+    display: flex;
+}
+
+#util-bar {
+    display: inline-flexbox;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-content: center;
+}
+
+.container#button-container {
+    max-width: 340px;
+    align-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.button {
+    max-width: 250px;
+    max-height: 90px;
+}
+
+.container#progress-container {
+    margin-top: 5px;
+    padding: 20px;
+    height: 100px;
+    max-width: 700px;
+    border-radius: 20px;
+    background-color: white;
+}
+
+#progress-bar {
+    width: 0%;
+}
+
+#alpha-grid {
+    margin-top: 20px;
+    height: fit-content;
+    padding: 10px;
+    padding-top: 30px;
+    border-radius: 20px;
+    background-color: whitesmoke;
+    display: grid;
+}
+
+.row#alpha-grid-row {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    gap: 30px;
+}
+
+.card.a-grid {
+    padding: 0px;
+    min-width: 250px;
+    min-height: 250px;
+    max-width: 250px;
+    max-height: 250px;
+}
+
+#abook-modal {
+    --bs-modal-max-width: 1400px;
+    --bs-modal-width: 1000px;
+    justify-items: center;
+}
+
