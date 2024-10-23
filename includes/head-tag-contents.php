@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title><?php print $PAGE_TITLE;?></title>
+    <title><?php print $CURRENT_PAGE;?></title>
 
     <?php if ($CURRENT_PAGE == "Index") { ?>
         <meta name="description" content="" />
