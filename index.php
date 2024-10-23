@@ -1,6 +1,5 @@
 <?php
 // This file is the default page of the website. It serves as a home page and displays the public blogs.
-session_start();
 $CURRENT_PAGE = "Index";
 ?>
 <!DOCTYPE html>

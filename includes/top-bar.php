@@ -26,7 +26,7 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
                             <a class="nav-link <?php if ($CURRENT_PAGE == "MyBlogs") {?>active<?php }?>" href="my-blogs.php" style="font-size: 1.2rem; padding: 10px 20px;">My Blogs</a>
                         </li>
                     <?php endif; ?>
-                    <?php if ($_SESSION['current_user_role'] == 'admin'): ?>
+                    <?php if (isset($_SESSION['current_user_role']) && $_SESSION['current_user_role'] == 'admin'): ?>
                         <li class="nav-item">
                             <a class="nav-link <?php if ($CURRENT_PAGE == "AdminDashboard") {?>active<?php }?>" href="admin-dashboard.php" style="font-size: 1.2rem; padding: 10px 20px;">Administration</a>
                         </li>
