@@ -1,0 +1,37 @@
+.container.about-bar {
+    border-radius: 30px;
+    background-color: #d5ebf5;
+    padding: 20px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+}
+
+#left {
+    justify-content: left;
+    text-align: left;
+}
+
+#right {
+    justify-content: right;
+    text-align: right;
+}
+
+.about-header {
+    max-width: fit-content;
+    max-height: fit-content;
+    margin: auto;
+}
+
+
+.image-container {
+    justify-content: left;
+    align-self: center;
+    max-height: 280px;
+    max-width: fit-content;
+}
+
+.img-fluid {
+    border-radius: 100%;
+    max-height: 250px;
+}

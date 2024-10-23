@@ -1,26 +1,136 @@
 <?php
-session_start();
 $CURRENT_PAGE = "About";
 ?>
 <!DOCTYPE html>
 <html lang="en">
-	<?php include("includes/head-tag-contents.php");?>
+<?php include("includes/head-tag-contents.php");?>
 
-	<head>
-        <link href="css/blogs.css" rel="stylesheet" type="text/css">
-    </head>
+<head>
+    <link rel="stylesheet" href="css/about.css">
+</head>
 
-	<body>
-		<?php include("includes/top-bar.php");?>
-		<section>
-			<div class="container" id='main-body'>
-				<h2>About Us</h2>
-				<p>About us information goes here.</p>
-				<p>About us information goes here.</p>
-				<p>About us information goes here.</p>
-			</div>
-		</section>
-		<?php include("includes/footer.php");?>
-	</body>
+<body>
+    <?php include("includes/top-bar.php");?>
+    <section>
+        <div class="container" id='main-body'>
+
+            <div class="container about-bar" id="left">
+                <div class="container image-container">
+                    <img class='img-fluid' src="../photo_abcd_A/images/about/samp1.jpg" alt="team image">
+                </div>
+
+                <div class="container">
+                    <div class="about-header">
+                        <h1 id="left">Alice Johnson</h1>
+                    </div>
+
+                    <div class="container about-bar">
+                        <p>
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+                            unknown
+                            printer took a galley of type and scrambled it to make a type specimen book. It has survived
+                            not only five centuries, but also the leap into electronic typesetting, remaining
+                            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
+                            containing Lorem Ipsum passages, and more recently with desktop publishing software like
+                            Aldus PageMaker including versions of Lorem Ipsum.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container about-bar" id="right">
+                <div class="container">
+
+                    <div class="about-header">
+                        <h1>Uvuvwevwevwe Onyenenyevwevwe Ugbwemubwem</h1>
+                    </div>
+                    <div class="container about-bar">
+                        <p>
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+                            unknown
+                            printer took a galley of type and scrambled it to make a type specimen book. It has survived
+                            not only five centuries, but also the leap into electronic typesetting, remaining
+                            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
+                            containing Lorem Ipsum passages, and more recently with desktop publishing software like
+                            Aldus PageMaker including versions of Lorem Ipsum.
+                        </p>
+                    </div>
+                </div>
+                <div class="container image-container">
+                    <img class='img-fluid' src="../photo_abcd_A/images/about/samp2.jpg" alt="team image">
+                </div>
+            </div>
+
+            <div class="container about-bar" id="left">
+                <div class="container image-container">
+                    <img class='img-fluid' src="../photo_abcd_A/images/about/samp3.jpg" alt="team image">
+                </div>
+                <div class="container">
+                    <div class="about-header">
+                        <h1>Phillip Philips</h1>
+                    </div>
+                    <div class="container about-bar">
+                        <p>
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+                            unknown
+                            printer took a galley of type and scrambled it to make a type specimen book. It has survived
+                            not only five centuries, but also the leap into electronic typesetting, remaining
+                            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
+                            containing Lorem Ipsum passages, and more recently with desktop publishing software like
+                            Aldus PageMaker including versions of Lorem Ipsum.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container about-bar" id="right">
+                <div class="container">
+                    <div class="about-header">
+                        <h1>Michaelangelo</h1>
+                    </div>
+                    <div class="container about-bar">
+                        <p>
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+                            unknown
+                            printer took a galley of type and scrambled it to make a type specimen book. It has survived
+                            not only five centuries, but also the leap into electronic typesetting, remaining
+                            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
+                            containing Lorem Ipsum passages, and more recently with desktop publishing software like
+                            Aldus PageMaker including versions of Lorem Ipsum.
+                        </p>
+                    </div>
+                </div>
+                <div class="container image-container">
+                    <img class='img-fluid' src="../photo_abcd_A/images/about/samp4.jpg" alt="team image">
+                </div>
+            </div>
+
+            <div class="container about-bar" id="left">
+                <div class="container image-container">
+                    <img class='img-fluid' src="../photo_abcd_A/images/about/samp5.jpg" alt="team image">
+                </div>
+
+                <div class="container">
+                    <div class="about-header">
+                        <h1>Bob Dylan</h1>
+                    </div>
+                    <div class="container about-bar">
+                        <p>
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+                            unknown
+                            printer took a galley of type and scrambled it to make a type specimen book. It has survived
+                            not only five centuries, but also the leap into electronic typesetting, remaining
+                            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
+                            containing Lorem Ipsum passages, and more recently with desktop publishing software like
+                            Aldus PageMaker including versions of Lorem Ipsum.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <?php include("includes/footer.php");?>
+</body>
 
 </html>
