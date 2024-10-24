@@ -15,6 +15,8 @@ var completion = 0;
 
 init();
 
+
+
 function init()
 {
     Promise.all([fetchArr('actions/abook-get-user-books.php'), fetchArr('actions/abook-get-user-blogs.php')])
@@ -43,14 +45,27 @@ async function fetchArr(url)
     return rows;
 }
 
-function updateBook()
+async function updateBook()
 {
-    const str = JSON.stringify(current_book);
-    fetch(`actions/abook-update-book.php`, 
+    var str = JSON.stringify(current_book);
+    await fetch(`actions/abook-update-book.php`, 
     {
         method: 'POST',
         body: str
     })
+
+    init();
+}
+
+async function deleteBook()
+{
+    var str = JSON.stringify(current_book);
+    await fetch(`actions/abook-delete-book.php`, 
+    {
+        method: 'POST',
+        body: str
+    })
+
     init();
 }
 
@@ -107,6 +122,7 @@ function displayBar()
     {
         displayGrid(user_books[0]);
     } else {
+
         user_books.forEach(book => {
             if (book.book_id === current_book.book_id)
             {
@@ -135,8 +151,8 @@ function displayGrid(book)
     //console.log(entries);
 
     entries.forEach(pair => {
-        const letter = pair[0];
-        const blog_id = pair[1];
+        var letter = pair[0];
+        var blog_id = pair[1];
         //console.log(pair);
 
         // If blog is empty, create empty slot.
@@ -144,7 +160,7 @@ function displayGrid(book)
         if (blog_id === null) {
             createBlankGridCard(letter);
         } else {
-            const blog = getBlogById(blog_id);
+            var blog = getBlogById(blog_id);
             createGridCard(blog);
             completion++;
         }
