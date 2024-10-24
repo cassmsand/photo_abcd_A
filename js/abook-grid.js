@@ -74,7 +74,7 @@ function setProgress()
     var progress = ~~((completion / 26)*100);
     progBar.style.width = `${progress}%`;
     //progBar.innerHTML = progress;
-    progHeader.innerHTML = `Book Completion | ${progress}%`
+    progHeader.innerHTML = `Book ${current_book.book_id} | ${progress}%`;
 }
 
 async function newBook()
@@ -135,6 +135,7 @@ function displayGrid(book)
 {
     completion = 0;
     current_book = book;
+    
     //console.log('Book before displayGrid: ', current_book);
     clearContainer(alpha_grid);
 
