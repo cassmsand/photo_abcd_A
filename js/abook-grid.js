@@ -18,6 +18,8 @@ var pending = 0;
 
 init();
 
+// Querying Functions
+
 function init()
 {
     Promise.all([fetchArr('actions/abook-get-user-books.php'), fetchArr('actions/abook-get-user-blogs.php')])
@@ -69,19 +71,6 @@ async function deleteBook()
     init();
 }
 
-function setProgress()
-{
-    var progress = ~~((completion / 26)*100);
-    var pendStr = '';
-    if (pending  > 0) {
-        pendStr = ` (${pending} Entry Pending)`;
-    }
-    progBar.style.width = `${progress}%`;
-    //progBar.innerHTML = progress;
-        
-    progHeader.innerHTML = `Book ${current_book.book_id} | ${progress}%${pendStr}`;
-}
-
 async function newBook()
 {
     await fetch('actions/abook-new-book.php', {
@@ -104,10 +93,32 @@ async function newBook()
     
 }
 
+// Display Functions
+
 /**
- * Updates the key (letter) in the pending_book parameter.
+ * Sets the progress bar logic.
+ * Displays progress and pending changes.
+ */
+function setProgress()
+{
+    var progress = ~~((completion / 26)*100);
+    var pendStr = '';
+    if (pending  > 0) {
+        pendStr = ` (${pending} Entry Pending)`;
+    }
+    progBar.style.width = `${progress}%`;
+    //progBar.innerHTML = progress;
+        
+    progHeader.innerHTML = `Book ${current_book.book_id} | ${progress}%${pendStr}`;
+}
+
+/**
+ * Updates pending letter entry.
  * 
- * @param {string} str 
+ * @param {string} str
+ * Name of the card ID.
+ * 
+ * Example String: F:6
  */
 function updateSlot(str)
 {
@@ -129,6 +140,13 @@ function updateSlot(str)
     
 }
 
+/**
+ * Clears the Book Bar and generates cards for all user books.
+ * Adds card with book creation functionality at the end of the book element.
+ * Automatically selects first Book element when page loads.
+ * Defers to current_book if recalled.
+ * Handles case in which user has no books.
+ */
 function displayBar() 
 {
     clearContainer(booksRow);
@@ -151,6 +169,9 @@ function displayBar()
 
 }
 
+/**
+ * Displays when there are no books for the current user.
+ */
 function noBookDisplay()
 {
     //alphaStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -174,6 +195,8 @@ function noBookDisplay()
     noBook.appendChild(noBookHeader);
     gridCont.appendChild(noBook);
 }
+
+
 
 function displayGrid(book) 
 {
@@ -216,19 +239,19 @@ function displayGrid(book)
     });
 
     setProgress();
-}
 
-function getBlogById(id)
-{
-    //console.log('searching');
-    let result;
-    user_blogs.forEach(blog => {
-        if (blog.blog_id === id) {
-            //console.log(blog);
-            result = blog;
-        } 
-    });
-    return result;
+    function getBlogById(id)
+    {
+        //console.log('searching');
+        let result;
+        user_blogs.forEach(blog => {
+            if (blog.blog_id === id) {
+                //console.log(blog);
+                result = blog;
+            } 
+        });
+        return result;
+    }
 }
 
 function clearContainer(container)
@@ -236,16 +259,46 @@ function clearContainer(container)
     container.innerHTML = '';
 }
 
+// Card Behavior Functions
+
 function displayAvailableBlogs(letter)
 {
     const modalRow = document.getElementById('abook-modal-row');
+    const modalBody = document.getElementById('abook-modal-body');
+    const noBlogs = document.getElementById('no-blogs');
+
     clearContainer(modalRow);
+
+    var hasEntries = false;
 
     user_blogs.forEach(blog => {
         if (blog.title[0] == letter) {
+            if (!hasEntries)
+            {
+                hasEntries = true;
+            }
             createGridCard(blog, modalRow, () => setCard(letter, blog));
         }
     });
+
+    if (hasEntries) {
+        if (noBlogs != null) {
+            noBlogs.remove();
+        }
+    } else {
+        if (noBlogs == null) 
+        {
+            const noBlogs = document.createElement("div");
+                noBlogs.className = 'container no-blogs';
+                noBlogs.id = 'no-blogs';
+            
+            const noBlogsHeader = document.createElement("h1");
+                noBlogsHeader.innerHTML = 'No Blogs Found'
+
+            noBlogs.appendChild(noBlogsHeader);
+            modalBody.appendChild(noBlogs);
+        }
+    }
 }
 
 function setCard(id, blog) 
@@ -285,7 +338,7 @@ function setCard(id, blog)
 
 }
 
-// Create Functions
+// Card Creation Functions
 
 function createBarCard(book) 
 {

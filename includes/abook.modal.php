@@ -8,10 +8,11 @@
                 
             <div class="modal-body" id='abook-modal-body'>
                 <!--Collection of valid blogs from user-->
+                
                 <div class="row justify-content-center" id="abook-modal-row"></div>
             </div>
             <div class="modal-footer">
-                <!--Button to save-->
+                <!--Button to confirm-->
             </div>
 
         </div>
