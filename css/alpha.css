@@ -51,14 +51,19 @@
     background-color: #ddf4f0;
 }
 
+.card-img {
+    object-fit: cover;
+}
+
 .card-img#blank {
     margin-top: 40px;
     max-width: 100px;
     height: 80px;
-    
+    object-fit: cover;
 }
 
 .card-body {
+    padding: 10px;
     justify-content: center;
     align-content: center;
     display: flex;
