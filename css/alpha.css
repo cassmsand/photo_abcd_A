@@ -34,6 +34,13 @@
     max-height: 180px;
 }
 
+.container.no-book {
+    min-height: 500px;
+    max-height: 800px;
+    text-align: center;
+    align-content: center;
+}
+
 .card.bar-card#new-book {
     margin-block: auto;
     padding: 0px;

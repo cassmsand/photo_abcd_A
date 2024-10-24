@@ -27,7 +27,7 @@ $CURRENT_PAGE = "ABook";
                 <div class="container row" id="util-bar">
 
                     <div class="container" id="progress-container">
-                        <h2 style="text-align: center;" id="prog-header">Book Completion | </h2>
+                        <h2 style="text-align: center;" id="prog-header">Book</h2>
 
                         <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
                             aria-valuemin="0" aria-valuemax="100">

@@ -2,6 +2,7 @@ const booksRow = document.getElementById('book-bar-row');
 const alpha_grid = document.getElementById('alpha-grid-row');
 const progBar = document.getElementById('progress-bar');
 const progHeader = document.getElementById('prog-header');
+const utilBar = document.getElementById('util-bar');
 
 let user_books = [];
 let user_blogs = [];
@@ -16,8 +17,6 @@ var pending = 0;
 */
 
 init();
-
-
 
 function init()
 {
@@ -88,7 +87,21 @@ async function newBook()
     await fetch('actions/abook-new-book.php', {
         credentials:"same-origin"
     });
+    
+    let noBook = document.getElementById('no-book');
+    if (noBook) {
+        noBook.remove();
+    }
+
+    if (utilBar.hidden)
+    {
+        utilBar.hidden = false;
+        alpha_grid.hidden = false;
+    }
+
     init();
+
+    
 }
 
 /**
@@ -124,17 +137,42 @@ function displayBar()
     });
     createBlankBarCard();
 
-    if (user_books.length > 0 && current_book == null)
-    {
+    if (user_books.length == 0) {
+        noBookDisplay();
+
+    } else if (user_books.length > 0 && current_book == null) {
         const firstBarCard = document.getElementById(`link-${user_books[0].book_id}`);
         firstBarCard.onclick();
-        
+
     } else {
         const currentCard = document.getElementById(`link-${current_book.book_id}`);
         currentCard.onclick();
-        
     }
 
+}
+
+function noBookDisplay()
+{
+    //alphaStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    //[...alphaStr].forEach(letter => createBlankGridCard(letter));
+    clearContainer(alpha_grid);
+    completion = 0;
+    pending = 0;
+    pending_book = null;
+
+    const gridCont = document.getElementById('alpha-grid');
+    utilBar.hidden = true;
+    alpha_grid.hidden = true;
+
+    const noBook = document.createElement("div");
+        noBook.className = 'container no-book';
+        noBook.id = 'no-book';
+    
+    const noBookHeader = document.createElement("h1");
+        noBookHeader.innerHTML = 'No Books Found'
+
+    noBook.appendChild(noBookHeader);
+    gridCont.appendChild(noBook);
 }
 
 function displayGrid(book) 
