@@ -6,6 +6,7 @@ const progHeader = document.getElementById('prog-header');
 let user_books = [];
 let user_blogs = [];
 let current_book;
+let pending_book;
 var completion = 0;
 var pending = 0;
 
@@ -48,7 +49,7 @@ async function fetchArr(url)
 
 async function updateBook()
 {
-    var str = JSON.stringify(current_book);
+    var str = JSON.stringify(pending_book);
     await fetch(`actions/abook-update-book.php`, 
     {
         method: 'POST',
@@ -91,7 +92,7 @@ async function newBook()
 }
 
 /**
- * Updates the key (letter) in the current_book parameter.
+ * Updates the key (letter) in the pending_book parameter.
  * 
  * @param {string} str 
  */
@@ -110,7 +111,7 @@ function updateSlot(str)
     pair = Object.fromEntries(arr);
 
     // Assign variable to letter.
-    Object.assign(current_book, pair);
+    Object.assign(pending_book, pair);
     //console.log(current_book);
     
 }
@@ -141,6 +142,7 @@ function displayGrid(book)
     completion = 0;
     pending = 0;
     current_book = book;
+    pending_book = book;
     
     //console.log('Book before displayGrid: ', current_book);
     clearContainer(alpha_grid);
