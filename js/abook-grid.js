@@ -7,6 +7,7 @@ let user_books = [];
 let user_blogs = [];
 let current_book;
 var completion = 0;
+var pending = 0;
 
 /*
 'actions/abook-get-user-books.php'
@@ -53,7 +54,6 @@ async function updateBook()
         method: 'POST',
         body: str
     })
-
     init();
 }
 
@@ -72,9 +72,14 @@ async function deleteBook()
 function setProgress()
 {
     var progress = ~~((completion / 26)*100);
+    var pendStr = '';
+    if (pending  > 0) {
+        pendStr = ` (${pending} Entry Pending)`;
+    }
     progBar.style.width = `${progress}%`;
     //progBar.innerHTML = progress;
-    progHeader.innerHTML = `Book ${current_book.book_id} | ${progress}%`;
+        
+    progHeader.innerHTML = `Book ${current_book.book_id} | ${progress}%${pendStr}`;
 }
 
 async function newBook()
@@ -134,6 +139,7 @@ function displayBar()
 function displayGrid(book) 
 {
     completion = 0;
+    pending = 0;
     current_book = book;
     
     //console.log('Book before displayGrid: ', current_book);
@@ -228,6 +234,8 @@ function setCard(id, blog)
     cardBody.appendChild(cardImage);
     cardBody.appendChild(cardLink);
     cardRef.replaceWith(card);
+    pending++;
+    setProgress();
     updateSlot(card.id);
 
 }
