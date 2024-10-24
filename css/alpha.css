@@ -10,10 +10,10 @@
 }
 
 #book-bar-row {
+    display: flex;
+    align-items: center;
     padding: 10px;
     max-height: 400px;
-    height: max-content;
-    height: auto;
     gap: 20px;
 }
 
@@ -35,13 +35,13 @@
 }
 
 .card.bar-card#new-book {
+    margin-block: auto;
     padding: 0px;
-    margin: auto;
     min-width: 70px;
-    min-height: 70px;
+    min-height: 120px;
     max-width: 70px;
-    max-height: 70px;
-    border-radius: 35%;
+    max-height: 120px;
+    border-radius: 12%;
 }
 
 #book-content {
