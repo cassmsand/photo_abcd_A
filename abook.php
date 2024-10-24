@@ -38,7 +38,7 @@ $CURRENT_PAGE = "ABook";
 
                     <div class="container" id="button-container">
                         <button type="button" class="btn btn-primary" id='update-button' onclick="updateBook()">Save Book Layout</button>
-                        <button type="button" class="btn btn-primary" id='delete-button' onclick="">Delete Book</button>
+                        <button type="button" class="btn btn-danger" id='delete-button' onclick="">Delete Book</button>
                     </div>
                     
 
