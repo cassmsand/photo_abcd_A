@@ -205,8 +205,13 @@ function displayGrid(book)
             createBlankGridCard(letter);
         } else {
             var blog = getBlogById(blog_id);
-            createGridCard(blog);
-            completion++;
+            if (blog != null) 
+            {
+                createGridCard(blog);
+                completion++;
+            } else {
+                createBlankGridCard(letter);
+            }
         }
     });
 
