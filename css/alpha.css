@@ -53,6 +53,7 @@
 
 .card-img {
     object-fit: cover;
+    border-radius: 0%;
 }
 
 .card-img#blank {
@@ -63,7 +64,7 @@
 }
 
 .card-body {
-    padding: 10px;
+    padding: 0px;
     justify-content: center;
     align-content: center;
     display: flex;
