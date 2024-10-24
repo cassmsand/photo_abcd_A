@@ -232,11 +232,10 @@ function createBarCard(book)
         const cardBody = document.createElement("div");
         cardBody.className = "card-body";
 
-            /*
             const cardImage = document.createElement("img");
+            cardImage.id = 'book-img';
             cardImage.className = "card-img";
-            cardImage.src = `${blog.dir}${blog.images[0]}`;
-            */
+            cardImage.src = "../photo_abcd_A/images/blank-book.jpg";
 
             const cardLink = document.createElement("a");
             cardLink.className = 'stretched-link';
@@ -245,7 +244,7 @@ function createBarCard(book)
             
     card.appendChild(cardHeader);
     card.appendChild(cardBody);
-    //cardBody.appendChild(cardImage);
+    cardBody.appendChild(cardImage);
     cardBody.appendChild(cardLink);
     booksRow.appendChild(card);
 }
