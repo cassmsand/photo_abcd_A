@@ -103,9 +103,18 @@ function setProgress()
 {
     var progress = ~~((completion / 26)*100);
     var pendStr = '';
-    if (pending  > 0) {
-        pendStr = ` (${pending} Entry Pending)`;
+
+    switch (pending) {
+        case 0:
+            break;
+        case 1:
+            pendStr = ` (Entry Pending)`;
+            break;
+        default:
+            pendStr = ` (${pending} Entries Pending)`;
+            break;
     }
+
     progBar.style.width = `${progress}%`;
     //progBar.innerHTML = progress;
         
@@ -195,8 +204,6 @@ function noBookDisplay()
     noBook.appendChild(noBookHeader);
     gridCont.appendChild(noBook);
 }
-
-
 
 function displayGrid(book) 
 {
