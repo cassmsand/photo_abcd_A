@@ -19,11 +19,11 @@
 
 .card {
     box-shadow: 15px 15px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 150ms ease-in-out;
 }
 
 .card:hover {
     transform: scale(110%);
-    transition: transform 80ms;
 }
 
 .card.bar-card {
