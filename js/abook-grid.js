@@ -65,7 +65,7 @@ async function deleteBook()
         method: 'POST',
         body: str
     })
-
+    current_book = null;
     init();
 }
 
@@ -120,16 +120,13 @@ function displayBar()
 
     if (user_books.length > 0 && current_book == null)
     {
-        displayGrid(user_books[0]);
+        const firstBarCard = document.getElementById(`link-${user_books[0].book_id}`);
+        firstBarCard.onclick();
+        
     } else {
-
-        user_books.forEach(book => {
-            if (book.book_id === current_book.book_id)
-            {
-                current_book = book;
-            }
-        });
-        displayGrid(current_book);
+        const currentCard = document.getElementById(`link-${current_book.book_id}`);
+        currentCard.onclick();
+        
     }
 
 }
@@ -254,6 +251,7 @@ function createBarCard(book)
             cardImage.src = "../photo_abcd_A/images/blank-book.jpg";
 
             const cardLink = document.createElement("a");
+            cardLink.id = `link-${book.book_id}`;
             cardLink.className = 'stretched-link';
             cardLink.onclick = function () { displayGrid(book) };
 
