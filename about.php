@@ -28,7 +28,7 @@ $CURRENT_PAGE = "About";
                             <h1 id="left">Alice Johnson</h1>
                         </div>
 
-                        <div class="container about-bar">
+                        <div class="container about-content">
                             <p>
                                 Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
                                 unknown
@@ -50,7 +50,7 @@ $CURRENT_PAGE = "About";
                     <div class="about-header">
                         <h1>Arnold Noble</h1>
                     </div>
-                    <div class="container about-bar">
+                    <div class="container about-content">
                         <p>
                             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
                             unknown
@@ -75,7 +75,7 @@ $CURRENT_PAGE = "About";
                     <div class="about-header">
                         <h1>Issac Conner</h1>
                     </div>
-                    <div class="container about-bar">
+                    <div class="container about-content">
                         <p>
                             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
                             unknown
@@ -94,7 +94,7 @@ $CURRENT_PAGE = "About";
                     <div class="about-header">
                         <h1>Bridget Everett</h1>
                     </div>
-                    <div class="container about-bar">
+                    <div class="container about-content">
                         <p>
                             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
                             unknown
@@ -120,7 +120,7 @@ $CURRENT_PAGE = "About";
                     <div class="about-header">
                         <h1>Darryl Mathews</h1>
                     </div>
-                    <div class="container about-bar">
+                    <div class="container about-content">
                         <p>
                             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
                             unknown

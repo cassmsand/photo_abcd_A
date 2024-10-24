@@ -1,6 +1,15 @@
 .container.about-bar {
     border-radius: 30px;
-    background-color: #d5ebf5;
+    background: linear-gradient(90deg, #e2faed, #ccdffc);
+    padding: 20px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+}
+
+.container.about-content {
+    border-radius: 30px;
+    background-color: white;
     padding: 20px;
     margin-top: 2rem;
     margin-bottom: 2rem;

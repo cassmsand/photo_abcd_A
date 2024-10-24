@@ -5,7 +5,7 @@
     height: max-content;
     padding: 20px;
     border-radius: 20px;
-    background-color: #ddf4f0;
+    background: linear-gradient(90deg, #e2faed, #ccdffc);
     align-content: start;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .card {
-    box-shadow: 10px 10px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 15px 15px 12px rgba(0, 0, 0, 0.1);
 }
 
 .card:hover {
@@ -49,7 +49,7 @@
     height: fit-content;
     padding: 20px;
     border-radius: 20px;
-    background-color: #ddf4f0;
+    background: linear-gradient(90deg, #e2faed, #ccdffc);
 }
 
 .card-img {
@@ -125,7 +125,7 @@
     padding: 10px;
     padding-top: 20px;
     border-radius: 20px;
-    background-color: whitesmoke;
+    background-color: white;
     display: grid;
 }
 
