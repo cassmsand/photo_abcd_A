@@ -141,11 +141,11 @@ function displayBar()
         noBookDisplay();
 
     } else if (user_books.length > 0 && current_book == null) {
-        const firstBarCard = document.getElementById(`link-${user_books[0].book_id}`);
+        var firstBarCard = document.getElementById(`link-${user_books[0].book_id}`);
         firstBarCard.onclick();
 
     } else {
-        const currentCard = document.getElementById(`link-${current_book.book_id}`);
+        var currentCard = document.getElementById(`link-${current_book.book_id}`);
         currentCard.onclick();
     }
 
