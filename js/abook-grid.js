@@ -204,8 +204,8 @@ function setCard(id, blog)
 
             const cardLink = document.createElement("a");
             cardLink.className = 'stretched-link';
-            cardLink.setAttribute('data-bs-target', "#abook-modal");
-            cardLink.setAttribute('data-bs-toggle', "modal");
+            cardLink.setAttribute('data-target', "#abook-modal");
+            cardLink.setAttribute('data-toggle', "modal");
             //cardLink.href = '#';
             cardLink.onclick = function () { displayAvailableBlogs(card.id[0]) }
 
@@ -269,6 +269,8 @@ function createGridCard(blog, container = alpha_grid, func = displayAvailableBlo
 
             const cardLink = document.createElement("a");
             cardLink.className = 'stretched-link';
+            cardLink.setAttribute('data-target', "#abook-modal");
+            cardLink.setAttribute('data-toggle', "modal");
             //cardLink.href = '#';
             cardLink.onclick = function () { func(card.id) }
             
