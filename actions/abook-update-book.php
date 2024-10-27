@@ -2,7 +2,7 @@
 session_start();
 require_once('../includes/db-conn.php');
 $book = (string)file_get_contents("php://input");
-//$book = "title:First Book/A:/B:/C:/D:/E:/F:6,21/G:7/H:8/I:9/J:10/K:/L:/M:/N:/O:/P:/Q:17/R:/S:19/T:/U:/V:/W:/X:/Y:/Z:/";
+//$book = "title:First Book/A:/B:/C:/D:/E:/F:6,21/G:7/H:8/I:9/J:10/K:/L:/M:/N:/O:/P:/Q:17/R:/S:19/T:/U:/V:/W:/X:/Y:/Z:";
 
 $self = $_SESSION['current_user_email'];
 

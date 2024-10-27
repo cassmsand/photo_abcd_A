@@ -14,8 +14,8 @@
             <div class="modal-footer">
                 <!--Button to confirm-->
                 <div class="container" id="button-container">
-                    <button type="button" class="btn btn-primary" id='confirm-selection-button'>Confirm Changes</button>
-                    <button type="button" class="btn btn-danger" id='cancel-button' data-dismiss="modal">Return</button>
+                    <button type="button" class="btn btn-primary" id='confirm-selection-button' data-dismiss="modal">Confirm Changes</button>
+                    <button type="button" class="btn btn-danger" id='cancel-selection-button' data-dismiss="modal">Return</button>
                 </div>
             </div>
 
