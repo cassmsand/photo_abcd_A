@@ -1,53 +1,26 @@
 <?php 
 session_start();
 require_once('../includes/db-conn.php');
-$book = json_decode(file_get_contents("php://input"), true);
+$book = (string)file_get_contents("php://input");
+//$book = "title:First Book/A:/B:/C:/D:/E:/F:6,21/G:7/H:8/I:9/J:10/K:/L:/M:/N:/O:/P:/Q:17/R:/S:19/T:/U:/V:/W:/X:/Y:/Z:/";
 
 $self = $_SESSION['current_user_email'];
-$book_id = $book['book_id'];
-// update table set var1= val1, ... where condition
-$setStr = '';
-$bindStr = '';
-$valArr = [];
 
-$whereArr = [];
-$whereStr = '';
+// Find the key, and then select by book title.
 
-foreach($book as $key => $val)
-{
-    switch ($key) {
-        case 'book_id':
-            $whereArr[] = $val;
-            $whereStr .= 's';
-            break;
+$title = explode("/A:", $book)[0];
+//Email - Str(contains )
+// Email - AbookID - str
 
-        case 'creator_email':
-            $whereArr[] = $val;
-            $whereStr .= 's';
-            break;
 
-        default:
-            if ($val != null)
-            {
-                $setStr .= "$key=?, ";
-                $valArr[] = $val;
-                $bindStr .= 'i';
-            }
-    }
-}
-$valArr = array_merge($valArr, $whereArr);
-$setStr = trim($setStr, ', ');
-$bindStr = $bindStr.$whereStr;
-
-// UPDATE alphabet_book SET F=6 WHERE book_id=1 AND creator_email='bob@example.com'
-$sql = "UPDATE alphabet_book SET $setStr WHERE book_id=? AND creator_email=?";
-//echo $sql;
-//echo json_encode($valArr);
-//echo $bindStr;
-
+// UPDATE alphabet_book SET value WHERE key = creator_email && value like $titleStr;
+$sql = "UPDATE preferences SET value=? WHERE name=? && value like CONCAT('%', ? ,'%')";
+// "%?%"
+// 
+//echo $book;
 
 if ($stmt = $conn->prepare($sql)) {
-    $stmt->bind_param($bindStr, ...$valArr);
+    $stmt->bind_param("sss", $book, $self, $title);
     if ($stmt->execute()) {
         
     } else {
@@ -55,6 +28,10 @@ if ($stmt = $conn->prepare($sql)) {
         
     }
 }
+
+//echo $book;
+
 $stmt->close();
+
 
 ?>

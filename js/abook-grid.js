@@ -12,8 +12,10 @@ let current_book;
 let pending_book;
 
 let selected_book;
+
 let selected_letter;
 var selected_blogs = [];
+let keyValObj;
 
 var completion = 0;
 var pending = 0;
@@ -49,6 +51,11 @@ var pending = 0;
 
 init();
 
+/**
+ * Cast the letter and letter array as an JSON object.
+ * Update functionality after.
+ * Update Letter.
+ */
 
 // Querying Functions
 
@@ -120,12 +127,19 @@ async function fetchBooks()
 
 async function updateBook()
 {
-    var str = JSON.stringify(pending_book);
+    let str = "";
+    for (let key in pending_book) {
+        let value = pending_book[key].join(",");
+        str += `${key}:${value}/`;
+    }
+    //console.log(str);
+
     await fetch(`actions/abook-update-book.php`, 
     {
         method: 'POST',
         body: str
-    })
+    }).then(response => console.log(response.text()))
+    
     init();
 }
 
@@ -220,6 +234,29 @@ function updateSlot(str)
     
 }
 
+/**
+ * Updates pending letter entry.
+ * Does not query. Does not provide visual feedback.
+ * 
+ * @param {string} str
+ * Name of the card ID.
+ * 
+ * Example String: F:6
+ */
+function updateSlot()
+{
+    var obj = {};
+    obj[selected_letter] = selected_blogs;
+
+    console.log(obj);
+    Object.assign(pending_book, obj);
+    selected_letter = "";
+    selected_blogs = [];
+    console.log(pending_book);
+    //console.log(selected_letter);
+    //console.log(selected_blogs);
+}
+
 // Display Functions
 
 /**
@@ -305,6 +342,8 @@ function displayGrid(book)
          * case 0: No related blogs.
          * case 1: Only has one blog.
          * default: Has multiple blogs.
+         * 
+         * Key : [value]
          */
         switch (blogidArr.length)
         {
@@ -549,21 +588,23 @@ function createBlogCard(blogOrChar, type = 'blog')
         cardBody.appendChild(cardLink);
         card.addEventListener('click', function (e) {
             const id = blog.blog_id;
-            selected_letter = card.id;
-            var arr = [];
+            selected_letter = blog.title[0];
+            //let obj = {};
 
             if (!card.classList.contains('selected'))
             {
                 card.classList.add('selected');
                 selected_blogs.push(id);
-                //var res = Object.fromEntries({selected_letter, selected_blogs});
-                console.log(Object.fromEntries([selected_letter, selected_blogs]));
+
+                console.log(selected_letter, selected_blogs);
+
             } 
             else 
             {
                 card.classList.remove('selected');
                 const index = selected_blogs.indexOf(id);
                 selected_blogs.splice(index,1);
+
                 console.log(selected_letter, selected_blogs);
             }
         });
@@ -631,6 +672,14 @@ function createBookCard(book = null, isblank = false)
         booksRow.appendChild(card);
     }
 }
+
+const confirmBtn = document.getElementById("confirm-selection-button");
+confirmBtn.addEventListener("click", function (e) {
+    updateSlot();
+})
+
+// 
+// confirm-selection-button
     
 
 /* Depreciated Functions
