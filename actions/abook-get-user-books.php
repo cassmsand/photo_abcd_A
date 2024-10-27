@@ -3,7 +3,7 @@ session_start();
 require_once('../includes/db-conn.php');
 
 $self = $_SESSION['current_user_email'];
-$sql = "SELECT * FROM alphabet_book WHERE creator_email = '{$self}'";
+$sql = "SELECT value FROM preferences WHERE name='{$self}' && notes='abook'";
 
 $result = $conn->query($sql);
 
@@ -18,6 +18,7 @@ $books = array();
 // Show rows if any are found. (If the query.result is > 0)
 if ($result->num_rows > 0) {
     foreach($result as $row) {
+        //$arr = explode("/", $row->value);
         $books[] = $row;
     }
 }

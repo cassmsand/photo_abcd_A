@@ -1,5 +1,7 @@
 const booksRow = document.getElementById('book-bar-row');
 const alpha_grid = document.getElementById('alpha-grid-row');
+const modalRow = document.getElementById('abook-modal-row');
+const modalBody = document.getElementById('abook-modal-body');
 const progBar = document.getElementById('progress-bar');
 const progHeader = document.getElementById('prog-header');
 const utilBar = document.getElementById('util-bar');
@@ -8,35 +10,65 @@ let user_books = [];
 let user_blogs = [];
 let current_book;
 let pending_book;
+
+let selected_book;
+let selected_letter;
+var selected_blogs = [];
+
 var completion = 0;
 var pending = 0;
 
-/*
-'actions/abook-get-user-books.php'
-'actions/abook-get-user-blogs.php'
-*/
+/**
+ * In the database: [Key => Value]
+ * Expected: creator_email => [...string of all letters]
+ * 
+ * [email] => 'title:/A:/B:/C:/D:/E:/F:/G:/H:/I:/J:/K:/L:/M:/N:/O:/P:/Q:/R:/S:/T:/U:/V:/W:/X:/Y:/Z:'
+ * Books Separated by '|'
+ * Attributes separated by '/'
+ * Key-Value pairs separated by ':'
+ * Value Entries Separated by ','
+ * 
+ * Input: 'title:Book Name/A:6,4,8/B:3,5,9/...'
+ * Output:
+ * 
+ * Array 
+ *  {
+ *      title => "Book Name",
+ *      A => "6,4,8",
+ *      B => "3,5,9",
+ *      ...
+ *  }
+ * 
+ * 
+ * Functional Requirements:
+ * Cards MUST support multiple card selections of same letter.
+ * Completion based on if letter has at least 1 entry.
+ * 
+ */
+
 
 init();
+
 
 // Querying Functions
 
 function init()
 {
-    Promise.all([fetchArr('actions/abook-get-user-books.php'), fetchArr('actions/abook-get-user-blogs.php')])
+    Promise.all([fetchBooks(), fetchBlogs()])
         .then(results => {
             user_books = results[0];
             user_blogs = results[1];
 
-            //console.log(user_books);
-            //console.log(user_blogs);
+            console.log(user_books);
+            console.log(user_blogs);
 
             displayBar();
         });
 }
 
-async function fetchArr(url)
+async function fetchBlogs()
 {
-    const response = await fetch(url);
+    const response = await fetch('actions/abook-get-user-blogs.php');
     if (!response.ok)
     {
         throw new Error('Network Response error');
@@ -46,6 +78,44 @@ async function fetchArr(url)
         return row;
     });
     return rows;
+}
+
+async function fetchBooks()
+{
+    const response = await fetch('actions/abook-get-user-books.php');
+    if (!response.ok)
+    {
+        throw new Error('Network Response error');
+    }
+    const dataArr = await response.json();
+    const rows = strToBook(dataArr[0].value);
+    return rows;
+
+    function strToBook(str)
+    {
+        // Will all alphabet books.
+        var bookArr = [];
+
+        // Splits Books from abook string.
+        var res = str.split("|");
+
+        // For each book string in the array
+        res.forEach((bookStr) => {
+            // Add Book Object (Has key values value pairs)
+            bookArr.push(
+                // Creates Key Value Pair
+                Object.fromEntries(
+                    // Splits key value strings
+                    bookStr.split("/")
+                        // Splits the key from the value
+                        .map(pair => pair.split(":")
+                            // Splits values.
+                            .map(values => values.split(","))
+                )))
+        });
+        
+        return bookArr; 
+    }
 }
 
 async function updateBook()
@@ -93,7 +163,7 @@ async function newBook()
     
 }
 
-// Display Functions
+// Modal Functions
 
 /**
  * Sets the progress bar logic.
@@ -118,11 +188,12 @@ function setProgress()
     progBar.style.width = `${progress}%`;
     //progBar.innerHTML = progress;
         
-    progHeader.innerHTML = `Book ${current_book.book_id} | ${progress}%${pendStr}`;
+    progHeader.innerHTML = `${current_book.title} | ${progress}%${pendStr}`;
 }
 
 /**
  * Updates pending letter entry.
+ * Does not query. Does not provide visual feedback.
  * 
  * @param {string} str
  * Name of the card ID.
@@ -149,6 +220,8 @@ function updateSlot(str)
     
 }
 
+// Display Functions
+
 /**
  * Clears the Book Bar and generates cards for all user books.
  * Adds card with book creation functionality at the end of the book element.
@@ -160,20 +233,23 @@ function displayBar()
 {
     clearContainer(booksRow);
     user_books.forEach(book => {
-        createBarCard(book);
+        createBookCard(book);
     });
-    createBlankBarCard();
+    createBookCard(null, true);
 
     if (user_books.length == 0) {
         noBookDisplay();
 
+        // Executes on click method for book card.
     } else if (user_books.length > 0 && current_book == null) {
-        var firstBarCard = document.getElementById(`link-${user_books[0].book_id}`);
-        firstBarCard.onclick();
+        //var firstBarCard = document.getElementById(`link-${user_books[0].title}`);
+        //firstBarCard.click
+        displayGrid(user_books[0]);
 
     } else {
-        var currentCard = document.getElementById(`link-${current_book.book_id}`);
-        currentCard.onclick();
+        //var currentCard = document.getElementById(`link-${current_book.title}`);
+        //currentCard.onclick();
+        displayGrid(current_book);
     }
 
 }
@@ -212,36 +288,43 @@ function displayGrid(book)
     current_book = book;
     pending_book = book;
     
-    //console.log('Book before displayGrid: ', current_book);
     clearContainer(alpha_grid);
 
     // Creates new book object. Prevents overriding of current_book.
     var letters = Object.assign({}, book);
-    delete letters['creator_email'];
-    delete letters['book_id'];
+    delete letters['title'];
 
     entries = Object.entries(letters);
-    //console.log('Book after letter block: ', current_book);
-    //console.log(entries);
-
+    
     entries.forEach(pair => {
         var letter = pair[0];
-        var blog_id = pair[1];
+        var blogidArr = pair[1];
         //console.log(pair);
 
-        // If blog is empty, create empty slot.
-        
-        if (blog_id === null) {
-            createBlankGridCard(letter);
-        } else {
-            var blog = getBlogById(blog_id);
-            if (blog != null) 
-            {
-                createGridCard(blog);
-                completion++;
-            } else {
-                createBlankGridCard(letter);
-            }
+        /**
+         * case 0: No related blogs.
+         * case 1: Only has one blog.
+         * default: Has multiple blogs.
+         */
+        switch (blogidArr.length)
+        {
+            case 0:
+                createBlogCard(letter, 'blank');
+                break;
+
+            case 1:
+                var blog = getBlogById(blogidArr[0]);
+                if (blog != null) 
+                {
+                    createBlogCard(blog, 'grid');
+                    completion++;
+                } else {
+                    createBlogCard(letter, 'blank');
+                }
+                break;
+
+            default:
+
         }
     });
 
@@ -270,21 +353,19 @@ function clearContainer(container)
 
 function displayAvailableBlogs(letter)
 {
-    const modalRow = document.getElementById('abook-modal-row');
-    const modalBody = document.getElementById('abook-modal-body');
+    
     const noBlogs = document.getElementById('no-blogs');
-
     clearContainer(modalRow);
+    //console.log('test');
 
     var hasEntries = false;
-
     user_blogs.forEach(blog => {
         if (blog.title[0] == letter) {
             if (!hasEntries)
             {
                 hasEntries = true;
             }
-            createGridCard(blog, modalRow, () => setCard(letter, blog));
+            createBlogCard(blog, 'modal');
         }
     });
 
@@ -308,6 +389,13 @@ function displayAvailableBlogs(letter)
     }
 }
 
+/**
+ * Replaces the card in the grid.
+ * Does not perform queries.
+ * 
+ * @param {*} id 
+ * @param {*} blog 
+ */
 function setCard(id, blog) 
 {
     const cardRef = document.getElementById(`${id}-blank`);
@@ -345,7 +433,207 @@ function setCard(id, blog)
 
 }
 
+function selectElement(element, type)
+{
+    if (type == 'book')
+    {
+        switch(selected_book)
+        {
+            case null || undefined:
+                selected_book = element;
+                selected_book.classList.add('selected');
+                break;
+            
+            default:
+                selected_book.classList.remove('selected');
+                selected_book = element;
+                selected_book.classList.add('selected');
+                break;
+        }
+    }
+        
+}
+
 // Card Creation Functions
+
+function createBlogCard(blogOrChar, type = 'blog')
+{
+    const card = document.createElement("div");
+    const cardHeader = document.createElement("div");
+    const cardBody = document.createElement("div");
+    const cardImage = document.createElement("img");
+    const cardLink = document.createElement("a");
+
+    switch (type)
+    {
+        case 'blank':
+            blank();
+            break;
+
+        case 'grid':
+            grid();
+            break;
+
+        case 'modal':
+            modal();
+            break;
+
+    }
+
+    function blank()
+    {
+        var letter = blogOrChar;
+        card.className = 'card a-grid';
+        card.id = `${letter}-blank`;
+        cardHeader.className = "card-header";
+        cardHeader.innerHTML = `${letter} | Add Entry`;
+        cardBody.className = "card-body";
+        cardImage.className = "card-img";
+        cardImage.id = 'blank';
+        cardImage.src = "../photo_abcd_A/images/blank-image.png";
+        cardLink.className = 'stretched-link';
+        cardLink.setAttribute('data-target', "#abook-modal");
+        cardLink.setAttribute('data-toggle', "modal");
+        //cardLink.onclick = function () { displayAvailableBlogs(letter) };
+        cardLink.addEventListener('click', function (e) {
+            displayAvailableBlogs(letter);
+        });
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        cardBody.appendChild(cardImage);
+        cardBody.appendChild(cardLink);
+        alpha_grid.appendChild(card);
+    }
+
+    function grid()
+    {
+        var blog = blogOrChar;
+        card.className = 'card a-grid';
+        card.id = blog.title[0];
+        cardHeader.className = "card-header";
+        cardHeader.innerHTML = `${blog.title}`;
+        cardBody.className = "card-body";
+        cardImage.className = "card-img";
+        cardImage.src = `${blog.dir}${blog.images[0]}`;
+        cardLink.className = 'stretched-link';
+        cardLink.setAttribute('data-target', "#abook-modal");
+        cardLink.setAttribute('data-toggle', "modal");
+        //cardLink.onclick = function () { displayAvailableBlogs(card.id) }
+        cardLink.addEventListener('click', function (e) {
+            displayAvailableBlogs(card.id);
+        });
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        cardBody.appendChild(cardImage);
+        cardBody.appendChild(cardLink);
+        alpha_grid.appendChild(card);
+    }
+
+    function modal()
+    {
+        var blog = blogOrChar;
+        card.className = 'card a-grid';
+        card.id = blog.title[0];
+        cardHeader.className = "card-header";
+        cardHeader.innerHTML = `${blog.title}`;
+        cardBody.className = "card-body";
+        cardImage.className = "card-img";
+        cardImage.src = `${blog.dir}${blog.images[0]}`;
+        cardLink.className = 'stretched-link';
+        //cardLink.setAttribute('data-target', "#abook-modal");
+        //cardLink.setAttribute('data-toggle', "modal");
+        //cardLink.onclick = function () { console.log('selection') }
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        cardBody.appendChild(cardImage);
+        cardBody.appendChild(cardLink);
+        card.addEventListener('click', function (e) {
+            const id = blog.blog_id;
+            selected_letter = card.id;
+            var arr = [];
+
+            if (!card.classList.contains('selected'))
+            {
+                card.classList.add('selected');
+                selected_blogs.push(id);
+                //var res = Object.fromEntries({selected_letter, selected_blogs});
+                console.log(Object.fromEntries([selected_letter, selected_blogs]));
+            } 
+            else 
+            {
+                card.classList.remove('selected');
+                const index = selected_blogs.indexOf(id);
+                selected_blogs.splice(index,1);
+                console.log(selected_letter, selected_blogs);
+            }
+        });
+        modalRow.appendChild(card);
+    }
+}
+
+function createBookCard(book = null, isblank = false)
+{
+    const card = document.createElement("div");
+    const cardHeader = document.createElement("div");
+    const cardBody = document.createElement("div");
+    const cardImage = document.createElement("img");
+    const cardLink = document.createElement("a");
+
+    switch (isblank) 
+    {
+        case false:
+            normal();
+            break;
+        
+        case true:
+            blank();
+            break;
+    }
+    
+    function normal()
+    {
+        card.className = 'card bar-card';
+        cardHeader.className = "card-header";
+        cardHeader.innerHTML = `${book.title}`;
+        cardBody.className = "card-body";
+        cardImage.id = 'book-img';
+        cardImage.className = "card-img";
+        cardImage.src = "../photo_abcd_A/images/blank-book.jpg";
+        cardLink.id = `link-${book.title}`;
+        cardLink.className = 'stretched-link';
+        //cardLink.onclick = function () { displayGrid(book) };
+        cardLink.addEventListener('click', function (e) {
+            displayGrid(book);
+        });
+        cardLink.addEventListener('click', function (e) {
+            selectElement(card, 'book');
+        });
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        cardBody.appendChild(cardImage);
+        cardBody.appendChild(cardLink);
+        booksRow.appendChild(card);
+    }
+
+    function blank()
+    {
+        card.className = 'card bar-card';
+        card.id = 'new-book'
+        cardBody.className = "card-body";
+        cardImage.className = "card-img";
+        cardImage.id = 'blank-bar';
+        cardImage.src = "../photo_abcd_A/images/add.png";
+        cardLink.className = 'stretched-link';
+        cardLink.onclick = function () { newBook(); };
+        card.appendChild(cardBody);
+        cardBody.appendChild(cardImage);
+        cardBody.appendChild(cardLink);
+        booksRow.appendChild(card);
+    }
+}
+    
+
+/* Depreciated Functions
 
 function createBarCard(book) 
 {
@@ -354,7 +642,7 @@ function createBarCard(book)
 
         const cardHeader = document.createElement("div");
         cardHeader.className = "card-header";
-        cardHeader.innerHTML = `Book ${book.book_id}`
+        cardHeader.innerHTML = `${book.title}`
 
         const cardBody = document.createElement("div");
         cardBody.className = "card-body";
@@ -365,7 +653,7 @@ function createBarCard(book)
             cardImage.src = "../photo_abcd_A/images/blank-book.jpg";
 
             const cardLink = document.createElement("a");
-            cardLink.id = `link-${book.book_id}`;
+            cardLink.id = `link-${book.title}`;
             cardLink.className = 'stretched-link';
             cardLink.onclick = function () { displayGrid(book) };
 
@@ -469,3 +757,4 @@ function createBlankGridCard(letter)
     cardBody.appendChild(cardLink);
     alpha_grid.appendChild(card);
 }
+    */
