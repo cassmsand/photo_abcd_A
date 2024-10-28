@@ -25,8 +25,6 @@
     -webkit-box-shadow:0px 0px 48px 9px rgba(142,138,255,0.37) !important;
     -moz-box-shadow: 0px 0px 48px 9px rgba(142,138,255,0.37) !important;
     box-shadow: 0px 0px 48px 9px rgba(142,138,255,0.37) !important;
-    
-
 }
 
 .card {
@@ -110,6 +108,7 @@
     justify-content: center;
     align-content: center;
     display: flex;
+    overflow-y: hidden;
 }
 
 #util-bar {

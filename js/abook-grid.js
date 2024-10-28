@@ -249,7 +249,8 @@ function displayBar()
 
         // Executes on click method for book card.
     } else if (user_books.length > 0 && current_book == null) {
-        //var firstBarCard = document.getElementById(`link-${user_books[0].title}`);
+        var bookCard = document.getElementById(`${user_books[0].title}`);
+        selectElement(bookCard);
         //firstBarCard.click
         displayGrid(user_books[0]);
 
@@ -326,13 +327,21 @@ function displayGrid(book)
                 {
                     createBlogCard(blog, 'grid');
                     completion++;
-                } else {
+                } 
+                else 
+                {
                     createBlogCard(letter, 'blank');
                 }
                 break;
 
             default:
-
+                var multiBlog = [];
+                blogidArr.forEach(blogid => {
+                    multiBlog.push(getBlogById(blogid));
+                });
+                createBlogCard(multiBlog, 'multi');
+                completion++;
+                break;
         }
     });
 
@@ -464,7 +473,7 @@ function selectElement(element, type='book')
 
 // Card Creation Functions
 
-function createBlogCard(blogOrChar, type = 'blog')
+function createBlogCard(blogOrChar, type = 'grid')
 {
     const card = document.createElement("div");
     const cardHeader = document.createElement("div");
@@ -486,6 +495,10 @@ function createBlogCard(blogOrChar, type = 'blog')
             modal();
             break;
 
+        case 'multi':
+            multi();
+            break;
+
     }
 
     function blank()
@@ -496,6 +509,7 @@ function createBlogCard(blogOrChar, type = 'blog')
         cardHeader.className = "card-header";
         cardHeader.innerHTML = `${letter} | Add Entry`;
         cardBody.className = "card-body";
+        cardBody.style.backgroundColor = "lightgray";
         cardImage.className = "card-img";
         cardImage.id = 'blank';
         cardImage.src = "../photo_abcd_A/images/blank-image.png";
@@ -526,7 +540,6 @@ function createBlogCard(blogOrChar, type = 'blog')
         cardLink.className = 'stretched-link';
         cardLink.setAttribute('data-target', "#abook-modal");
         cardLink.setAttribute('data-toggle', "modal");
-        //cardLink.onclick = function () { displayAvailableBlogs(card.id) }
         cardLink.addEventListener('click', function (e) {
             displayAvailableBlogs(card.id);
         });
@@ -535,6 +548,75 @@ function createBlogCard(blogOrChar, type = 'blog')
         cardBody.appendChild(cardImage);
         cardBody.appendChild(cardLink);
         alpha_grid.appendChild(card);
+    }
+
+    function multi()
+    {
+        var blogArr = blogOrChar;
+        var blog = blogArr[0];
+
+        var headerText = `${blog.title} (${blogArr.length} Blogs)`;
+
+        card.className = 'card a-grid';
+        card.id = blog.title[0];
+        cardHeader.className = "card-header";
+        cardHeader.innerHTML = headerText;
+        cardBody.className = "card-body";
+        cardImage.className = "card-img";
+        cardImage.src = `${blog.dir}${blog.images[0]}`;
+        cardLink.className = 'stretched-link';
+        cardLink.setAttribute('data-target', "#abook-modal");
+        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.addEventListener('click', function (e) {
+            displayAvailableBlogs(card.id);
+        });
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        cardBody.appendChild(cardImage);
+        cardBody.appendChild(cardLink);
+        alpha_grid.appendChild(card);
+    }
+
+    function multi2()
+    {
+        var blogArr = blogOrChar;
+        const cardInner = document.createElement("div");
+            cardInner.className = "carousel-inner";
+        card.className = 'carousel slide card a-grid';
+        card.setAttribute("data-ride", "carousel");
+        card.id = blogArr[0].title[0];
+        let firstEl = true;
+        blogArr.forEach(blog => 
+        {
+            const caroItem = document.createElement("div");
+            caroItem.className = "carousel-item";
+            if (firstEl == true) {
+                firstEl = false;
+                caroItem.classList.add("active");
+            }
+                const cardCaroHeader = document.createElement("div");
+                    cardCaroHeader.className = "card-header";
+                    cardCaroHeader.innerHTML = `${blog.title}`;
+                const cardCaroBody = document.createElement("div");
+                    cardCaroBody.className = "card-body";
+                    const cardCaroImage = document.createElement("img");
+                        cardCaroImage.className = "card-img";
+                        cardCaroImage.src = `${blog.dir}${blog.images[0]}`;
+                        cardCaroBody.appendChild(cardCaroImage);
+                caroItem.appendChild(cardCaroHeader);
+                caroItem.appendChild(cardCaroBody);
+            cardInner.appendChild(caroItem);
+        });
+        cardLink.className = 'stretched-link';
+        cardLink.setAttribute('data-target', "#abook-modal");
+        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.addEventListener('click', function (e) {
+            displayAvailableBlogs(card.id);
+        });
+        cardInner.appendChild(cardLink);
+        card.appendChild(cardInner);
+        alpha_grid.appendChild(card);
+        
     }
 
     function modal()
@@ -550,9 +632,6 @@ function createBlogCard(blogOrChar, type = 'blog')
         cardImage.className = "card-img";
         cardImage.src = `${blog.dir}${blog.images[0]}`;
         cardLink.className = 'stretched-link';
-        //cardLink.setAttribute('data-target', "#abook-modal");
-        //cardLink.setAttribute('data-toggle', "modal");
-        //cardLink.onclick = function () { console.log('selection') }
         card.appendChild(cardHeader);
         card.appendChild(cardBody);
         cardBody.appendChild(cardImage);
@@ -572,7 +651,7 @@ function createBlogCard(blogOrChar, type = 'blog')
             else 
             {
                 card.classList.remove('selected');
-                const index = selected_blogs.indexOf(id);
+                var index = selected_blogs.indexOf(id);
                 selected_blogs.splice(index,1);
 
                 console.log(selected_blogs);
@@ -583,7 +662,7 @@ function createBlogCard(blogOrChar, type = 'blog')
         if (current_book[letter].includes(id))
         {
             console.log('Contains Blog: '+id);
-            selectElement(card);
+            card.classList.add('selected');
             selected_blogs.push(id);
             console.log(selected_blogs);
         }
@@ -613,6 +692,7 @@ function createBookCard(book = null, isblank = false)
     function normal()
     {
         card.className = 'card bar-card';
+        card.id = `${book.title}`;
         cardHeader.className = "card-header";
         cardHeader.innerHTML = `${book.title}`;
         cardBody.className = "card-body";
@@ -652,7 +732,6 @@ function createBookCard(book = null, isblank = false)
     }
 }
 
-
 const confirmBtn = document.getElementById("confirm-selection-button");
 confirmBtn.addEventListener("click", function (e) {
     updateSlot();
@@ -663,130 +742,3 @@ cancelBtn.addEventListener("click", function (e) {
     selected_letter = "";
     selected_blogs = [];
 })
-    
-
-/* Depreciated Functions
-
-function createBarCard(book) 
-{
-    const card = document.createElement("div");
-    card.className = 'card bar-card';
-
-        const cardHeader = document.createElement("div");
-        cardHeader.className = "card-header";
-        cardHeader.innerHTML = `${book.title}`
-
-        const cardBody = document.createElement("div");
-        cardBody.className = "card-body";
-
-            const cardImage = document.createElement("img");
-            cardImage.id = 'book-img';
-            cardImage.className = "card-img";
-            cardImage.src = "../photo_abcd_A/images/blank-book.jpg";
-
-            const cardLink = document.createElement("a");
-            cardLink.id = `link-${book.title}`;
-            cardLink.className = 'stretched-link';
-            cardLink.onclick = function () { displayGrid(book) };
-
-            
-    card.appendChild(cardHeader);
-    card.appendChild(cardBody);
-    cardBody.appendChild(cardImage);
-    cardBody.appendChild(cardLink);
-    booksRow.appendChild(card);
-}
-
-function createGridCard(blog, container = alpha_grid, func = displayAvailableBlogs)
-{
-    const card = document.createElement("div");
-    card.className = 'card a-grid';
-    card.id = blog.title[0];
-
-        const cardHeader = document.createElement("div");
-        cardHeader.className = "card-header";
-        cardHeader.innerHTML = `${blog.title}`;
-
-        const cardBody = document.createElement("div");
-        cardBody.className = "card-body";
-
-            const cardImage = document.createElement("img");
-            cardImage.className = "card-img";
-            cardImage.src = `${blog.dir}${blog.images[0]}`;
-
-            const cardLink = document.createElement("a");
-            cardLink.className = 'stretched-link';
-            cardLink.setAttribute('data-target', "#abook-modal");
-            cardLink.setAttribute('data-toggle', "modal");
-            //cardLink.href = '#';
-            cardLink.onclick = function () { func(card.id) }
-            
-    card.appendChild(cardHeader);
-    card.appendChild(cardBody);
-    cardBody.appendChild(cardImage);
-    cardBody.appendChild(cardLink);
-    container.appendChild(card);
-
-}
-
-function createBlankBarCard()
-{
-    const card = document.createElement("div");
-    card.className = 'card bar-card';
-    card.id = 'new-book'
-
-        const cardBody = document.createElement("div");
-        cardBody.className = "card-body";
-
-            const cardImage = document.createElement("img");
-            cardImage.className = "card-img";
-            cardImage.id = 'blank-bar';
-            cardImage.src = "../photo_abcd_A/images/add.png";
-
-            const cardLink = document.createElement("a");
-            cardLink.className = 'stretched-link';
-            //cardLink.href = '#'; // Create new book here.
-
-            // Might add functionality later?
-            cardLink.onclick = function () { newBook(); };
-    
-    card.appendChild(cardBody);
-    cardBody.appendChild(cardImage);
-    cardBody.appendChild(cardLink);
-    booksRow.appendChild(card);
-}
-
-function createBlankGridCard(letter)
-{
-    const card = document.createElement("div");
-    card.className = 'card a-grid';
-    card.id = `${letter}-blank`;
-
-        const cardHeader = document.createElement("div");
-        cardHeader.className = "card-header";
-        cardHeader.innerHTML = `${letter} | Add Entry`;
-
-        const cardBody = document.createElement("div");
-        cardBody.className = "card-body";
-
-            const cardImage = document.createElement("img");
-            cardImage.className = "card-img";
-            cardImage.id = 'blank';
-            cardImage.src = "../photo_abcd_A/images/blank-image.png";
-
-            const cardLink = document.createElement("a");
-            cardLink.className = 'stretched-link';
-            cardLink.setAttribute('data-target', "#abook-modal");
-            cardLink.setAttribute('data-toggle', "modal");
-            //cardLink.href = `abook/${letter}`;
-            //cardLink.href = `#`;
-            cardLink.onclick = function () { displayAvailableBlogs(letter) };
-
-            
-    card.appendChild(cardHeader);
-    card.appendChild(cardBody);
-    cardBody.appendChild(cardImage);
-    cardBody.appendChild(cardLink);
-    alpha_grid.appendChild(card);
-}
-    */
