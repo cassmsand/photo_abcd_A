@@ -32,6 +32,9 @@ if (isset($_POST['new-register'])) {
         $stmt->bind_param("ssss", $email, $hashed_pw, $fname, $lname);
         if ($stmt->execute()) {
             $_SESSION['current_user_email'] = $email;
+            $_SESSION['current_user_first_name'] = $fname;
+            $_SESSION['current_user_last_name'] = $lname;
+            $_SESSION['current_user_role'] = "blogger";
             $conn->close();
             header("Location: ../index.php");
             exit();
