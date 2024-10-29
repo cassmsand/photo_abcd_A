@@ -13,7 +13,7 @@ h2 {
     overflow-x:scroll;
 }
 
-#usersTable, #blogsTable, #countsTable, #alphabetCountsTable {
+#usersTable, #blogsTable, #siteTotalsTable, #alphabetCountsTable, #adminAlphabetBookCountsTable {
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
@@ -21,12 +21,12 @@ h2 {
     background-color:white;
 }
 
-#usersTable thead tr#header, #blogsTable thead tr#header, #countsTable thead tr#header, #alphabetCountsTable thead tr#header {
+#usersTable thead tr#header, #blogsTable thead tr#header, #siteTotalsTable thead tr#header, #alphabetCountsTable thead tr#header, #adminAlphabetBookCountsTable thead tr#header {
     background-color: rgb(73, 100, 181);
     color: white;
 }
 
-#usersTable td, #usersTable th, #blogsTable td, #blogsTable th, #countsTable td, #countsTable th, #alphabetCountsTable td, #alphabetCountsTable th {
+#usersTable td, #usersTable th, #blogsTable td, #blogsTable th, #siteTotalsTable td, #siteTotalsTable th, #alphabetCountsTable td, #alphabetCountsTable th, #adminAlphabetBookCountsTable td, adminAlphabetBookCountsTable th {
     font-size: 12px;
     border: 1px solid #ddd;
     text-align: left;
