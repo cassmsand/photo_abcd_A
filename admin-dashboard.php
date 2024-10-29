@@ -91,8 +91,10 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 						</table>
 						<button id="editUserButton">Edit User</button>
 						<button id="deleteUserButton">Delete User</button>
+						<button id="viewAlphabetCountsButton">View Alphabet Book Counts</button>
 						<?php include("includes/edit-user-modal.php");?>
 						<?php include("includes/delete-user-modal.php");?>
+						<?php include("includes/view-alphabet-counts-modal.php");?>
 					</div>
 				</section>
 				</br>
@@ -250,6 +252,27 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 
 						$('#deleteUserModal').modal('show');
 					});
+
+					// Click listener for the View Alphabet Counts button
+					$('#viewAlphabetCountsButton').on('click', function() {
+						const selectedRow = $('#usersTable tbody tr.selected');
+
+						if (selectedRow.length === 0) {
+							alert('Please select a user to view alphabet book counts.');
+							return;
+						}
+
+						const userEmail = selectedRow.find('td:eq(0)').text(); // Email
+						const userFirstName = selectedRow.find('td:eq(1)').text(); // First Name
+						const userLastName = selectedRow.find('td:eq(2)').text(); // Last Name
+
+						// Fill in fields in the modal
+						$('#userFullName').val(' ' + userFirstName + ' ' + userLastName);
+
+						// Call the function to show the modal and load alphabet counts for the selected user
+						showAlphabetCountsModal(userEmail);
+					});
+
 
 					blogsTable.on('click', 'tbody tr', function (e) {
 						if ($(this).hasClass('selected')) {
