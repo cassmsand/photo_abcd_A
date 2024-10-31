@@ -17,7 +17,7 @@ $CURRENT_PAGE = "About";
             <div class="container about-bar row align-items-start" id="left">
                 <div class="col-3">
                     <div class="container image-container">
-                        <img class='img-fluid' src="../photo_abcd_A/images/about/samp1.jpg" alt="team image">
+                        <img class='img-fluid' src="images/about/samp1.jpg" alt="team image">
                     </div>
                 </div>
                 
@@ -63,13 +63,13 @@ $CURRENT_PAGE = "About";
                     </div>
                 </div>
                 <div class="container image-container">
-                    <img class='img-fluid' src="../photo_abcd_A/images/about/samp2.jpg" alt="team image">
+                    <img class='img-fluid' src="images/about/samp2.jpg" alt="team image">
                 </div>
             </div>
 
             <div class="container about-bar" id="left">
                 <div class="container image-container">
-                    <img class='img-fluid' src="../photo_abcd_A/images/about/samp3.jpg" alt="team image">
+                    <img class='img-fluid' src="images/about/samp3.jpg" alt="team image">
                 </div>
                 <div class="container">
                     <div class="about-header">
@@ -107,13 +107,13 @@ $CURRENT_PAGE = "About";
                     </div>
                 </div>
                 <div class="container image-container">
-                    <img class='img-fluid' src="../photo_abcd_A/images/about/samp4.jpg" alt="team image">
+                    <img class='img-fluid' src="images/about/samp4.jpg" alt="team image">
                 </div>
             </div>
 
             <div class="container about-bar" id="left">
                 <div class="container image-container">
-                    <img class='img-fluid' src="../photo_abcd_A/images/about/samp5.jpg" alt="team image">
+                    <img class='img-fluid' src="images/about/samp5.jpg" alt="team image">
                 </div>
 
                 <div class="container">

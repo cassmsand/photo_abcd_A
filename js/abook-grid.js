@@ -595,7 +595,7 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardBody.className = "card-body";
         cardImage.className = "card-img";
         cardImage.id = 'blank';
-        cardImage.src = "../photo_abcd_A/images/blank-image.png";
+        cardImage.src = "images/blank-image.png";
         cardLink.className = 'stretched-link';
         cardLink.setAttribute('data-target', "#abook-modal");
         cardLink.setAttribute('data-toggle', "modal");
@@ -783,7 +783,7 @@ function createBookCard(book = null, isblank = false)
         cardBody.className = "card-body";
         cardImage.id = 'book-img';
         cardImage.className = "card-img";
-        cardImage.src = "../photo_abcd_A/images/blank-book.png";
+        cardImage.src = "images/blank-book.png";
         cardLink.id = `link-${book.title}`;
         cardLink.className = 'stretched-link';
         //cardLink.onclick = function () { displayGrid(book) };
@@ -807,7 +807,7 @@ function createBookCard(book = null, isblank = false)
         cardBody.className = "card-body";
         cardImage.className = "card-img";
         cardImage.id = 'blank-bar';
-        cardImage.src = "../photo_abcd_A/images/add.png";
+        cardImage.src = "images/add.png";
         cardLink.className = 'stretched-link';
         cardLink.setAttribute('data-target', "#new-book-modal");
         cardLink.setAttribute('data-toggle', "modal");
