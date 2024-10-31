@@ -91,8 +91,10 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 						</table>
 						<button id="editUserButton">Edit User</button>
 						<button id="deleteUserButton">Delete User</button>
+						<button id="viewAlphabetCountsButton">View User Alphabet Book Counts</button>
 						<?php include("includes/edit-user-modal.php");?>
 						<?php include("includes/delete-user-modal.php");?>
+						<?php include("includes/view-alphabet-counts-modal.php");?>
 					</div>
 				</section>
 				</br>
@@ -131,13 +133,58 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 											<td><?php echo formatDateTime($row['modification_date']); ?></td>
 											<td><?php echo $row['privacy_filter']; ?></td>
 										</tr>
-							<?php } ?>
+								<?php } ?>
 							</tbody>
 						</table>
 						<button id="editBlogButton">Edit Blog</button>
 						<button id="deleteBlogButton">Delete Blog</button>
 						<?php include("includes/edit-blog-modal.php");?>
 						<?php include("includes/delete-blog-modal.php");?>
+					</div>
+				</section>
+				</br>
+				<section>
+					<?php
+						// Fetch user alphabet book counts
+						$sql = "
+							SELECT 
+								u.email AS creator_email,
+								COALESCE(SUM(CASE WHEN LetterCount > 0 THEN 1 ELSE 0 END), 0) AS LettersWithCount,
+								(26 - COALESCE(SUM(CASE WHEN LetterCount > 0 THEN 1 ELSE 0 END), 0)) AS LettersWithoutCount
+							FROM users u
+							LEFT JOIN (
+								SELECT 
+									creator_email,
+									COUNT(*) AS LetterCount 
+								FROM blogs
+								GROUP BY creator_email, LEFT(title, 1)
+							) AS LetterCounts ON u.email = LetterCounts.creator_email
+							GROUP BY u.email
+						";
+						$result = $conn->query($sql);
+					?>
+					<div class="tableContainer">
+						<h3>Alphabet Book Counts</h3>
+						<table id="adminAlphabetBookCountsTable" class="display">
+							<thead>
+								<tr id="header">
+									<th>User Email</th>
+									<th>Completed</th>
+									<th>Pending</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+									while($row = $result->fetch_assoc()) {
+								?>
+									<tr>
+										<td><?php echo $row['creator_email']; ?></td>
+										<td><?php echo $row['LettersWithCount']; ?></td>
+										<td><?php echo $row['LettersWithoutCount']; ?></td>
+									</tr>
+								<?php } ?>
+							</tbody>
+						</table>
 					</div>
 				</section>
 				</br>
@@ -164,8 +211,8 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 						}
 					?>
 					<div class="tableContainer">
-						<h3>Site Counts</h3>
-						<table id="countsTable" class="display">
+						<h3>Site Totals</h3>
+						<table id="siteTotalsTable" class="display">
 							<thead>
 								<tr id="header">
 									<th>Count Type</th>
@@ -192,11 +239,13 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 				$(document).ready(function() {
 					$('#usersTable').DataTable();
 					$('#blogsTable').DataTable();
-					$('#countsTable').DataTable();
+					$('#adminAlphabetBookCountsTable').DataTable();
+					$('#siteTotalsTable').DataTable();
 
 					const usersTable = new DataTable('#usersTable');
 					const blogsTable = new DataTable('#blogsTable');
-					const countsTable = new DataTable('#countsTable');
+					const adminAlphabetBookCountsTable = new DataTable('#adminAlphabetBookCountsTable');
+					const siteTotalsTable = new DataTable('#siteTotalsTable');
 
 					usersTable.on('click', 'tbody tr', function (e) {
 						if ($(this).hasClass('selected')) {
@@ -250,6 +299,27 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 
 						$('#deleteUserModal').modal('show');
 					});
+
+					// Click listener for the View Alphabet Counts button
+					$('#viewAlphabetCountsButton').on('click', function() {
+						const selectedRow = $('#usersTable tbody tr.selected');
+
+						if (selectedRow.length === 0) {
+							alert('Please select a user to view alphabet book counts.');
+							return;
+						}
+
+						const userEmail = selectedRow.find('td:eq(0)').text(); // Email
+						const userFirstName = selectedRow.find('td:eq(1)').text(); // First Name
+						const userLastName = selectedRow.find('td:eq(2)').text(); // Last Name
+
+						// Fill in fields in the modal
+						$('#userFullName').val(' ' + userFirstName + ' ' + userLastName);
+
+						// Call the function to show the modal and load alphabet counts for the selected user
+						showAlphabetCountsModal(userEmail);
+					});
+
 
 					blogsTable.on('click', 'tbody tr', function (e) {
 						if ($(this).hasClass('selected')) {
@@ -314,11 +384,20 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 						$('#deleteBlogModal').modal('show');
 					});
 
-					countsTable.on('click', 'tbody tr', function (e) {
+					adminAlphabetBookCountsTable.on('click', 'tbody tr', function (e) {
 						if ($(this).hasClass('selected')) {
 							$(this).removeClass('selected');
 						} else {
-							$('#countsTable tbody tr').removeClass('selected');
+							$('#adminAlphabetBookCountsTable tbody tr').removeClass('selected');
+							$(this).addClass('selected');
+						}
+					});
+
+					siteTotalsTable.on('click', 'tbody tr', function (e) {
+						if ($(this).hasClass('selected')) {
+							$(this).removeClass('selected');
+						} else {
+							$('#siteTotalsTable tbody tr').removeClass('selected');
 							$(this).addClass('selected');
 						}
 					});

@@ -1,6 +1,11 @@
 <?php
 session_start();
 $CURRENT_PAGE = "MyBlogs";
+
+if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_role'])) {
+    header('Location: ' . $base_url . 'index.php');
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

@@ -1,10 +1,10 @@
 <?php
-    $host = $_SERVER['HTTP_HOST'];
-    $is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
-    
-    // If the server is localhost, include 'photo_abcd_A' in the base URL
-    $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A/' : '/');
-    $blankIcon = $base_url . 'images/blankicon.jpg';
+$host = $_SERVER['HTTP_HOST'];
+$is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
+
+// If the server is localhost, include 'photo_abcd_A' in the base URL
+$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A/' : '/');
+$blankIcon = $base_url . 'images/blankicon.jpg';
 ?>
 
 <!DOCTYPE html>
@@ -35,9 +35,39 @@
                 </select>
             </div>
 
-
             <!-- Posts Container for Grid -->
             <div id="postsContainer" class="grid-container"></div>
+
+            <!-- Edit Modal -->
+            <!-- Edit Modal -->
+            <!-- Edit Modal -->
+            <div id="editModal" class="modal" style="display: none;"> <!-- Initially hidden -->
+                <div class="modal-content">
+                    <span id="closeModal" style="cursor: pointer;">&times;</span>
+                    <h2>Edit Blog Post</h2>
+                    
+                    <input type="hidden" id="blogId"> <!-- Hidden input for blog ID -->
+                    
+                    <label for="title">Title:</label>
+                    <input type="text" id="editTitle" required placeholder="Enter blog title"><br>
+
+                    <label for="description">Description:</label>
+                    <textarea id="editDescription" required placeholder="Enter blog description"></textarea><br>
+
+                    <label for="privacyFilter">Privacy Filter:</label>
+                    <select id="privacyFilter">
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                    </select><br>
+
+                    <input type="hidden" id="creatorEmail"> <!-- Hidden input for creator email -->
+                    <input type="hidden" id="eventDate"> <!-- Hidden input for event date -->
+                    <input type="hidden" id="creationDate"> <!-- Hidden input for creation date -->
+
+                    <button id="saveButton">Save</button>
+                </div>
+            </div>
+
             <script>
                 const baseUrl = '<?php echo $base_url; ?>';
 
@@ -74,7 +104,8 @@
 
                                 const creationDate = document.createElement('p');
                                 creationDate.className = 'blog-creation-date';
-                                creationDate.textContent = new Date(post.creation_date).toLocaleString();
+                                const creationDateObject = new Date(post.creation_date);
+                                creationDate.textContent = creationDateObject.toLocaleDateString() + ' ' + creationDateObject.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                                 const blogTitle = document.createElement('h2');
                                 blogTitle.className = 'blog-title';
@@ -99,14 +130,25 @@
 
                                 const dropdownContent = document.createElement('div');
                                 dropdownContent.className = 'dropdown-content';
-
+                                
                                 const editLink = document.createElement('a');
-                                editLink.href = '#'; // Link to edit functionality
+                                editLink.href = '#';
                                 editLink.textContent = 'Edit';
+                                editLink.onclick = (e) => {
+                                    e.preventDefault();
+                                    openEditModal(post); // Open the modal with the current post data
+                                };
 
                                 const deleteLink = document.createElement('a');
                                 deleteLink.href = '#'; // Link to delete functionality
                                 deleteLink.textContent = 'Delete';
+                                deleteLink.onclick = (e) => {
+                                    e.preventDefault();
+                                    // Confirmation dialog
+                                    if (confirm('Are you sure you want to delete this blog post?')) {
+                                        deleteBlog(post.blog_id, post.creator_email, post.title, post.description);
+                                    }
+                                };
 
                                 dropdownContent.appendChild(editLink);
                                 dropdownContent.appendChild(deleteLink);
@@ -121,6 +163,7 @@
                                 blogContainer.appendChild(blogTitle);
                                 blogContainer.appendChild(img);
                                 blogContainer.appendChild(blogDescription);
+                                // blogContainer.appendChild(eventDate); // Removed event date
                                 blogContainer.appendChild(optionsDropdown); // Add dropdown to blogContainer
                                 postsContainer.appendChild(blogContainer);
                             });
@@ -128,8 +171,9 @@
                         .catch(error => console.error('Error fetching blog posts:', error));
                 };
 
-                // Initial fetch with default action
+
                 fetchBlogs('get-my-blogs');
+                
 
                 document.getElementById('searchButton').addEventListener('click', () => {
                     const title = document.getElementById('searchInput').value;
@@ -171,18 +215,123 @@
                             }
                         });
 
-                        // If the clicked element is the dropdown button, toggle the respective menu
-                        if (event.target.classList.contains('options-button')) {
-                            const dropdownContent = event.target.nextElementSibling;
+                        // If the clicked element is the dropdown button, toggle its dropdown
+                        const optionsButton = event.target.closest('.options-button');
+                        if (optionsButton) {
+                            const dropdownContent = optionsButton.nextElementSibling;
                             dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
                         }
                     });
                 });
 
-            </script>
+                const openEditModal = (post) => {
+                    document.getElementById('editModal').style.display = 'block';
 
+                    console.log("Opening modal for post:", post); // Debug log
+
+                    // Populate the fields with the existing data from the post object
+                    document.getElementById('blogId').value = post.blog_id; // Should be defined
+                    document.getElementById("editTitle").value = post.title; // Auto-fill title with current title
+                    document.getElementById("editDescription").value = post.description; // Auto-fill description with current description
+                    document.getElementById('privacyFilter').value = post.privacy_filter; // Set privacy filter value
+
+                    document.getElementById('creatorEmail').value = post.creator_email; // Populate creator email
+                    document.getElementById('eventDate').value = post.event_date; // Populate event date
+                    document.getElementById('creationDate').value = post.creation_date; // Populate creation date
+                    
+                };
+
+
+
+                document.getElementById('closeModal').onclick = () => {
+                        document.getElementById('editModal').style.display = 'none';
+                    };
+
+                
+                document.getElementById('saveButton').onclick = () => {
+                    event.preventDefault();
+
+                    const blogId = document.getElementById('blogId').value;
+                    const title = document.getElementById('editTitle').value;
+                    const description = document.getElementById('editDescription').value;
+                    const privacyFilter = document.getElementById('privacyFilter').value;
+                    const creatorEmail = document.getElementById('creatorEmail').value;
+                    const eventDate = document.getElementById('eventDate').value;
+                    const creationDate = document.getElementById('creationDate').value;
+                    
+                    /*
+                    console.log('Saving the following data:');
+                    console.log('Blog ID:', blogId);
+                    console.log('Title:', title);
+                    console.log('Description:', description);
+                    console.log('Privacy Filter:', privacyFilter);
+                    console.log('Creator Email:', creatorEmail);
+                    console.log('Event Date:', eventDate);
+                    console.log('Creation Date:', creationDate);
+                    */
+                    // Ensure we are capturing the current values from the modal
+                    if (title.trim() === '' || description.trim() === '') {
+                        alert('Title and Description cannot be empty!');
+                        return; // Exit if validation fails
+                    }
+
+                    // Save changes via AJAX
+                    fetch(`actions/update-blog.php`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ blogId, title, description, privacyFilter, creatorEmail, eventDate, creationDate }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Response from server:", data); // Debug log
+                        if (data.success) {
+                            alert('Blog post updated successfully!');
+                            // Reload the posts to reflect changes
+                            fetchBlogs('get-my-blogs');
+                            document.getElementById('editModal').style.display = 'none'; // Close modal
+                        } else {
+                            alert('Failed to update blog post: ' + data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error updating blog post:', error));
+                };
+
+                
+                const deleteBlog = (blogId, creatorEmail, title, description) => {
+                    fetch(`actions/delete-blog.php`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            blogId,
+                            creatorEmail,
+                            title,
+                            description,
+                            deleteBlog: 'yes', // Flag to indicate deletion
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Response from server:", data); // Debug log
+                        if (data.success) {
+                            alert('Blog post deleted successfully!');
+                            // Reload the posts to reflect changes
+                            fetchBlogs('get-my-blogs');
+                        } else {
+                            alert('Failed to delete blog post: ' + data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error deleting blog post:', error));
+                };
+
+
+            </script>
         </div>
     </section>
-
 </body>
 </html>
+
+
