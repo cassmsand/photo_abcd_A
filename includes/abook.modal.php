@@ -1,5 +1,5 @@
-<div class="modal fade" id="abook-modal">
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade" id="abook-modal" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content" id="abook-modal-content">
 
             <div class="modal-header">
@@ -13,6 +13,15 @@
             </div>
             <div class="modal-footer">
                 <!--Button to confirm-->
+                
+                    <div class="col">
+                        <button type="button" class="btn btn-primary" id='confirm-selection-button' data-dismiss="modal">Confirm</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-danger" id='cancel-selection-button' data-dismiss="modal">Return</button>
+                    </div>
+    
+                
             </div>
 
         </div>

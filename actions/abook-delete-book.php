@@ -1,16 +1,14 @@
 <?php 
 session_start();
 require_once('../includes/db-conn.php');
-$book = json_decode(file_get_contents("php://input"), true);
-
+$bookTitle = (string)file_get_contents("php://input");
 $self = $_SESSION['current_user_email'];
-$book_id = $book['book_id'];
+$primaryKey = "abook-$self-$bookTitle";
 
-$sql = "DELETE FROM alphabet_book WHERE book_id=? AND creator_email=?";
-
+$sql = "DELETE FROM preferences WHERE name=?";
 
 if ($stmt = $conn->prepare($sql)) {
-    $stmt->bind_param('si', $book_id, $self);
+    $stmt->bind_param('s', $primaryKey);
     if ($stmt->execute()) {
         
     } else {
