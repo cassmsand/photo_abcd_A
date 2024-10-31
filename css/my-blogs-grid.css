@@ -209,7 +209,7 @@ h2 {
 .modal {
     display: none; /* Initially hidden */
     position: fixed;
-    z-index: 1000; /* Ensure it is above other content */
+    
     left: 0;
     top: 0;
     width: 100%;

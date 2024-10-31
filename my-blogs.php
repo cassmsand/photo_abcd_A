@@ -18,6 +18,8 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 
 <body>
     <?php include("includes/top-bar.php"); ?>
+    <!-- Include the modal from new-blog-modal.php -->
+    <?php include("includes/new-blog-modal.php"); ?>
     <div class="container" id='main-body'>
         <h2>My Blogs</h2>
 
@@ -25,8 +27,7 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newBlogModal">
             Create New Blog
         </button>
-        <!-- Include the modal from new-blog-modal.php -->
-        <?php include("includes/new-blog-modal.php"); ?>
+        
 
         <script>
             const actionType = 'get-my-blogs'; // Set action to fetch my blogs
