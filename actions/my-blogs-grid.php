@@ -87,6 +87,12 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                             }
 
                             blogPosts.forEach(post => {
+                                // set path to the newly uploaded image first
+                                var path = baseUrl + `images/${post.blog_id}/${post.images[0]}`;
+                                // if the newly uploaded image is gone, resort to default
+                                if (post.images.length <= 0){
+                                    path = baseUrl + "images/photoABCDLogo.png";
+                                }
                                 const blogContainer = document.createElement('div');
                                 blogContainer.className = 'blog-container';
 
@@ -112,7 +118,7 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                                 blogTitle.textContent = post.title;
 
                                 const img = document.createElement('img');
-                                img.src = baseUrl + `images/${post.blog_id}/${post.blog_id}.jpg`;
+                                img.src = path;
                                 img.alt = 'Blog Image';
                                 img.className = 'blog-photo';
 

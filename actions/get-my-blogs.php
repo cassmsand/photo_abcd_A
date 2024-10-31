@@ -60,7 +60,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         // Get the images for the blog post
         $blog_id = $row['blog_id'];
-        $imageDir = "../photo_abcd_A/images/$blog_id/";
+        $imageDir = "../images/$blog_id/";
         $images = array();
 
         if (is_dir($imageDir)) {
@@ -71,6 +71,7 @@ if ($result->num_rows > 0) {
                 if (preg_match('/\.(jpg|jpeg|png)$/i', $file)) {
                     $images[] = $file;
                 }
+                
             }
         }
 
@@ -78,6 +79,7 @@ if ($result->num_rows > 0) {
         $row['images'] = $images;
         $blogPosts[] = $row;
     }
+    
 } else {
     // Send a response indicating no blogs were found
     echo json_encode(['message' => 'No matching blogs found']);
