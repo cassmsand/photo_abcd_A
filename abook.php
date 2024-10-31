@@ -19,6 +19,9 @@ $CURRENT_PAGE = "ABook";
 <body>
     <?php include("includes/top-bar.php");?>
     <?php include("includes/abook.modal.php");?>
+    <?php include("includes/abook.newbook.modal.php");?>
+    <?php include("includes/abook.bookedit.modal.php");?>
+    
     <div class='container' id="main-body">
         <h2>Alphabet Book</h2>
         <div class="container" id='book-bar'>
@@ -52,7 +55,7 @@ $CURRENT_PAGE = "ABook";
                     </div>
 
                     <div class="col">
-                        <button type="button" class="btn btn-primary" id='edit-button' onclick="">Edit Book</button>
+                        <button type="button" class="btn btn-primary" id='edit-button' data-target="#book-edit-modal" data-toggle="modal">Edit Book</button>
                         <button type="button" class="btn btn-primary" id='print-button' onclick="">Print Book</button>
                     </div>
 

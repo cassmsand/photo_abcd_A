@@ -7,6 +7,7 @@ const progBarPending = document.getElementById('progress-bar-pending');
 const progBarRegress = document.getElementById('progress-bar-regress');
 const progHeader = document.getElementById('prog-header');
 const utilBar = document.getElementById('util-bar');
+const bookeditTitle = document.getElementById("bookedit-title");
 
 let user_books = [];
 let user_blogs = [];
@@ -114,25 +115,23 @@ async function fetchBooks()
         throw new Error('Network Response error');
     }
     const dataArr = await response.json();
-    const rows = strToBook(dataArr[0].value);
+    //console.log(dataArr);
+    const rows = strToBook(dataArr);
     return rows;
 
-    function strToBook(str)
+    function strToBook(strArr)
     {
         // Will all alphabet books.
         var bookArr = [];
 
-        // Splits Books from abook string.
-        var res = str.split("|");
-
         // For each book string in the array
-        res.forEach((bookStr) => {
+        strArr.forEach((bookStr) => {
             // Add Book Object (Has key values value pairs)
             bookArr.push(
                 // Creates Key Value Pair
                 Object.fromEntries(
                     // Splits key value strings
-                    bookStr.split("/")
+                    bookStr.value.split("/")
                         // Splits the key from the value
                         .map(pair => pair.split(":")
                             // Splits values.
@@ -146,40 +145,47 @@ async function fetchBooks()
 
 async function updateBook()
 {
-    let str = "";
+    var oldBookTitle = current_book['title'][0];
+    let newBookStr = "";
+
     for (let key in pending_book) {
         let value = pending_book[key].join(",");
-        str += `${key}:${value}/`;
+        newBookStr += `${key}:${value}/`;
     }
-    str = str.substring(0, str.length - 1);
-    //console.log(str);
 
+    newBookStr = newBookStr.substring(0, newBookStr.length - 1);
+    newBookStr = `${oldBookTitle}|${newBookStr}`
+    console.log(newBookStr);
+    
     await fetch(`actions/abook-update-book.php`, 
     {
         method: 'POST',
-        body: str
+        body: newBookStr
     }).then(response => console.log(response.text()))
     
+    current_book = Object.assign({}, pending_book);
     init();
+    
 }
 
 async function deleteBook()
 {
-    var str = JSON.stringify(current_book);
+    const oldBookTitle = `${current_book['title'][0]}`;
     await fetch(`actions/abook-delete-book.php`, 
     {
         method: 'POST',
-        body: str
+        body: oldBookTitle
     })
     current_book = null;
     init();
 }
 
-async function newBook()
+async function newBook(newbookTitle)
 {
     await fetch('actions/abook-new-book.php', {
-        credentials:"same-origin"
-    });
+        method: 'POST',
+        body: newbookTitle
+    }).then(response => console.log(response.text()));
     
     let noBook = document.getElementById('no-book');
     if (noBook) {
@@ -191,10 +197,8 @@ async function newBook()
         utilBar.hidden = false;
         alpha_grid.hidden = false;
     }
-
     init();
 
-    
 }
 
 // Modal Functions
@@ -241,7 +245,6 @@ function setProgress()
 function updatePending()
 {
     const postAmt = selected_blogs.length;
-    console.log(postAmt);
     var obj = {};
     obj[selected_letter] = selected_blogs;
 
@@ -258,21 +261,21 @@ function updatePending()
     // If post amount is 0, card is reset. Doesn't matter what the initial is.
     if (postAmt == 0 && initialEntries > 0)
     {
-        console.log("regress");
+        //console.log("regress");
         regression++
     }
         
     // If post amount is greater 0 and initial is 0, can only increase.
     else if (postAmt > 0 && initialEntries == 0)
     {
-        console.log("increase");
+        //console.log("increase");
         pending++
     }
         
     // If both numbers are greater than 0, the value is only being replaced.
     else if (postAmt > 0 && initialEntries > 0)
     {
-        console.log("reset");
+        //console.log("reset");
         regression++
         pending++
     }
@@ -304,15 +307,13 @@ function displayBar()
         noBookDisplay();
 
         // Executes on click method for book card.
-    } else if (user_books.length > 0 && current_book == null) {
+    } else if (current_book == null) {
         var bookCard = document.getElementById(`${user_books[0].title}`);
         toggleCard(bookCard);
-        //firstBarCard.click
         displayGrid(user_books[0]);
 
     } else {
-        //var currentCard = document.getElementById(`link-${current_book.title}`);
-        //currentCard.onclick();
+        
         displayGrid(current_book);
     }
 
@@ -350,8 +351,10 @@ function displayGrid(book)
     completion = 0;
     pending = 0;
     regression = 0;
-    current_book = book;
-    pending_book = book;
+
+    current_book = Object.assign({}, book);
+    pending_book = Object.assign({}, book);
+
     clearContainer(alpha_grid);
 
     // Creates new book object. Prevents overriding of current_book.
@@ -808,7 +811,11 @@ function createBookCard(book = null, isblank = false)
         cardImage.id = 'blank-bar';
         cardImage.src = "../photo_abcd_A/images/add.png";
         cardLink.className = 'stretched-link';
-        cardLink.onclick = function () { newBook(); };
+        cardLink.setAttribute('data-target', "#new-book-modal");
+        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.addEventListener("click", function (e) {
+            
+        })
         card.appendChild(cardBody);
         cardBody.appendChild(cardImage);
         cardBody.appendChild(cardLink);
@@ -816,9 +823,9 @@ function createBookCard(book = null, isblank = false)
     }
 }
 
-// Modal Confirm
-const confirmBtn = document.getElementById("confirm-selection-button");
-confirmBtn.addEventListener("click", function (e) {
+// Grid Modal Confirm & Cancel
+const gridConfirmBtn = document.getElementById("confirm-selection-button");
+gridConfirmBtn.addEventListener("click", function (e) {
     updatePending();
     //selected_card.classList.remove("selected");
     selected_card = undefined;
@@ -826,12 +833,40 @@ confirmBtn.addEventListener("click", function (e) {
     setProgress();
 })
 
-// Modal Cancel
-const cancelBtn = document.getElementById("cancel-selection-button");
-cancelBtn.addEventListener("click", function (e) {
+const gridCancelBtn = document.getElementById("cancel-selection-button");
+gridCancelBtn.addEventListener("click", function (e) {
     selected_letter = undefined;
     selected_blogs = [];
     selected_card.classList.remove("selected");
     selected_card = undefined;
     initialEntries = 0;
+})
+
+
+// New Book Modal Confirm
+const newBookConfirmBtn = document.getElementById("newbook-confirm-button");
+newBookConfirmBtn.addEventListener("click", function (e) {
+    var newbookTitle = document.getElementById("newbook-title").value;
+    newBook(newbookTitle);
+})
+
+// Edit Book Modal Toggle
+const bookEditModalBtn = document.getElementById("edit-button");
+bookEditModalBtn.addEventListener("click", function (e) {
+    var title = current_book["title"][0];
+    bookeditTitle.value = title;
+})
+
+// Book Edit Modal Confirm & Cancel
+const bookConfirmBtn = document.getElementById("bookedit-confirm-button");
+bookConfirmBtn.addEventListener("click", function (e) {
+    const obj = {};
+    obj['title'] = [bookeditTitle.value];
+    Object.assign(pending_book, obj);
+    bookeditTitle.value = "";
+})
+
+const bookCancelBtn = document.getElementById("bookedit-cancel-button");
+bookCancelBtn.addEventListener("click", function (e) {
+    bookeditTitle.value = "";
 })

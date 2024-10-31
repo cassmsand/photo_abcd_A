@@ -3,7 +3,7 @@ session_start();
 require_once('../includes/db-conn.php');
 
 $self = $_SESSION['current_user_email'];
-$sql = "SELECT value FROM preferences WHERE name='{$self}' && notes='abook'";
+$sql = "SELECT value FROM preferences WHERE name like '%abook-$self%'";
 
 $result = $conn->query($sql);
 
