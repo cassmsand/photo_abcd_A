@@ -115,6 +115,7 @@
     padding: 0px;
     justify-content: center;
     align-content: center;
+    background: linear-gradient(135deg, #ccdffc, #e2faed);
     display: flex;
     overflow-y: hidden;
 }

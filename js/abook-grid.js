@@ -593,14 +593,12 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardHeader.className = "card-header";
         cardHeader.innerHTML = `${letter} | Add Entry`;
         cardBody.className = "card-body";
-        cardBody.style.backgroundColor = "lightgray";
         cardImage.className = "card-img";
         cardImage.id = 'blank';
         cardImage.src = "../photo_abcd_A/images/blank-image.png";
         cardLink.className = 'stretched-link';
         cardLink.setAttribute('data-target', "#abook-modal");
         cardLink.setAttribute('data-toggle', "modal");
-        //cardLink.onclick = function () { displayAvailableBlogs(letter) };
         cardLink.addEventListener('click', function (e) {
             toggleCard(card, "blog");
             displayAvailableBlogs(letter);
@@ -785,7 +783,7 @@ function createBookCard(book = null, isblank = false)
         cardBody.className = "card-body";
         cardImage.id = 'book-img';
         cardImage.className = "card-img";
-        cardImage.src = "../photo_abcd_A/images/blank-book.jpg";
+        cardImage.src = "../photo_abcd_A/images/blank-book.png";
         cardLink.id = `link-${book.title}`;
         cardLink.className = 'stretched-link';
         //cardLink.onclick = function () { displayGrid(book) };
