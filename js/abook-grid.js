@@ -3,22 +3,41 @@ const alpha_grid = document.getElementById('alpha-grid-row');
 const modalRow = document.getElementById('abook-modal-row');
 const modalBody = document.getElementById('abook-modal-body');
 const progBar = document.getElementById('progress-bar');
+const progBarPending = document.getElementById('progress-bar-pending');
+const progBarRegress = document.getElementById('progress-bar-regress');
 const progHeader = document.getElementById('prog-header');
 const utilBar = document.getElementById('util-bar');
 
 let user_books = [];
 let user_blogs = [];
+
+/**
+ * Essentially just book states.
+ * All book updates done by pending_book.
+ */
 let current_book;
 let pending_book;
 
+/**
+ * Variables for Selection Logic.
+ * 
+ * selected_card, selected_book:
+ * Used for toggling card visuals when selected.
+ * 
+ * selected_letter, selected_blogs:
+ * Handles key-value logic for current book.
+ * 
+ */
+let selected_card;
 let selected_book;
-
 let selected_letter;
 var selected_blogs = [];
-let keyValObj;
 
+// Variables for progress bar logic.
+var initialEntries = 0;
 var completion = 0;
 var pending = 0;
+var regression = 0;
 
 /**
  * In the database: [Key => Value]
@@ -186,7 +205,9 @@ async function newBook()
  */
 function setProgress()
 {
-    var progress = ~~((completion / 26)*100);
+    var progress = ~~(((completion-regression) / 26) * 100);
+    var progressPending = ~~((pending / 26) * 100);
+    var progressRegress = ~~(((regression - pending) / 26) * 100);
     var pendStr = '';
 
     switch (pending) {
@@ -201,6 +222,8 @@ function setProgress()
     }
 
     progBar.style.width = `${progress}%`;
+    progBarPending.style.width = `${progressPending}%`;
+    progBarRegress.style.width = `${progressRegress}%`;
     //progBar.innerHTML = progress;
         
     progHeader.innerHTML = `${current_book.title} | ${progress}%${pendStr}`;
@@ -215,16 +238,49 @@ function setProgress()
  * 
  * Example String: F:6
  */
-function updateSlot()
+function updatePending()
 {
+    const postAmt = selected_blogs.length;
+    console.log(postAmt);
     var obj = {};
     obj[selected_letter] = selected_blogs;
 
-    console.log(obj);
     Object.assign(pending_book, obj);
-    selected_letter = "";
+    selected_letter = undefined;
     selected_blogs = [];
-    console.log(pending_book);
+    
+    /**
+     * Logic goes as follows:
+     * Both the initial and post values will only
+     * ever be 0 or greater than 0.
+     */
+  
+    // If post amount is 0, card is reset. Doesn't matter what the initial is.
+    if (postAmt == 0 && initialEntries > 0)
+    {
+        console.log("regress");
+        regression++
+    }
+        
+    // If post amount is greater 0 and initial is 0, can only increase.
+    else if (postAmt > 0 && initialEntries == 0)
+    {
+        console.log("increase");
+        pending++
+    }
+        
+    // If both numbers are greater than 0, the value is only being replaced.
+    else if (postAmt > 0 && initialEntries > 0)
+    {
+        console.log("reset");
+        regression++
+        pending++
+    }
+
+    // No changes. Should be made impossible to do in modal.
+    // case postAmt == 0 && initialEntries == 0
+            
+
 }
 
 // Display Functions
@@ -250,7 +306,7 @@ function displayBar()
         // Executes on click method for book card.
     } else if (user_books.length > 0 && current_book == null) {
         var bookCard = document.getElementById(`${user_books[0].title}`);
-        selectElement(bookCard);
+        toggleCard(bookCard);
         //firstBarCard.click
         displayGrid(user_books[0]);
 
@@ -293,6 +349,7 @@ function displayGrid(book)
 {
     completion = 0;
     pending = 0;
+    regression = 0;
     current_book = book;
     pending_book = book;
     clearContainer(alpha_grid);
@@ -370,10 +427,14 @@ function clearContainer(container)
 
 function displayAvailableBlogs(letter)
 {
-    
+    selected_letter = letter;
+
+    // Initial number of entries defined by book.
+    initialEntries = current_book[letter].filter(value => (value != "")).length;
+    console.log(initialEntries);
+
     const noBlogs = document.getElementById('no-blogs');
     clearContainer(modalRow);
-    //console.log('test');
 
     var hasEntries = false;
     user_blogs.forEach(blog => {
@@ -446,27 +507,47 @@ function setCard(id, blog)
     cardRef.replaceWith(card);
     pending++;
     setProgress();
-    updateSlot(card.id);
+    updatePending(card.id);
 
 }
 
-function selectElement(element, type='book')
+function toggleCard(element, type='book')
 {
-    if (type == 'book')
+    switch(type)
     {
-        switch(selected_book)
-        {
-            case null || undefined:
-                selected_book = element;
-                selected_book.classList.add('selected');
-                break;
-            
-            default:
-                selected_book.classList.remove('selected');
-                selected_book = element;
-                selected_book.classList.add('selected');
-                break;
-        }
+        case "book":
+            switch(selected_book)
+            {
+                case undefined:
+                    selected_book = element;
+                    selected_book.classList.add('selected');
+                    break;
+                
+                default:
+                    selected_book.classList.remove('selected');
+                    selected_book = element;
+                    selected_book.classList.add('selected');
+                    break;
+            }
+            break;
+
+        case "blog":
+            switch(selected_card)
+            {
+                case undefined:
+                    selected_card = element;
+                    selected_card.classList.add('selected');
+                    //console.log(selected_card);
+                    break;
+                
+                default:
+                    selected_card.classList.remove('selected');
+                    selected_card = element;
+                    selected_card.classList.add('selected');
+                    //console.log(selected_card);
+                    break;
+            }
+            break;
     }
         
 }
@@ -518,6 +599,7 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardLink.setAttribute('data-toggle', "modal");
         //cardLink.onclick = function () { displayAvailableBlogs(letter) };
         cardLink.addEventListener('click', function (e) {
+            toggleCard(card, "blog");
             displayAvailableBlogs(letter);
         });
         card.appendChild(cardHeader);
@@ -541,6 +623,7 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardLink.setAttribute('data-target', "#abook-modal");
         cardLink.setAttribute('data-toggle', "modal");
         cardLink.addEventListener('click', function (e) {
+            toggleCard(card, "blog");
             displayAvailableBlogs(card.id);
         });
         card.appendChild(cardHeader);
@@ -554,9 +637,10 @@ function createBlogCard(blogOrChar, type = 'grid')
     {
         var blogArr = blogOrChar;
         var blog = blogArr[0];
-
-        var headerText = `${blog.title} (${blogArr.length} Blogs)`;
-
+        const multiNum = document.createElement('div');
+        multiNum.className = "multi-num";
+        multiNum.innerHTML = `${blogArr.length}+`
+        var headerText = `${blog.title}`;
         card.className = 'card a-grid';
         card.id = blog.title[0];
         cardHeader.className = "card-header";
@@ -568,10 +652,12 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardLink.setAttribute('data-target', "#abook-modal");
         cardLink.setAttribute('data-toggle', "modal");
         cardLink.addEventListener('click', function (e) {
+            toggleCard(card, "blog");
             displayAvailableBlogs(card.id);
         });
         card.appendChild(cardHeader);
         card.appendChild(cardBody);
+        card.appendChild(multiNum);
         cardBody.appendChild(cardImage);
         cardBody.appendChild(cardLink);
         alpha_grid.appendChild(card);
@@ -637,8 +723,6 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardBody.appendChild(cardImage);
         cardBody.appendChild(cardLink);
         card.addEventListener('click', function (e) {
-            selected_letter = blog.title[0];
-            //let obj = {};
 
             if (!card.classList.contains('selected'))
             {
@@ -661,10 +745,10 @@ function createBlogCard(blogOrChar, type = 'grid')
 
         if (current_book[letter].includes(id))
         {
-            console.log('Contains Blog: '+id);
+            //console.log('Contains Blog: '+id);
             card.classList.add('selected');
             selected_blogs.push(id);
-            console.log(selected_blogs);
+            //console.log(selected_blogs);
         }
         
     }
@@ -706,7 +790,7 @@ function createBookCard(book = null, isblank = false)
             displayGrid(book);
         });
         cardLink.addEventListener('click', function (e) {
-            selectElement(card, 'book');
+            toggleCard(card, 'book');
         });
         card.appendChild(cardHeader);
         card.appendChild(cardBody);
@@ -732,13 +816,22 @@ function createBookCard(book = null, isblank = false)
     }
 }
 
+// Modal Confirm
 const confirmBtn = document.getElementById("confirm-selection-button");
 confirmBtn.addEventListener("click", function (e) {
-    updateSlot();
+    updatePending();
+    //selected_card.classList.remove("selected");
+    selected_card = undefined;
+    initialEntries = 0;
+    setProgress();
 })
 
+// Modal Cancel
 const cancelBtn = document.getElementById("cancel-selection-button");
 cancelBtn.addEventListener("click", function (e) {
-    selected_letter = "";
+    selected_letter = undefined;
     selected_blogs = [];
+    selected_card.classList.remove("selected");
+    selected_card = undefined;
+    initialEntries = 0;
 })

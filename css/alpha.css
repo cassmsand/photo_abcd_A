@@ -12,6 +12,9 @@
 #book-bar-row {
     display: flex;
     align-items: center;
+    align-items: start; 
+    flex: nowrap; 
+    overflow-x: scroll;
     margin: auto;
     padding: 20px;
     max-height: 400px;
@@ -42,6 +45,11 @@
     min-height: 180px;
     max-width: 180px;
     max-height: 180px;
+}
+
+.card-header {
+    text-align: center;
+    justify-items: center;
 }
 
 .container.no-book {
@@ -112,30 +120,49 @@
 }
 
 #util-bar {
-    display: inline-flexbox;
+    max-width: 80%;
+    display: flex;
     margin-left: auto;
     margin-right: auto;
+}
+
+.modal-header {
+    text-align: center;
+    margin: auto;
+}
+
+.modal-footer {
+    display: flex;
+    align-content: center;
     justify-content: center;
+    max-width: none;
+    margin-right: 25%;
+    margin-left: 25%;
+}
+
+#button-container {
+    max-width: 400px;
     align-content: center;
+    justify-content: center;
+    margin: auto;
+    display: flex;
 }
 
-.container#button-container {
-    max-width: 340px;
-    align-content: center;
-    margin-left: auto;
-    margin-right: auto;
+.col {
+    display: grid;
+    row-gap: 10px;
 }
 
-.button {
-    max-width: 250px;
-    max-height: 90px;
+.btn {
+    min-width: 100%;
+    max-width: 150px;
+    max-height: 50px;
 }
 
-.container#progress-container {
-    margin-top: 5px;
-    padding: 20px;
+#progress-container {
+    padding: 15px;
     height: 100px;
-    max-width: 700px;
+    max-width: 600px;
     border-radius: 20px;
     background-color: white;
 }
@@ -162,21 +189,41 @@
 }
 
 .row#alpha-grid-row {
+    justify-content: space-between;
     margin-top: 30px;
     margin-bottom: 30px;
-    gap: 35px;
+    gap: 30px;
 }
 
 .card.a-grid {
     padding: 0px;
-    min-width: 250px;
-    min-height: 250px;
-    max-width: 250px;
-    max-height: 250px;
+    min-width: 280px;
+    min-height: 280px;
+    max-width: 280px;
+    max-height: 280px;
 }
 
 #abook-modal {
     --bs-modal-max-width: 1400px;
     --bs-modal-width: 1000px;
     justify-items: center;
+}
+
+.multi-num {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    text-align: center;
+    align-content: center;
+    color: white;
+    background-color: blue;
+    border-radius: 100%;
+    max-width: 40px;
+    max-height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+.progress {
+    --bs-progress-height: 1.5rem;
 }

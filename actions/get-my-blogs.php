@@ -60,7 +60,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         // Get the images for the blog post
         $blog_id = $row['blog_id'];
-        $imageDir = "../photo_abcd_A/images/$blog_id/";
+        $imageDir = "../photo_abcd_A/images/{$blog_id}/";
         $images = array();
 
         if (is_dir($imageDir)) {
