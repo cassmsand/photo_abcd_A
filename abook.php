@@ -1,5 +1,6 @@
 <?php
 include_once("includes/db-conn.php");
+session_start();
 
 $CURRENT_PAGE = "ABook";
 
