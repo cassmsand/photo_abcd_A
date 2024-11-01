@@ -494,7 +494,7 @@ function setCard(id, blog)
 
             const cardImage = document.createElement("img");
             cardImage.className = "card-img";
-            cardImage.src = `images/${blog.images[0]}`;
+            cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
 
             const cardLink = document.createElement("a");
             cardLink.className = 'stretched-link';
@@ -619,7 +619,7 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardHeader.innerHTML = `${blog.title}`;
         cardBody.className = "card-body";
         cardImage.className = "card-img";
-        cardImage.src = `images/${blog.images[0]}`;
+        cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
         cardLink.className = 'stretched-link';
         cardLink.setAttribute('data-target', "#abook-modal");
         cardLink.setAttribute('data-toggle', "modal");
@@ -648,7 +648,7 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardHeader.innerHTML = headerText;
         cardBody.className = "card-body";
         cardImage.className = "card-img";
-        cardImage.src = `images/${blog.images[0]}`;
+        cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
         cardLink.className = 'stretched-link';
         cardLink.setAttribute('data-target', "#abook-modal");
         cardLink.setAttribute('data-toggle', "modal");
@@ -688,7 +688,7 @@ function createBlogCard(blogOrChar, type = 'grid')
                     cardCaroBody.className = "card-body";
                     const cardCaroImage = document.createElement("img");
                         cardCaroImage.className = "card-img";
-                        cardCaroImage.src = `images/${blog.images[0]}`;
+                        cardCaroImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
                         cardCaroBody.appendChild(cardCaroImage);
                 caroItem.appendChild(cardCaroHeader);
                 caroItem.appendChild(cardCaroBody);
@@ -717,7 +717,7 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardHeader.innerHTML = `${blog.title}`;
         cardBody.className = "card-body";
         cardImage.className = "card-img";
-        cardImage.src = `images/${blog.images[0]}`;
+        cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
         cardLink.className = 'stretched-link';
         card.appendChild(cardHeader);
         card.appendChild(cardBody);
