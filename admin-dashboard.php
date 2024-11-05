@@ -35,9 +35,9 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 					?>
 					<div class="tableContainer">
 						<h3>Users</h3>
-						<table id="usersTable" class="display">
+						<table id="usersTable" class="styledTable">
 							<thead>
-								<tr id="header">
+								<tr class="header">
 									<th>Email</th>
 									<th>First Name</th>
 									<th>Last Name</th>
@@ -106,9 +106,9 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 					?>
 					<div class="tableContainer">
 						<h3>Blogs</h3>
-						<table id="blogsTable" class="display">
+						<table id="blogsTable" class="styledTable">
 							<thead>
-								<tr id="header">
+								<tr class="header">
 									<th>ID</th>
 									<th>Creator Email</th>
 									<th>Title</th>
@@ -165,9 +165,9 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 					?>
 					<div class="tableContainer">
 						<h3>Alphabet Book Counts</h3>
-						<table id="adminAlphabetBookCountsTable" class="display">
+						<table id="adminAlphabetBookCountsTable" class="styledTable">
 							<thead>
-								<tr id="header">
+								<tr class="header">
 									<th>User Email</th>
 									<th>Completed</th>
 									<th>Pending</th>
@@ -212,9 +212,9 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 					?>
 					<div class="tableContainer">
 						<h3>Site Totals</h3>
-						<table id="siteTotalsTable" class="display">
+						<table id="siteTotalsTable" class="styledTable">
 							<thead>
-								<tr id="header">
+								<tr class="header">
 									<th>Count Type</th>
 									<th>Total Count</th>
 								</tr>
