@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User Modal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
 <body>
 
 <div id="deleteBlogModal" class="modal" style="display: none;">
@@ -8,6 +14,7 @@
             <form id="deleteBlogForm">
                 <div class="modal-header">
                     <h3>Delete Blog</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -88,6 +95,8 @@ function saveDeleteBlogChanges() {
     });
 }
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

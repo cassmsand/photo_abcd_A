@@ -27,7 +27,7 @@
             <form id="viewAlphabetCountsForm">
                 <div class="modal-header">
                     <h3 class="modal-title" id="exampleModalLabel">View Alphabet Book Counts</h3>
-                    <button type="button" class="btn btn-primary" onclick="exitViewAlphabetCounts()">Exit</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group row">
@@ -37,9 +37,9 @@
                         </div>
                     </div>
                     <div>
-                        <table id="alphabetCountsTable" class="display">
+                        <table id="alphabetCountsTable" class="styledTable">
                             <thead>
-                                <tr id="header">
+                                <tr class="header">
                                     <th>Letter</th>
                                     <th>Count</th>
                                 </tr>
