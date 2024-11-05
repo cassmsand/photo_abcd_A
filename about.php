@@ -1,5 +1,7 @@
 <?php
 $CURRENT_PAGE = "About";
+include_once("includes/db-conn.php");
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +19,7 @@ $CURRENT_PAGE = "About";
             <div class="container about-bar row align-items-start" id="left">
                 <div class="col-3">
                     <div class="container image-container">
-                        <img class='img-fluid' src="images/about/samp1.jpg" alt="team image">
+                        <img class='img-fluid' src="images/about/cassie.jpg" alt="team image">
                     </div>
                 </div>
                 
@@ -25,18 +27,16 @@ $CURRENT_PAGE = "About";
                 <div class="col-9">
                     <div class="container row">
                         <div class="about-header">
-                            <h1 id="left">Alice Johnson</h1>
+                            <h1 id="left">Cassie Sand</h1>
                         </div>
 
                         <div class="container about-content">
                             <p>
-                                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                unknown
-                                printer took a galley of type and scrambled it to make a type specimen book. It has survived
-                                not only five centuries, but also the leap into electronic typesetting, remaining
-                                essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-                                containing Lorem Ipsum passages, and more recently with desktop publishing software like
-                                Aldus PageMaker including versions of Lorem Ipsum.
+                                Cassie Sand was raised in Lakeville, Minnesota. After graduating from Lakeville North High School, she attended Simpson College located in Indianola, Iowa.
+                                While in Iowa, she completed a double major in Business Management and Theatre Arts, graduating in 2020.
+                                Upon entering the workforce, she chose to complete a second bachelors degree to pursue a career in software development.
+                                She will be graduating in December 2024 with a Bachelor of Science degree in Computer Science from Metroplitan State University.
+                                Her well-rounded background has proven essential to developing new creative solutions.
                             </p>
                         </div>
                     </div>
