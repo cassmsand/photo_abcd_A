@@ -35,6 +35,10 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                 </select>
             </div>
 
+            <div id="photosOnly">
+                <label for="P"
+            </div>
+
             <!-- Posts Container for Grid -->
             <div id="postsContainer" class="grid-container"></div>
 
