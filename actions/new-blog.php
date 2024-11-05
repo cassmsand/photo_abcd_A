@@ -22,27 +22,33 @@ if (isset($_POST['create-new-blog'])) {
             mkdir($blog_dir);
             $conn->close();
             
-            // Check file size
-            if ($_FILES["fileToUpload"]["size"] > 500000) {
-            echo "file is too large.";
-            $uploadOk = 0;
-            $flag = FALSE; // file will NOT be uploaded next
+
+            //check to see if file was uploaded AND theres no error, then proceed to upload
+            if (isset($_FILES['new-blog-images']) && $_FILES['new-blog-images']['error'] == 0){
+                // Check file size
+                if ($_FILES["fileToUpload"]["size"] > 500000) {
+                echo "file is too large.";
+                $uploadOk = 0;
+                $flag = FALSE; // file will NOT be uploaded next
             
+                } else{
+                    if ($flag == TRUE){
+                        // Add image to filepath
+                        $tempFileName = $_FILES['new-blog-images']['tmp_name'];
+                        $finalPath = $blog_dir . '/' . $_FILES['new-blog-images']['name'];
+                        move_uploaded_file($tempFileName, $finalPath);
+                    
+
+                }
+
             }
 
-            if ($flag == TRUE){
-            // Add image to database (WIP)
-            $tempFileName = $_FILES['new-blog-images']['tmp_name'];
-            $finalPath = $blog_dir . '/' . $_FILES['new-blog-images']['name'];
-            move_uploaded_file($tempFileName, $finalPath);
+    
+        }
+            //even if no image upload, redirect back
             header('Location: ../index.php');
             exit;
             
-            }
-            else{
-                header('Location: ../index.php');
-                exit;
-            }
         } else {
             echo 'Error: '.$stmt->error;
         }
