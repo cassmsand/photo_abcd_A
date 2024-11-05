@@ -1,6 +1,8 @@
 <?php
 // This file is the default page of the website. It serves as a home page and displays the public blogs.
 $CURRENT_PAGE = "Index";
+include_once("includes/db-conn.php");
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
