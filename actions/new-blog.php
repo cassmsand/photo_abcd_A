@@ -4,10 +4,24 @@ include_once "../includes/db-conn.php";
 
 if (isset($_POST['create-new-blog'])) {
     $email = $_SESSION['current_user_email'];
-    $title = $_POST['title'];
+    $title = $_POST['title'] ?? ''; //avoid undefined variable
     $desc = $_POST['desc'];
     $eventDate = $_POST['event-date'];
     $visibility = getVisibility();
+
+
+    // to validate the title of blog
+    //using javascript to quickly flash a message
+    if (!preg_match('/^[a-zA-Z0-9].*/', $title)){
+        echo "<script>
+            alert('Title must start with a letter or number only.');
+            window.history.back();
+        </script>";
+        exit;
+    }
+    
+
+
 
     $sql = 'INSERT INTO blogs (creator_email, title, description, event_date, privacy_filter) VALUE (?,?,?,?,?)';
 
