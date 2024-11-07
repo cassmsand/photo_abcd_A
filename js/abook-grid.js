@@ -34,11 +34,6 @@ let selected_book;
 let selected_letter;
 var selected_blogs = [];
 
-// Variables for progress bar logic.
-var initialEntries = 0;
-var completion = 0;
-var pending = 0;
-var regression = 0;
 
 /**
  * In the database: [Key => Value]
@@ -209,26 +204,36 @@ async function newBook(newbookTitle)
  */
 function setProgress()
 {
-    var progress = ~~(((completion-regression) / 26) * 100);
-    var progressPending = ~~((pending / 26) * 100);
-    var progressRegress = ~~(((regression - pending) / 26) * 100);
+    var totalCurrent = Object.values(current_book).filter(value => (value != "")).length;
+    var totalPending = Object.values(pending_book).filter(value => (value != "")).length;
+    totalPending -= totalCurrent;
+    var regression = 0;
+
+    if (totalPending < 0) {
+        regression = totalPending;
+    }
+
+    var progress = ~~(((totalCurrent+regression-1) / 26) * 100);
+    var progressPending = ~~((totalPending / 26) * 100);
+    var progressRegress = ~~(((regression*-1) / 26) * 100);
+
     var pendStr = '';
 
-    switch (pending) {
+    switch (totalPending) {
+        case totalPending < 0:
         case 0:
             break;
         case 1:
             pendStr = ` (Entry Pending)`;
             break;
-        default:
-            pendStr = ` (${pending} Entries Pending)`;
+        case totalPending > 1:
+            pendStr = ` (${totalPending} Entries Pending)`;
             break;
     }
 
     progBar.style.width = `${progress}%`;
     progBarPending.style.width = `${progressPending}%`;
     progBarRegress.style.width = `${progressRegress}%`;
-    //progBar.innerHTML = progress;
         
     progHeader.innerHTML = `${current_book.title} | ${progress}%${pendStr}`;
 }
@@ -247,42 +252,8 @@ function updatePending()
     const postAmt = selected_blogs.length;
     var obj = {};
     obj[selected_letter] = selected_blogs;
-
     Object.assign(pending_book, obj);
-    selected_letter = undefined;
-    selected_blogs = [];
-    
-    /**
-     * Logic goes as follows:
-     * Both the initial and post values will only
-     * ever be 0 or greater than 0.
-     */
-  
-    // If post amount is 0, card is reset. Doesn't matter what the initial is.
-    if (postAmt == 0 && initialEntries > 0)
-    {
-        //console.log("regress");
-        regression++
-    }
-        
-    // If post amount is greater 0 and initial is 0, can only increase.
-    else if (postAmt > 0 && initialEntries == 0)
-    {
-        //console.log("increase");
-        pending++
-    }
-        
-    // If both numbers are greater than 0, the value is only being replaced.
-    else if (postAmt > 0 && initialEntries > 0)
-    {
-        //console.log("reset");
-        regression++
-        pending++
-    }
-
-    // No changes. Should be made impossible to do in modal.
-    // case postAmt == 0 && initialEntries == 0
-            
+    updateSelectedCard(postAmt);
 
 }
 
@@ -327,8 +298,6 @@ function noBookDisplay()
     //alphaStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     //[...alphaStr].forEach(letter => createBlankGridCard(letter));
     clearContainer(alpha_grid);
-    completion = 0;
-    pending = 0;
     pending_book = null;
 
     const gridCont = document.getElementById('alpha-grid');
@@ -348,10 +317,6 @@ function noBookDisplay()
 
 function displayGrid(book) 
 {
-    completion = 0;
-    pending = 0;
-    regression = 0;
-
     current_book = Object.assign({}, book);
     pending_book = Object.assign({}, book);
 
@@ -386,7 +351,6 @@ function displayGrid(book)
                 if (blog != null) 
                 {
                     createBlogCard(blog, 'grid');
-                    completion++;
                 } 
                 else 
                 {
@@ -400,25 +364,24 @@ function displayGrid(book)
                     multiBlog.push(getBlogById(blogid));
                 });
                 createBlogCard(multiBlog, 'multi');
-                completion++;
                 break;
         }
     });
 
     setProgress();
+}
 
-    function getBlogById(id)
-    {
-        //console.log('searching');
-        let result;
-        user_blogs.forEach(blog => {
-            if (blog.blog_id === id) {
-                //console.log(blog);
-                result = blog;
-            } 
-        });
-        return result;
-    }
+function getBlogById(id)
+{
+    //console.log('searching');
+    let result;
+    user_blogs.forEach(blog => {
+        if (blog.blog_id === id) {
+            //console.log(blog);
+            result = blog;
+        } 
+    });
+    return result;
 }
 
 function clearContainer(container)
@@ -428,12 +391,27 @@ function clearContainer(container)
 
 // Card Behavior Functions
 
-function displayAvailableBlogs(letter)
+function displayAvailableBlogs(letter, hasPending = false)
 {
     selected_letter = letter;
+    console.log(letter);
+    var blogCardType;
+    var initialEntries = 0;
+
+    switch (hasPending)
+    {
+        case false:
+            blogCardType = "modal";
+            initialEntries = current_book[letter].filter(value => (value != "")).length;
+            break;
+
+        case true:
+            blogCardType = "modalpending";
+            initialEntries = pending_book[letter].filter(value => (value != "")).length;
+            break;
+    }
 
     // Initial number of entries defined by book.
-    initialEntries = current_book[letter].filter(value => (value != "")).length;
     console.log(initialEntries);
 
     const noBlogs = document.getElementById('no-blogs');
@@ -446,7 +424,7 @@ function displayAvailableBlogs(letter)
             {
                 hasEntries = true;
             }
-            createBlogCard(blog, 'modal');
+            createBlogCard(blog, blogCardType);
         }
     });
 
@@ -468,50 +446,6 @@ function displayAvailableBlogs(letter)
             modalBody.appendChild(noBlogs);
         }
     }
-}
-
-/**
- * Replaces the card in the grid.
- * Does not perform queries.
- * 
- * @param {*} id 
- * @param {*} blog 
- */
-function setCard(id, blog) 
-{
-    const cardRef = document.getElementById(`${id}-blank`);
-    
-    const card = document.createElement("div");
-    card.className = 'card a-grid';
-    card.id = `${blog.title[0]}:${blog.blog_id}`;
-
-        const cardHeader = document.createElement("div");
-        cardHeader.className = "card-header";
-        cardHeader.innerHTML = `${blog.title}`;
-
-        const cardBody = document.createElement("div");
-        cardBody.className = "card-body";
-
-            const cardImage = document.createElement("img");
-            cardImage.className = "card-img";
-            cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
-
-            const cardLink = document.createElement("a");
-            cardLink.className = 'stretched-link';
-            cardLink.setAttribute('data-target', "#abook-modal");
-            cardLink.setAttribute('data-toggle', "modal");
-            //cardLink.href = '#';
-            cardLink.onclick = function () { displayAvailableBlogs(card.id[0]) }
-
-    card.appendChild(cardHeader);
-    card.appendChild(cardBody);
-    cardBody.appendChild(cardImage);
-    cardBody.appendChild(cardLink);
-    cardRef.replaceWith(card);
-    pending++;
-    setProgress();
-    updatePending(card.id);
-
 }
 
 function toggleCard(element, type='book')
@@ -577,6 +511,10 @@ function createBlogCard(blogOrChar, type = 'grid')
 
         case 'modal':
             modal();
+            break;
+
+        case 'modalpending':
+            modal(true);
             break;
 
         case 'multi':
@@ -664,49 +602,7 @@ function createBlogCard(blogOrChar, type = 'grid')
         alpha_grid.appendChild(card);
     }
 
-    function multi2()
-    {
-        var blogArr = blogOrChar;
-        const cardInner = document.createElement("div");
-            cardInner.className = "carousel-inner";
-        card.className = 'carousel slide card a-grid';
-        card.setAttribute("data-ride", "carousel");
-        card.id = blogArr[0].title[0];
-        let firstEl = true;
-        blogArr.forEach(blog => 
-        {
-            const caroItem = document.createElement("div");
-            caroItem.className = "carousel-item";
-            if (firstEl == true) {
-                firstEl = false;
-                caroItem.classList.add("active");
-            }
-                const cardCaroHeader = document.createElement("div");
-                    cardCaroHeader.className = "card-header";
-                    cardCaroHeader.innerHTML = `${blog.title}`;
-                const cardCaroBody = document.createElement("div");
-                    cardCaroBody.className = "card-body";
-                    const cardCaroImage = document.createElement("img");
-                        cardCaroImage.className = "card-img";
-                        cardCaroImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
-                        cardCaroBody.appendChild(cardCaroImage);
-                caroItem.appendChild(cardCaroHeader);
-                caroItem.appendChild(cardCaroBody);
-            cardInner.appendChild(caroItem);
-        });
-        cardLink.className = 'stretched-link';
-        cardLink.setAttribute('data-target', "#abook-modal");
-        cardLink.setAttribute('data-toggle', "modal");
-        cardLink.addEventListener('click', function (e) {
-            displayAvailableBlogs(card.id);
-        });
-        cardInner.appendChild(cardLink);
-        card.appendChild(cardInner);
-        alpha_grid.appendChild(card);
-        
-    }
-
-    function modal()
+    function modal(hasPending = false)
     {
         var blog = blogOrChar;
         const letter = blog.title[0];
@@ -744,12 +640,23 @@ function createBlogCard(blogOrChar, type = 'grid')
         });
         modalRow.appendChild(card);
 
-        if (current_book[letter].includes(id))
+        if (hasPending)
         {
-            //console.log('Contains Blog: '+id);
-            card.classList.add('selected');
-            selected_blogs.push(id);
-            //console.log(selected_blogs);
+            if (pending_book[letter].includes(id))
+            {
+                card.classList.add('selected');
+                selected_blogs.push(id);
+            }
+        }
+        else
+        {
+            if (current_book[letter].includes(id))
+            {
+                //console.log('Contains Blog: '+id);
+                card.classList.add('selected');
+                selected_blogs.push(id);
+                //console.log(selected_blogs);
+            }
         }
         
     }
@@ -821,11 +728,120 @@ function createBookCard(book = null, isblank = false)
     }
 }
 
+function updateSelectedCard(blogCount)
+{
+    var bId = selected_blogs[0];
+    var letter = selected_letter;
+    var blog = getBlogById(bId);
+
+    const card = document.createElement("div");
+    const cardHeader = document.createElement("div");
+    const cardBody = document.createElement("div");
+    const cardImage = document.createElement("img");
+    const cardLink = document.createElement("a");
+
+    switch (blogCount)
+    {
+        case 0:
+            none();
+            break;
+
+        case 1:
+            single();
+            break;
+
+        default:
+            multi();
+            break;
+
+    }
+
+    function none()
+    {
+        card.className = 'card a-grid';
+        card.id = `${letter}-blank`;
+        cardHeader.className = "card-header";
+        cardHeader.innerHTML = `${letter} | Add Entry`;
+        cardBody.className = "card-body";
+        cardImage.className = "card-img";
+        cardImage.id = 'blank';
+        cardImage.src = "images/blank-image.png";
+        cardLink.className = 'stretched-link';
+        cardLink.setAttribute('data-target', "#abook-modal");
+        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.addEventListener('click', function (e) {
+            toggleCard(card, "blog");
+            displayAvailableBlogs(letter, true);
+        });
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        card.classList.add('selected');
+        cardBody.appendChild(cardImage);
+        cardBody.appendChild(cardLink);
+        selected_card.replaceWith(card);
+    }
+
+    function single()
+    {
+        card.className = 'card a-grid';
+        card.id = blog.title[0];
+        cardHeader.className = "card-header";
+        cardHeader.innerHTML = `${blog.title}`;
+        cardBody.className = "card-body";
+        cardImage.className = "card-img";
+        cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
+        cardLink.className = 'stretched-link';
+        cardLink.setAttribute('data-target', "#abook-modal");
+        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.addEventListener('click', function (e) {
+            toggleCard(card, "blog");
+            displayAvailableBlogs(card.id, true);
+        });
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        card.classList.add('selected');
+        cardBody.appendChild(cardImage);
+        cardBody.appendChild(cardLink);
+        selected_card.replaceWith(card);
+    }
+
+    function multi()
+    {
+        const multiNum = document.createElement('div');
+        multiNum.className = "multi-num";
+        multiNum.innerHTML = `${blogCount}+`
+        var headerText = `${blog.title}`;
+        card.className = 'card a-grid';
+        card.id = blog.title[0];
+        cardHeader.className = "card-header";
+        cardHeader.innerHTML = headerText;
+        cardBody.className = "card-body";
+        cardImage.className = "card-img";
+        cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
+        cardLink.className = 'stretched-link';
+        cardLink.setAttribute('data-target', "#abook-modal");
+        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.addEventListener('click', function (e) {
+            toggleCard(card, "blog");
+            displayAvailableBlogs(card.id, true);
+        });
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        card.appendChild(multiNum);
+        card.classList.add('selected');
+        cardBody.appendChild(cardImage);
+        cardBody.appendChild(cardLink);
+        selected_card.replaceWith(card);
+    }
+}
+
 // Grid Modal Confirm & Cancel
 const gridConfirmBtn = document.getElementById("confirm-selection-button");
 gridConfirmBtn.addEventListener("click", function (e) {
     updatePending();
     //selected_card.classList.remove("selected");
+    selected_letter = undefined;
+    selected_blogs = [];
     selected_card = undefined;
     initialEntries = 0;
     setProgress();
