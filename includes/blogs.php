@@ -84,8 +84,6 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                 baseUrl += '/';
             }
 
-            console.log('baseUrl:', baseUrl); // Debugging: Check baseUrl value
-
             // Event listener for view options change
             document.getElementById('viewOptions').addEventListener('change', function () {
                 const viewOption = this.value;
@@ -269,20 +267,20 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
             }
 
             // Function to display photo-only view
-            function displayPhotoOnlyView(blogPosts, postsContainer, sortOrder, sortBy = 'title') {
+            function displayPhotoOnlyView(blogPosts, postsContainer, sortOrder = 'asc') {
                 const row = document.createElement('div');
                 row.className = 'row';
                 blogPosts.sort((a, b) => {
                     let compareA, compareB;
 
-                    if (sortBy === 'title') {
+                    if (sortOrder === 'asc' || sortOrder ==='des') {
                         compareA = a.title.toLowerCase();
                         compareB = b.title.toLowerCase();
-                    } else if (sortBy === 'date') {
+                    } else if (sortOrder === 'date_asc' || sortOrder === 'date_des') {
                         compareA = new Date(a.eventDate);
                         compareB = new Date(b.eventDate);
                     }
-                    if (sortOrder === 'asc') {
+                    if (sortOrder === 'asc' || sortOrder === 'date_asc') {
                         return compareA > compareB ? 1 : (compareA < compareB ? -1 : 0);
                     } else {
                         return compareA < compareB ? 1 : (compareA > compareB ? -1 : 0);
@@ -315,11 +313,9 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                     const imageUrl = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '.jpg';
                     cardImage.src = imageUrl;
                     cardImage.onerror = function() {
-                        // Hide the image or set a default image if it fails to load
                         cardImage.style.display = 'none';
                         console.log('Failed to load image for blog_id ' + post.blog_id);
                     };
-                    console.log('Card Image URL:', cardImage.src); // Debugging: Check image URL
 
                     cardBody.appendChild(cardImage);
                     cardBody.appendChild(cardLink);
