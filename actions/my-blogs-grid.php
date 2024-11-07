@@ -32,6 +32,8 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                 <select id="sortOrder">
                     <option value="asc">Alphabetically (A-Z)</option>
                     <option value="desc">Alphabetically (Z-A)</option>
+                    <option value="date_asc">Event Date (Oldest to Newest)</option>
+                    <option value="date_des">Event Date (Newest to Oldest)</option>
                 </select>
             </div>
 

@@ -269,18 +269,23 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
             }
 
             // Function to display photo-only view
-            function displayPhotoOnlyView(blogPosts, postsContainer, sortOrder) {
+            function displayPhotoOnlyView(blogPosts, postsContainer, sortOrder, sortBy = 'title') {
                 const row = document.createElement('div');
                 row.className = 'row';
-
-                // Sort blogs based on title
                 blogPosts.sort((a, b) => {
-                    const titleA = a.title.toLowerCase();
-                    const titleB = b.title.toLowerCase();
+                    let compareA, compareB;
+
+                    if (sortBy === 'title') {
+                        compareA = a.title.toLowerCase();
+                        compareB = b.title.toLowerCase();
+                    } else if (sortBy === 'date') {
+                        compareA = new Date(a.eventDate);
+                        compareB = new Date(b.eventDate);
+                    }
                     if (sortOrder === 'asc') {
-                        return titleA.localeCompare(titleB);
+                        return compareA > compareB ? 1 : (compareA < compareB ? -1 : 0);
                     } else {
-                        return titleB.localeCompare(titleA);
+                        return compareA < compareB ? 1 : (compareA > compareB ? -1 : 0);
                     }
                 });
 
