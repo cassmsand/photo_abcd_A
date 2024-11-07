@@ -23,6 +23,7 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                 <input type="text" id="searchInput" placeholder="Search by title...">
                 <label for="startDate">Sort by creation date:</label>
                 <input type="date" id="startDate" placeholder="Start Date" style="margin-left: 5px;">
+                <span class="date-range-separator">to</span>
                 <input type="date" id="endDate" placeholder="End Date">
                 <button id="searchButton">Search</button>
             </div>
@@ -60,14 +61,16 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                     <label for="description">Description:</label>
                     <textarea id="editDescription" required placeholder="Enter blog description"></textarea><br>
 
+                    <label for="eventDate">Event Date:</label>
+                    <input type="date" id="eventDate" required><br>
+
                     <label for="privacyFilter">Privacy Filter:</label>
-                    <select id="privacyFilter">
+                    <select id="privacyFilter" name ="privacyFilter">
                         <option value="public">Public</option>
                         <option value="private">Private</option>
                     </select><br>
 
                     <input type="hidden" id="creatorEmail"> <!-- Hidden input for creator email -->
-                    <input type="hidden" id="eventDate"> <!-- Hidden input for event date -->
                     <input type="hidden" id="creationDate"> <!-- Hidden input for creation date -->
 
                     <button id="saveButton">Save</button>

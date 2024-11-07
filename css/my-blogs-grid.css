@@ -11,13 +11,28 @@ h2 {
     margin: 20px auto; 
 }
 
-
 .blog-container {
-    height: auto;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: #fff; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    padding-bottom: 20px; /* Adds some space at the bottom for the date */
+}
+
+
+.blog-creation-date {
+    font-size: 14px;
+    color: #666;
+    position: absolute;
+    bottom: 5px; /* Positions it at the very bottom */
+    width: 100%;
+    text-align: center;
+}
+
+
+.blog-creation-date::before {
+    content: "Posted on: ";
+    font-weight: bold;
 }
 
 
@@ -45,13 +60,6 @@ h2 {
 }
 
 
-.blog-creation-date {
-    margin-left: 5px;
-    display: block;
-    text-align: center;
-}
-
-
 .image-container {
     display: flex;
     justify-content: center;
@@ -70,6 +78,7 @@ h2 {
 
 .blog-description {
     text-align: center;
+    margin-bottom: 15px;
 }
 
 
@@ -93,14 +102,27 @@ h2 {
 }
 
 
-#searchContainer input[type="text"],
-#searchContainer input[type="date"] {
+#searchContainer input[type="text"] {
     padding: 10px;
     margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
     width: 200px; 
+}
+
+#searchContainer input[type="date"] {
+    padding: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 200px; 
+}
+
+.date-range-separator {
+    margin: 0 10px;  /* Equal space between date inputs */
 }
 
 
@@ -242,8 +264,11 @@ h2 {
     cursor: pointer;
 }
 
-/* Button styles */
-.save-button {
+#privacyFilter {
+    margin-bottom: 10px; /* Adds a gap below the privacy filter */
+}
+
+#saveButton {
     background-color: #007BFF; 
     color: white; 
     border: none; 
@@ -258,7 +283,7 @@ h2 {
     transition: background-color 0.3s ease; 
 }
 
-.save-button:hover {
+#saveButton:hover {
     background-color: #0056b3; 
 }
 
