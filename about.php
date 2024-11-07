@@ -44,26 +44,23 @@ session_start();
                 
             </div>
 
-            <div class="container about-bar" id="right">
+            <div class="container about-bar" id="left">
                 <div class="container">
 
                     <div class="about-header">
-                        <h1>Arnold Noble</h1>
+                        <h1>Samuel Goergen</h1>
                     </div>
                     <div class="container about-content">
                         <p>
-                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                            unknown
-                            printer took a galley of type and scrambled it to make a type specimen book. It has survived
-                            not only five centuries, but also the leap into electronic typesetting, remaining
-                            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-                            containing Lorem Ipsum passages, and more recently with desktop publishing software like
-                            Aldus PageMaker including versions of Lorem Ipsum.
+                            Sam is originally from Plymouth, Minnesota. After high school, he excelled in a sales career, generating around one million dollars in annual revenue for five consecutive years.
+                            More recently, he's pivoted to software engineering, captivated by its potential to transform business and interactions.
+                            In his free time, he likes to indulge in golf and frisbee golf, stay fit with weightlifting, and relax by watching football.
+                            His passion for achievement shines through in everything he does, from coding to sports.
                         </p>
                     </div>
                 </div>
                 <div class="container image-container">
-                    <img class='img-fluid' src="images/about/samp2.jpg" alt="team image">
+                    <img class='img-fluid' src="images/about/sam.jpg" alt="team image">
                 </div>
             </div>
 
