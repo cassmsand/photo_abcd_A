@@ -16,10 +16,10 @@ session_start();
     <body>
         <?php include("includes/top-bar.php");?>
         <h2>Home</h2>
+        <?php include("includes/blogs.php");?>
+        <?php include("includes/footer.php");?>
         <script>
             const actionType = 'get-blogs'; // Set action to fetch my blogs
         </script>
-        <?php include("includes/blogs.php");?>
-        <?php include("includes/footer.php");?>
     </body>
 </html>

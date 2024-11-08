@@ -1,7 +1,7 @@
 <?php
 session_start();
 $CURRENT_PAGE = "AdminDashboard";
-include_once("../includes/db-conn.php");
+include_once("includes/db-conn.php");
 
 $base_url = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/photo_abcd_A/';
 

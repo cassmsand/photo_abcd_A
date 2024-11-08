@@ -535,8 +535,8 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardImage.id = 'blank';
         cardImage.src = "images/blank-image.png";
         cardLink.className = 'stretched-link';
-        cardLink.setAttribute('data-target', "#abook-modal");
-        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.setAttribute('data-bs-target', "#abook-modal");
+        cardLink.setAttribute('data-bs-toggle', "modal");
         cardLink.addEventListener('click', function (e) {
             toggleCard(card, "blog");
             displayAvailableBlogs(letter);
@@ -559,8 +559,8 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardImage.className = "card-img";
         cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
         cardLink.className = 'stretched-link';
-        cardLink.setAttribute('data-target', "#abook-modal");
-        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.setAttribute('data-bs-target', "#abook-modal");
+        cardLink.setAttribute('data-bs-toggle', "modal");
         cardLink.addEventListener('click', function (e) {
             toggleCard(card, "blog");
             displayAvailableBlogs(card.id);
@@ -588,8 +588,8 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardImage.className = "card-img";
         cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
         cardLink.className = 'stretched-link';
-        cardLink.setAttribute('data-target', "#abook-modal");
-        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.setAttribute('data-bs-target', "#abook-modal");
+        cardLink.setAttribute('data-bs-toggle', "modal");
         cardLink.addEventListener('click', function (e) {
             toggleCard(card, "blog");
             displayAvailableBlogs(card.id);
@@ -716,8 +716,8 @@ function createBookCard(book = null, isblank = false)
         cardImage.id = 'blank-bar';
         cardImage.src = "images/add.png";
         cardLink.className = 'stretched-link';
-        cardLink.setAttribute('data-target', "#new-book-modal");
-        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.setAttribute('data-bs-target', "#new-book-modal");
+        cardLink.setAttribute('data-bs-toggle', "modal");
         cardLink.addEventListener("click", function (e) {
             
         })
@@ -767,8 +767,8 @@ function updateSelectedCard(blogCount)
         cardImage.id = 'blank';
         cardImage.src = "images/blank-image.png";
         cardLink.className = 'stretched-link';
-        cardLink.setAttribute('data-target', "#abook-modal");
-        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.setAttribute('data-bs-target', "#abook-modal");
+        cardLink.setAttribute('data-bs-toggle', "modal");
         cardLink.addEventListener('click', function (e) {
             toggleCard(card, "blog");
             displayAvailableBlogs(letter, true);
@@ -791,8 +791,8 @@ function updateSelectedCard(blogCount)
         cardImage.className = "card-img";
         cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
         cardLink.className = 'stretched-link';
-        cardLink.setAttribute('data-target', "#abook-modal");
-        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.setAttribute('data-bs-target', "#abook-modal");
+        cardLink.setAttribute('data-bs-toggle', "modal");
         cardLink.addEventListener('click', function (e) {
             toggleCard(card, "blog");
             displayAvailableBlogs(card.id, true);
@@ -819,8 +819,8 @@ function updateSelectedCard(blogCount)
         cardImage.className = "card-img";
         cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
         cardLink.className = 'stretched-link';
-        cardLink.setAttribute('data-target', "#abook-modal");
-        cardLink.setAttribute('data-toggle', "modal");
+        cardLink.setAttribute('data-bs-target', "#abook-modal");
+        cardLink.setAttribute('data-bs-toggle', "modal");
         cardLink.addEventListener('click', function (e) {
             toggleCard(card, "blog");
             displayAvailableBlogs(card.id, true);
