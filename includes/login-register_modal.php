@@ -21,7 +21,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#register_modal">Register</button>
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#register_modal">Register</button>
 					<input type="submit" name="submit" value="Login" class="btn btn-primary">
 				</div>
 			</form>
@@ -68,7 +68,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#login_modal">Back to Login</button>
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#login_modal">Back to Login</button>
 					<input type="submit" name="new-register" value="Create Account" class="btn btn-primary">
 				</div>
 			</form>

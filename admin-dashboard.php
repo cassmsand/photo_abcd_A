@@ -1,7 +1,7 @@
 <?php
 session_start();
 $CURRENT_PAGE = "AdminDashboard";
-include_once("../includes/db-conn.php");
+include_once("includes/db-conn.php");
 
 $base_url = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/photo_abcd_A/';
 
@@ -16,8 +16,8 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 		<?php include("includes/head-tag-contents.php");?>
 
 	<head>
+		<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
 		<link href="css/tables.css" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
     </head>
 	<body>
 		<?php include("includes/top-bar.php");?>
@@ -234,175 +234,357 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 				</section>
 				</br>
 			</div>
-			<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-			<script>
-				$(document).ready(function() {
-					$('#usersTable').DataTable();
-					$('#blogsTable').DataTable();
-					$('#adminAlphabetBookCountsTable').DataTable();
-					$('#siteTotalsTable').DataTable();
 
-					const usersTable = new DataTable('#usersTable');
-					const blogsTable = new DataTable('#blogsTable');
-					const adminAlphabetBookCountsTable = new DataTable('#adminAlphabetBookCountsTable');
-					const siteTotalsTable = new DataTable('#siteTotalsTable');
-
-					usersTable.on('click', 'tbody tr', function (e) {
-						if ($(this).hasClass('selected')) {
-							$(this).removeClass('selected');
-						} else {
-							$('#usersTable tbody tr').removeClass('selected');
-							$(this).addClass('selected');
-						}
-					});
-
-					// Click listener for the Edit user button
-					$('#editUserButton').on('click', function() {
-						const selectedRow = $('#usersTable tbody tr.selected');
-
-						if (selectedRow.length === 0) {
-							alert('Please select a user to edit.');
-							return;
-						}
-
-						const email = selectedRow.find('td:eq(0)').text(); // Email
-						const firstName = selectedRow.find('td:eq(1)').text(); // First Name
-						const lastName = selectedRow.find('td:eq(2)').text(); // Last Name
-						const password = selectedRow.find('td:eq(3)').text(); // Password
-						const active = selectedRow.find('td:eq(4)').text(); // Active
-						const role = selectedRow.find('td:eq(5)').text(); // Role
-
-						// Fill in fields in the modal
-						$('#editEmail').text(email);
-						$('#editFirstName').val(firstName);
-						$('#editLastName').val(lastName);
-						$('#editPassword').val(password);
-						$('#active').val(active);
-						$('#role').val(role);
-
-						$('#editUserModal').modal('show');
-					});
-
-					// Click listener for the Delete user button
-					$('#deleteUserButton').on('click', function() {
-						const selectedRow = $('#usersTable tbody tr.selected');
-
-						if (selectedRow.length === 0) {
-							alert('Please select a user to delete.');
-							return;
-						}
-
-						const email = selectedRow.find('td:eq(0)').text(); // Email
-
-						// Fill in fields in the modal
-						$('#deleteEmail').text(email);
-
-						$('#deleteUserModal').modal('show');
-					});
-
-					// Click listener for the View Alphabet Counts button
-					$('#viewAlphabetCountsButton').on('click', function() {
-						const selectedRow = $('#usersTable tbody tr.selected');
-
-						if (selectedRow.length === 0) {
-							alert('Please select a user to view alphabet book counts.');
-							return;
-						}
-
-						const userEmail = selectedRow.find('td:eq(0)').text(); // Email
-						const userFirstName = selectedRow.find('td:eq(1)').text(); // First Name
-						const userLastName = selectedRow.find('td:eq(2)').text(); // Last Name
-
-						// Fill in fields in the modal
-						$('#userFullName').val(' ' + userFirstName + ' ' + userLastName);
-
-						// Call the function to show the modal and load alphabet counts for the selected user
-						showAlphabetCountsModal(userEmail);
-					});
-
-
-					blogsTable.on('click', 'tbody tr', function (e) {
-						if ($(this).hasClass('selected')) {
-							$(this).removeClass('selected');
-						} else {
-							$('#blogsTable tbody tr').removeClass('selected');
-							$(this).addClass('selected');
-						}
-					});
-
-					// Click listener for the Edit blog button
-					$('#editBlogButton').on('click', function() {
-						const selectedRow = $('#blogsTable tbody tr.selected');
-
-						if (selectedRow.length === 0) {
-							alert('Please select a blog to edit.');
-							return;
-						}
-
-						const blogId = selectedRow.find('td:eq(0)').text(); // Blog ID
-						const creatorEmail = selectedRow.find('td:eq(1)').text(); // Creator Email
-						const title = selectedRow.find('td:eq(2)').text(); // Title
-						const description = selectedRow.find('td:eq(3)').text(); // Description
-						const eventDate = selectedRow.find('td:eq(4)').text(); // Event Date
-						const creationDate = selectedRow.find('td:eq(5)').text(); // Creation Date
-						const modificationDate = selectedRow.find('td:eq(6)').text(); // Modification Date
-						const privacyFilter = selectedRow.find('td:eq(7)').text(); // Privacy Filter
-
-						// Fill in form fields in the modal
-						$('#BlogId').text(blogId);
-						$('#editCreatorEmail').text(creatorEmail);
-						$('#editTitle').val(title);
-						$('#editDescription').val(description);
-						$('#editEventDate').val(eventDate);
-						$('#editCreationDate').val(creationDate);
-						$('#editModificationDate').val(modificationDate);
-						$('#editPrivacyFilter').val(privacyFilter);
-
-						$('#editBlogModal').modal('show');
-					});
-
-					// Click listener for the Delete blog button
-					$('#deleteBlogButton').on('click', function() {
-						const selectedRow = $('#blogsTable tbody tr.selected');
-
-						if (selectedRow.length === 0) {
-							alert('Please select a blog to delete.');
-							return;
-						}
-
-						const blogId = selectedRow.find('td:eq(0)').text(); // Blog ID
-						const creatorEmail = selectedRow.find('td:eq(1)').text(); // Creator Email
-						const title = selectedRow.find('td:eq(2)').text(); // Title
-						const description = selectedRow.find('td:eq(3)').text(); // Description
-
-						// Fill in form fields in the modal
-						$('#deleteBlogId').text(blogId);
-						$('#deleteCreatorEmail').text(creatorEmail);
-						$('#deleteTitle').text(title);
-						$('#deleteDescription').text(description);
-					
-						$('#deleteBlogModal').modal('show');
-					});
-
-					adminAlphabetBookCountsTable.on('click', 'tbody tr', function (e) {
-						if ($(this).hasClass('selected')) {
-							$(this).removeClass('selected');
-						} else {
-							$('#adminAlphabetBookCountsTable tbody tr').removeClass('selected');
-							$(this).addClass('selected');
-						}
-					});
-
-					siteTotalsTable.on('click', 'tbody tr', function (e) {
-						if ($(this).hasClass('selected')) {
-							$(this).removeClass('selected');
-						} else {
-							$('#siteTotalsTable tbody tr').removeClass('selected');
-							$(this).addClass('selected');
-						}
-					});
-				});
-			</script>
 			<?php include("includes/footer.php");?>
+			<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
+			
+			<script>
+			function saveUserChanges() {
+				const formData = {
+					email: document.getElementById('editEmail').innerText,
+					firstName: document.getElementById('editFirstName').value,
+					lastName: document.getElementById('editLastName').value,
+					password: document.getElementById('editPassword').value,
+					active: document.getElementById('editActive').value,
+					role: document.getElementById('editRole').value
+				};
+
+				// AJAX request
+				fetch('actions/update-user.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(formData),
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						alert('User updated successfully!');
+						location.reload();
+					} else {
+						alert('Error updating user: ' + data.message);
+					}
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+			}
+
+			function saveBlogChanges() {
+				const formData = {
+					blogId: document.getElementById('editBlogId').innerText,
+					creatorEmail: document.getElementById('editCreatorEmail').innerText,
+					title: document.getElementById('editTitle').value,
+					description: document.getElementById('editDescription').value,
+					eventDate: document.getElementById('editEventDate').value,
+					creationDate: document.getElementById('editCreationDate').value,
+					modificationDate: document.getElementById('editModificationDate').value,
+					privacyFilter: document.getElementById('editPrivacyFilter').value
+				};
+
+				// AJAX request
+				fetch('actions/update-blog.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(formData),
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						alert('Blog updated successfully!');
+						location.reload();
+					} else {
+						alert('Error updating blog: ' + data.message);
+					}
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+			}
+
+			function saveDeleteBlogChanges() {
+				const formData = {
+					blogId: document.getElementById('deleteBlogId').innerText,
+					creatorEmail: document.getElementById('deleteCreatorEmail').innerText,
+					title: document.getElementById('deleteTitle').innerText,
+					description: document.getElementById('deleteDescription').innerText,
+					deleteBlog: document.getElementById('deleteBlog').value,
+				};
+
+				// Exit if both deleteUser is "no"
+				if (formData.deleteBlog === 'no') {
+					$('#deleteBlogModal').modal('hide');
+					return;
+				}
+
+				// AJAX request
+				fetch('actions/delete-blog.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(formData),
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						alert('Blog deleted successfully!');
+						location.reload();
+					} else {
+						alert('Error deleting blog: ' + data.message);
+					}
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+			}
+
+			function saveDeleteUserChanges() {
+				const formData = {
+					email: document.getElementById('deleteEmail').innerText,
+					deleteUser: document.getElementById('deleteUser').value,
+					deleteUserBlogs: document.getElementById('deleteUserBlogs').value
+				};
+
+				// Exit if both deleteUser is "no"
+				if (formData.deleteUser === 'no') {
+					$('#deleteUserModal').modal('hide');
+					return;
+				}
+
+				// AJAX request
+				fetch('actions/delete-user.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(formData),
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						alert('User deleted successfully!');
+						location.reload();
+					} else {
+						alert('Error deleting user: ' + data.message);
+					}
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+			}
+
+			function showAlphabetCountsModal(email) {
+				// Clear the table
+				$('#alphabetCountsTable tbody').empty();
+
+				// Destroy the DataTable instance if it exists
+				if ($.fn.dataTable.isDataTable('#alphabetCountsTable')) {
+					$('#alphabetCountsTable').DataTable().clear().destroy();
+				}
+
+				$.ajax({
+					url: 'actions/get-alphabet-counts-for-admin.php',
+					type: 'GET',
+					data: { email: email },  // Send the email
+					dataType: 'json',
+					success: function(response) {
+						if (Array.isArray(response) && response.length > 0) {
+							response.forEach(function(row) {
+								$('#alphabetCountsTable tbody').append(
+									'<tr><td>' + row.Letter + '</td><td>' + row.LetterCount + '</td></tr>'
+								);
+							});
+
+							// Re-initialize DataTable after populating the table
+							$('#alphabetCountsTable').DataTable();
+							$('#viewAlphabetCountsModal').modal('show'); // Show the modal
+						} else {
+							console.warn('No data returned for the given email.');
+							$('#viewAlphabetCountsModal').modal('show'); // Show the modal even if there's no data
+						}
+					},
+					error: function(xhr, status, error) {
+						console.error("Error fetching data:", error);
+					}
+				});
+			}
+
+			function exitViewAlphabetCounts() {
+				$('#viewAlphabetCountsModal').modal('hide');
+			}
+
+			$(document).ready(function() {
+				$('#usersTable').DataTable();
+				$('#blogsTable').DataTable();
+				$('#adminAlphabetBookCountsTable').DataTable();
+				$('#siteTotalsTable').DataTable();
+
+				const usersTable = new DataTable('#usersTable');
+				const blogsTable = new DataTable('#blogsTable');
+				const adminAlphabetBookCountsTable = new DataTable('#adminAlphabetBookCountsTable');
+				const siteTotalsTable = new DataTable('#siteTotalsTable');
+
+				usersTable.on('click', 'tbody tr', function (e) {
+					if ($(this).hasClass('selected')) {
+						$(this).removeClass('selected');
+					} else {
+						$('#usersTable tbody tr').removeClass('selected');
+						$(this).addClass('selected');
+					}
+				});
+
+				// Click listener for the Edit user button
+				$('#editUserButton').on('click', function() {
+					const selectedRow = $('#usersTable tbody tr.selected');
+
+					if (selectedRow.length === 0) {
+						alert('Please select a user to edit.');
+						return;
+					}
+
+					const email = selectedRow.find('td:eq(0)').text(); // Email
+					const firstName = selectedRow.find('td:eq(1)').text(); // First Name
+					const lastName = selectedRow.find('td:eq(2)').text(); // Last Name
+					const password = selectedRow.find('td:eq(3)').text(); // Password
+					const active = selectedRow.find('td:eq(4)').text(); // Active
+					const role = selectedRow.find('td:eq(5)').text(); // Role
+
+					// Fill in fields in the modal
+					$('#editEmail').text(email);
+					$('#editFirstName').val(firstName);
+					$('#editLastName').val(lastName);
+					$('#editPassword').val(password);
+					$('#active').val(active);
+					$('#role').val(role);
+
+					$('#editUserModal').modal('show');
+				});
+
+				// Click listener for the Delete user button
+				$('#deleteUserButton').on('click', function() {
+					const selectedRow = $('#usersTable tbody tr.selected');
+
+					if (selectedRow.length === 0) {
+						alert('Please select a user to delete.');
+						return;
+					}
+
+					const email = selectedRow.find('td:eq(0)').text(); // Email
+
+					// Fill in fields in the modal
+					$('#deleteEmail').text(email);
+
+					$('#deleteUserModal').modal('show');
+				});
+
+				// Click listener for the View Alphabet Counts button
+				$('#viewAlphabetCountsButton').on('click', function() {
+					const selectedRow = $('#usersTable tbody tr.selected');
+
+					if (selectedRow.length === 0) {
+						alert('Please select a user to view alphabet book counts.');
+						return;
+					}
+
+					const userEmail = selectedRow.find('td:eq(0)').text(); // Email
+					const userFirstName = selectedRow.find('td:eq(1)').text(); // First Name
+					const userLastName = selectedRow.find('td:eq(2)').text(); // Last Name
+
+					// Fill in fields in the modal
+					$('#userFullName').val(' ' + userFirstName + ' ' + userLastName);
+
+					// Call the function to show the modal and load alphabet counts for the selected user
+					showAlphabetCountsModal(userEmail);
+				});
+
+
+				blogsTable.on('click', 'tbody tr', function (e) {
+					if ($(this).hasClass('selected')) {
+						$(this).removeClass('selected');
+					} else {
+						$('#blogsTable tbody tr').removeClass('selected');
+						$(this).addClass('selected');
+					}
+				});
+
+				// Click listener for the Edit blog button
+				$('#editBlogButton').on('click', function() {
+					const selectedRow = $('#blogsTable tbody tr.selected');
+
+					if (selectedRow.length === 0) {
+						alert('Please select a blog to edit.');
+						return;
+					}
+
+					const blogId = selectedRow.find('td:eq(0)').text(); // Blog ID
+					const creatorEmail = selectedRow.find('td:eq(1)').text(); // Creator Email
+					const title = selectedRow.find('td:eq(2)').text(); // Title
+					const description = selectedRow.find('td:eq(3)').text(); // Description
+					const eventDate = selectedRow.find('td:eq(4)').text(); // Event Date
+					const creationDate = selectedRow.find('td:eq(5)').text(); // Creation Date
+					const modificationDate = selectedRow.find('td:eq(6)').text(); // Modification Date
+					const privacyFilter = selectedRow.find('td:eq(7)').text(); // Privacy Filter
+
+					// Fill in form fields in the modal
+					$('#BlogId').text(blogId);
+					$('#editCreatorEmail').text(creatorEmail);
+					$('#editTitle').val(title);
+					$('#editDescription').val(description);
+					$('#editEventDate').val(eventDate);
+					$('#editCreationDate').val(creationDate);
+					$('#editModificationDate').val(modificationDate);
+					$('#editPrivacyFilter').val(privacyFilter);
+
+					$('#editBlogModal').modal('show');
+				});
+
+				// Click listener for the Delete blog button
+				$('#deleteBlogButton').on('click', function() {
+					const selectedRow = $('#blogsTable tbody tr.selected');
+
+					if (selectedRow.length === 0) {
+						alert('Please select a blog to delete.');
+						return;
+					}
+
+					const blogId = selectedRow.find('td:eq(0)').text(); // Blog ID
+					const creatorEmail = selectedRow.find('td:eq(1)').text(); // Creator Email
+					const title = selectedRow.find('td:eq(2)').text(); // Title
+					const description = selectedRow.find('td:eq(3)').text(); // Description
+
+					// Fill in form fields in the modal
+					$('#deleteBlogId').text(blogId);
+					$('#deleteCreatorEmail').text(creatorEmail);
+					$('#deleteTitle').text(title);
+					$('#deleteDescription').text(description);
+				
+					$('#deleteBlogModal').modal('show');
+				});
+
+				adminAlphabetBookCountsTable.on('click', 'tbody tr', function (e) {
+					if ($(this).hasClass('selected')) {
+						$(this).removeClass('selected');
+					} else {
+						$('#adminAlphabetBookCountsTable tbody tr').removeClass('selected');
+						$(this).addClass('selected');
+					}
+				});
+
+				siteTotalsTable.on('click', 'tbody tr', function (e) {
+					if ($(this).hasClass('selected')) {
+						$(this).removeClass('selected');
+					} else {
+						$('#siteTotalsTable tbody tr').removeClass('selected');
+						$(this).addClass('selected');
+					}
+				});
+			});
+		</script>
+
 	</body>
 </html>

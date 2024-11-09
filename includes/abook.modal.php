@@ -1,4 +1,4 @@
-<div class="modal fade" id="abook-modal" data-backdrop="static">
+<div class="modal fade" id="abook-modal" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content" id="abook-modal-content">
 
@@ -15,10 +15,10 @@
                 <!--Button to confirm-->
                 
                     <div class="col">
-                        <button type="button" class="btn btn-primary" id='confirm-selection-button' data-dismiss="modal">Confirm</button>
+                        <button type="button" class="btn btn-primary" id='confirm-selection-button' data-bs-dismiss="modal">Confirm</button>
                     </div>
                     <div class="col">
-                        <button type="button" class="btn btn-danger" id='cancel-selection-button' data-dismiss="modal">Return</button>
+                        <button type="button" class="btn btn-danger" id='cancel-selection-button' data-bs-dismiss="modal">Return</button>
                     </div>
     
                 

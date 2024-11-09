@@ -67,7 +67,7 @@
             <a id='your-blogs' href="actions/self-view.php" class="btn btn-primary">Your Blogs</a>
             <a href="actions/test-view.php" class="btn btn-primary">Get Alice Blogs</a>
 
-            <a id='new-blogs' href="#" class="btn btn-primary" data-toggle="modal" data-target="#new-blog-modal">Create New Blog</a>
+            <a id='new-blogs' href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-blog-modal">Create New Blog</a>
 
         </div>
 
@@ -164,8 +164,8 @@
                 const cardBody = document.createElement("div");
                 cardBody.className = "card-body";
                     const cardLink = document.createElement("a");
-                    cardLink.setAttribute('data-target', "#card-modal");
-                    cardLink.setAttribute('data-toggle', "modal");
+                    cardLink.setAttribute('data-bs-target', "#card-modal");
+                    cardLink.setAttribute('data-bs-toggle', "modal");
                     cardLink.className = 'stretched-link';
                     cardLink.onclick = function() {fillModal(pair);};
                     const cardImage = document.createElement("img");

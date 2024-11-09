@@ -10,10 +10,10 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 
 <!DOCTYPE html>
 <html lang="en">
-
+    
+<?php include("includes/head-tag-contents.php");?>
 <head>
     <title><?php print "My Blogs"; ?></title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -37,7 +37,5 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 
     <?php include("includes/footer.php"); ?>
 
-    <!-- Bootstrap JS Bundle (with Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
