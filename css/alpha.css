@@ -1,3 +1,4 @@
+/* Container Styles */
 .container#book-bar {
     margin-left: auto;
     margin-right: auto;
@@ -9,27 +10,15 @@
     align-content: start;
 }
 
-#book-bar-row {
-    display: flex;
-    align-items: center;
-    align-items: start; 
-    flex: nowrap; 
-    overflow-x: scroll;
-    margin: auto;
-    padding: 20px;
-    max-height: 400px;
-    gap: 20px;
-    background-color: white;
-    border-radius: 20px;
+.container.no-book,
+.container.no-blogs {
+    min-height: 500px;
+    max-height: 800px;
+    text-align: center;
+    align-content: center;
 }
 
-.selected {
-    transform: scale(1.1);
-    -webkit-box-shadow:0px 0px 48px 9px rgba(240, 255, 108, 0.37) !important;
-    -moz-box-shadow: 0px 0px 48px 9px rgba(240, 255, 108, 0.37) !important;
-    box-shadow: 0px 0px 48px 9px rgba(240, 255, 108, 0.37) !important;
-}
-
+/* Card Styles */
 .card {
     box-shadow: 15px 15px 12px rgba(0, 0, 0, 0.1);
     transition: transform 150ms ease-in-out;
@@ -47,25 +36,6 @@
     max-height: 180px;
 }
 
-.card-header {
-    text-align: center;
-    justify-items: center;
-}
-
-.container.no-book {
-    min-height: 500px;
-    max-height: 800px;
-    text-align: center;
-    align-content: center;
-}
-
-.container.no-blogs {
-    min-height: 500px;
-    max-height: 800px;
-    text-align: center;
-    align-content: center;
-}
-
 .card.bar-card#new-book {
     margin-block: auto;
     padding: 0px;
@@ -76,12 +46,18 @@
     border-radius: 12%;
 }
 
-#book-content {
-    margin-top: 20px;
-    height: fit-content;
-    padding: 20px;
-    border-radius: 20px;
-    background: linear-gradient(90deg, #e2faed, #ccdffc);
+.card-body {
+    padding: 0px;
+    justify-content: center;
+    align-content: center;
+    background: linear-gradient(135deg, #ccdffc, #e2faed);
+    display: flex;
+    overflow-y: hidden;
+}
+
+.card-header {
+    text-align: center;
+    justify-items: center;
 }
 
 .card-img {
@@ -91,7 +67,7 @@
 }
 
 .card-img#book-img {
-    margin:auto;
+    margin: auto;
     max-width: 120px;
     height: 120px;
     object-fit: cover;
@@ -105,26 +81,17 @@
 }
 
 .card-img#blank-bar {
-    margin:auto;
+    margin: auto;
     max-width: 30px;
     height: 30px;
     object-fit: cover;
 }
 
-.card-body {
-    padding: 0px;
-    justify-content: center;
-    align-content: center;
-    background: linear-gradient(135deg, #ccdffc, #e2faed);
-    display: flex;
-    overflow-y: hidden;
-}
-
-#util-bar {
-    max-width: 80%;
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
+/* Modal Styles */
+#abook-modal {
+    --bs-modal-max-width: 1400px;
+    --bs-modal-width: 1000px;
+    justify-items: center;
 }
 
 .modal-header {
@@ -141,25 +108,14 @@
     margin-left: 25%;
 }
 
-#button-container {
-    max-width: 400px;
-    align-content: center;
-    justify-content: center;
-    margin: auto;
-    display: flex;
-}
-
-.col {
-    display: grid;
-    row-gap: 10px;
-}
-
+/* Button Styles */
 .btn {
     min-width: 100%;
     max-width: 150px;
     max-height: 50px;
 }
 
+/* Progress Styles */
 #progress-container {
     padding: 15px;
     height: 100px;
@@ -172,6 +128,11 @@
     width: 0%;
 }
 
+.progress {
+    --bs-progress-height: 1.5rem;
+}
+
+/* Alpha Grid Styles */
 #alpha-grid {
     margin-top: 20px;
     height: fit-content;
@@ -182,18 +143,16 @@
     display: grid;
 }
 
-#abook-modal-row {
+#abook-modal-row,
+.row#alpha-grid-row {
     display: flex;
     margin-top: 30px;
     margin-bottom: 30px;
-    gap: 35px;
+    gap: 30px;
 }
 
 .row#alpha-grid-row {
     justify-content: space-between;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    gap: 30px;
 }
 
 .card.a-grid {
@@ -204,27 +163,89 @@
     max-height: 280px;
 }
 
-#abook-modal {
-    --bs-modal-max-width: 1400px;
-    --bs-modal-width: 1000px;
-    justify-items: center;
+/* Utility Bar Styles */
+#util-bar {
+    max-width: 80%;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.multi-num {
+#button-container {
+    max-width: 400px;
+    align-content: center;
+    justify-content: center;
+    margin: auto;
+    display: flex;
+}
+
+/* Multi Number Badge */
+.nested-count-badge {
     position: absolute;
-    top: -15px;
-    right: -15px;
     text-align: center;
     align-content: center;
+    padding: 10px;
     color: white;
-    background-color: blue;
-    border-radius: 100%;
-    max-width: 40px;
+    border-radius: 25px;
+    max-width: 200px;
     max-height: 40px;
     min-width: 40px;
     min-height: 40px;
+    bottom: -15px;
+    left: -15px;
+    background-color: blue;
 }
 
-.progress {
-    --bs-progress-height: 1.5rem;
+.entry-count-badge {
+    position: absolute;
+    text-align: center;
+    align-content: center;
+    padding: 10px;
+    color: white;
+    border-radius: 25px;
+    max-width: 200px;
+    max-height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    bottom: -15px;
+    right: -15px;
+    background-color: green;
+}
+
+/* Flexbox and Grid Utilities */
+.col {
+    display: grid;
+    row-gap: 10px;
+}
+
+/* Selected Card Styles */
+.selected {
+    transform: scale(1.1);
+    -webkit-box-shadow: 0px 0px 27px 10px rgba(255, 182, 56, 0.8) !important;
+    -moz-box-shadow: 0px 0px 27px 10px rgba(255, 182, 56, 0.8) !important;
+    box-shadow: 0px 0px 27px 10px rgba(255, 182, 56, 0.8) !important;
+}
+
+/* Book Bar Row Styles */
+#book-bar-row {
+    display: flex;
+    align-items: center;
+    align-items: start;
+    flex: nowrap;
+    overflow-x: scroll;
+    margin: auto;
+    padding: 20px;
+    max-height: 400px;
+    gap: 20px;
+    background-color: white;
+    border-radius: 20px;
+}
+
+/* Content Styles */
+#book-content {
+    margin-top: 20px;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #e2faed, #ccdffc);
 }
