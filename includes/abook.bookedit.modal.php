@@ -21,12 +21,12 @@
 
                         <div class="col">
                             <button type="button" class="btn btn-primary" id='bookedit-confirm-button'
-                                data-dismiss="modal">Confirm</button>
+                                data-bs-dismiss="modal">Confirm</button>
                         </div>
 
                         <div class="col">
                             <button type="button" class="btn btn-danger" id='bookedit-cancel-button'
-                                data-dismiss="modal">Return</button>
+                                data-bs-dismiss="modal">Return</button>
                         </div>
 
                     </div>

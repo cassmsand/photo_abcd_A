@@ -54,10 +54,7 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
 
     ?>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+    
     <script>
         log_button = document.getElementById('log-button');
 
@@ -67,15 +64,15 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
             case 'login':
                 log_button.innerHTML = 'Login';
                 log_button.href = "#";
-                log_button.setAttribute('data-toggle', "modal");
-                log_button.setAttribute('data-target', "#login_modal");
+                log_button.setAttribute('data-bs-toggle', "modal");
+                log_button.setAttribute('data-bs-target', "#login_modal");
                 break;
 
             case 'logout':
                 log_button.innerHTML = 'Logout';
                 log_button.href = "actions/logout.php";
-                log_button.removeAttribute('data-toggle');
-                log_button.removeAttribute('data-target');
+                log_button.removeAttribute('data-bs-toggle');
+                log_button.removeAttribute('data-bs-target');
                 break;
         }
         

@@ -56,7 +56,7 @@ $CURRENT_PAGE = "ABook";
                     </div>
 
                     <div class="col">
-                        <button type="button" class="btn btn-primary" id='edit-button' data-target="#book-edit-modal" data-toggle="modal">Edit Book</button>
+                        <button type="button" class="btn btn-primary" id='edit-button' data-bs-target="#book-edit-modal" data-bs-toggle="modal">Edit Book</button>
                         <button type="button" class="btn btn-primary" id='print-button' onclick="">Print Book</button>
                     </div>
 

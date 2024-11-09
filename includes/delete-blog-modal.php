@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User Modal</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-
 <div id="deleteBlogModal" class="modal" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -56,47 +46,3 @@
         </div>
     </div>
 </div>
-
-<script>
-function saveDeleteBlogChanges() {
-    const formData = {
-        blogId: document.getElementById('deleteBlogId').innerText,
-        creatorEmail: document.getElementById('deleteCreatorEmail').innerText,
-        title: document.getElementById('deleteTitle').innerText,
-        description: document.getElementById('deleteDescription').innerText,
-        deleteBlog: document.getElementById('deleteBlog').value,
-    };
-
-    // Exit if both deleteUser is "no"
-    if (formData.deleteBlog === 'no') {
-        $('#deleteBlogModal').modal('hide');
-        return;
-    }
-
-    // AJAX request
-    fetch('actions/delete-blog.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Blog deleted successfully!');
-            location.reload();
-        } else {
-            alert('Error deleting blog: ' + data.message);
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-}
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>
