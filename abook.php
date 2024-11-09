@@ -24,7 +24,7 @@ $CURRENT_PAGE = "ABook";
     <?php include("includes/abook.bookedit.modal.php");?>
     
     <div class='container' id="main-body">
-        <h2>Alphabet Book</h2>
+        <h2 style="text-align: center">Alphabet Book</h2>
         <div class="container" id='book-bar'>
             <div class="row" id="book-bar-row"></div>
         </div>
