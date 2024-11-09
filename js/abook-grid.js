@@ -580,6 +580,7 @@ function createBlogCard(blogOrChar, type = 'grid')
             imgSrc = `images/${blog.blog_id}/${blog.images[0]}`;
         } else {
             imgSrc = "images/blank-image.png";
+            cardImage.id = 'blank';
         }
         card.className = 'card a-grid';
         card.id = blog.title[0];
@@ -619,6 +620,7 @@ function createBlogCard(blogOrChar, type = 'grid')
             imgSrc = `images/${blog.blog_id}/${blog.images[0]}`;
         } else {
             imgSrc = "images/blank-image.png";
+            cardImage.id = 'blank';
         }
         const multiNum = document.createElement('div');
         multiNum.className = "nested-count-badge";
@@ -662,6 +664,7 @@ function createBlogCard(blogOrChar, type = 'grid')
             imgSrc = `images/${blog.blog_id}/${blog.images[0]}`;
         } else {
             imgSrc = "images/blank-image.png";
+            cardImage.id = 'blank';
         }
         card.className = 'card a-grid';
         card.id = blog.title[0];
@@ -851,6 +854,7 @@ function updateSelectedCard(blogCount)
             imgSrc = `images/${blog.blog_id}/${blog.images[0]}`;
         } else {
             imgSrc = "images/blank-image.png";
+            cardImage.id = 'blank';
         }
         card.className = 'card a-grid';
         card.id = blog.title[0];
@@ -887,6 +891,7 @@ function updateSelectedCard(blogCount)
             imgSrc = `images/${blog.blog_id}/${blog.images[0]}`;
         } else {
             imgSrc = "images/blank-image.png";
+            cardImage.id = 'blank';
         }
         const multiNum = document.createElement('div');
         multiNum.className = "nested-count-badge";

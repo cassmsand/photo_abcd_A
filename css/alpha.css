@@ -74,10 +74,8 @@
 }
 
 .card-img#blank {
-    margin-top: 55px;
-    max-width: 100px;
-    height: 80px;
-    object-fit: cover;
+    padding: 25%;
+    object-fit: contain;
 }
 
 .card-img#blank-bar {
