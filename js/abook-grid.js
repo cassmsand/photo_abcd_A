@@ -8,6 +8,7 @@ const progBarRegress = document.getElementById('progress-bar-regress');
 const progHeader = document.getElementById('prog-header');
 const utilBar = document.getElementById('util-bar');
 const bookeditTitle = document.getElementById("bookedit-title");
+const bookPrintBtn = document.getElementById("print-button");
 
 // Array of book and blog objects.
 let user_books = [];
@@ -926,6 +927,58 @@ function updateSelectedCard(blogCount)
         selected_card.replaceWith(card);
     }
 }
+
+// Print Logic
+const printBook = () => {
+    const printContainer = document.createElement("div");
+    printContainer.classList.add("printable");
+    
+    document.body.appendChild(printContainer);
+    
+    var elements = Object.assign({}, current_book);
+    var bookTitle = elements["title"];
+    delete elements["title"];
+    for (const letter in elements) {
+        const idArr = elements[letter];
+        if (idArr != "") {
+            idArr.forEach(blog_id => {
+                createPage(blog_id);
+            });
+        }
+    }
+
+    console.log(elements);
+    window.print();
+    document.body.removeChild(printContainer);
+
+    function createPage(blog_id)
+    {
+        const blog = getBlogById(blog_id);
+
+        const printElement = document.createElement('div');
+        printElement.classList.add("printelement");
+        const blogTitle = document.createElement("h1");
+        blogTitle.innerHTML = blog.title;
+        const blogImage = document.createElement('img');
+        blogImage.src = `images/${blog_id}/${blog.images[0]}`;
+        const blogDesc = document.createElement("p");
+        blogDesc.innerHTML = blog.description;
+        const blogEventDate = document.createElement("p");
+        blogEventDate.innerHTML = blog.event_date;
+
+        printElement.appendChild(blogTitle);
+        printElement.appendChild(blogImage);
+        printElement.appendChild(blogDesc);
+        printElement.appendChild(blogEventDate);
+
+        printContainer.appendChild(printElement);
+    }
+    
+};
+
+bookPrintBtn.addEventListener("click", () => {
+    printBook();
+});
 
 // Grid Modal Confirm & Cancel
 const gridConfirmBtn = document.getElementById("confirm-selection-button");

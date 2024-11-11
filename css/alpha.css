@@ -247,3 +247,33 @@
     border-radius: 20px;
     background: linear-gradient(90deg, #e2faed, #ccdffc);
 }
+
+
+@media print {
+    body *:not(.printable, .printable *) {
+        display: none;
+    }
+
+    @page {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .printable {
+        margin: auto;
+        align-content: center;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .printelement {
+        page-break-after: always;
+    }
+
+    img {
+        object-fit: cover;
+        max-width: 100%;
+        max-height: 500px;
+    }
+
+}
