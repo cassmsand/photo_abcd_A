@@ -88,22 +88,19 @@ session_start();
             <div class="container about-bar" id="right">
                 <div class="container">
                     <div class="about-header">
-                        <h1>Bridget Everett</h1>
+                        <h1>Ryan Her</h1>
                     </div>
                     <div class="container about-content">
                         <p>
-                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                            unknown
-                            printer took a galley of type and scrambled it to make a type specimen book. It has survived
-                            not only five centuries, but also the leap into electronic typesetting, remaining
-                            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-                            containing Lorem Ipsum passages, and more recently with desktop publishing software like
-                            Aldus PageMaker including versions of Lorem Ipsum.
+                            Ryan was born and raised in Saint Paul, Minnesota. He attended Blaine High School and graduated in 2019. Ryan attended Anoka Ramsey Community College and
+                            then transferred to Metropolitan State University, majoring in Computer Science and is set to graduate in December 2024 with his Bachelors. In his free time
+                            Ryan enjoys training in Muay Thai and watching Vikings football. Ryan has successfully completed a Software Engineering Internship with Securian Financial and aims 
+                            to continue on this career path in tech.
                         </p>
                     </div>
                 </div>
                 <div class="container image-container">
-                    <img class='img-fluid' src="images/about/samp4.jpg" alt="team image">
+                    <img class='img-fluid' src="images/about/ryanH.png" alt="team image">
                 </div>
             </div>
 
