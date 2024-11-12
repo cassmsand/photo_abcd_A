@@ -135,7 +135,7 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
                             return;
                         }
                         if (viewOptions === 'photoOnly') {
-                            displaySortedBlogs(sortOrder)
+                            displaySortedBlogs(sortOrder, blogModular, blogPosts)
                         } else {
                             displayTraditionalView(blogModular, postsContainer, sortOrder, blogPosts)
                         }
@@ -300,11 +300,19 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
 
             // Function to display photo-only view
 
-            function displaySortedBlogs(sortOrder = 'asc') {
+            function displaySortedBlogs(sortOrder = 'asc', blogModular, blogPosts) {
                 blogRow.innerHTML = ''; // Clear the container
-
+                let combinedGet = [];
                 // Sort blogs based on title in ascending or descending order
-                blogModular.sort((a, b) => {
+                for (let j = 0; j<blogPosts.length; j++) {
+                    for (let i = 0; i < blogModular.length; i++) {
+                        if (blogPosts[j].blog_id === blogModular[i].table.blog_id) {
+                            combinedGet.push(blogModular[i])
+                            break;
+                        }
+                    }
+                }
+                combinedGet.sort((a, b) => {
                     const titleA = a.table.title.toLowerCase();
                     const titleB = b.table.title.toLowerCase();
                     const dateA = a.table.event_date;
@@ -312,7 +320,6 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
                     if (sortOrder === 'asc') {
                         return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
                     } else if (sortOrder === 'desc') {
-                        console.log(sortOrder)
                         return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
                     } else if (sortOrder === 'date_asc') {
                         return dateA < dateB ? -1 : (dateA > dateB ? 1 : 0);
@@ -320,7 +327,8 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
                         return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
                     }
                 });
-                blogModular.forEach(pair => {
+
+                combinedGet.forEach(pair => {
                     // Blog Row Attributes
                     const table = pair.table;
                     const blog_id = table.blog_id;
