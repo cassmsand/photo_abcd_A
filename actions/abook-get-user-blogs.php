@@ -21,9 +21,18 @@ if ($result->num_rows > 0) {
         // Relative directory for scandir.
         $rel_dir = "../images/{$row['blog_id']}/";
 
+        // Get name and extension of image file (after filtering unrelated entries).
+        // DOES NOT SORT OUT INVALID FILE EXTENSIONS
         $blog_files = array_values(array_diff(scandir($rel_dir), array('..', '.')));
+
+        // Create key-value pair.
+        // Example: blog['images'] = ['example1.jpg', 'example2.png', 'example3.gif', ...]
         $blog_images = array('images' => $blog_files);
+
+        // Merge blog key-value pair to blog row.
         (array)$row = array_merge((array)$row, $blog_images);
+
+        // Add blog row to array
         $blogs[] = $row;
     }
 }
