@@ -8,16 +8,21 @@ const progBarRegress = document.getElementById('progress-bar-regress');
 const progHeader = document.getElementById('prog-header');
 const utilBar = document.getElementById('util-bar');
 const bookeditTitle = document.getElementById("bookedit-title");
+const bookPrintBtn = document.getElementById("print-button");
 
+// Array of book and blog objects.
 let user_books = [];
 let user_blogs = [];
 
 /**
- * Essentially just book states.
+ * Book objects. Contains title and letter entries.
+ * current_book represents the book in the database.
+ * pending_book represents the pending changes in the page.
  * All book updates done by pending_book.
  */
 let current_book;
 let pending_book;
+let possible_entries;
 
 /**
  * Variables for Selection Logic.
@@ -81,9 +86,25 @@ function init()
             user_books = results[0];
             user_blogs = results[1];
 
+            if (possible_entries === undefined) {
+                possible_entries = {};
+                user_blogs.forEach(blog => {
+                    const letter = blog.title[0].toUpperCase();
+                    const id = blog.blog_id;
+                    if (possible_entries[letter] === undefined) {
+                        possible_entries[letter] = [id];
+                    } else {
+                        if (!possible_entries[letter].includes(id)) {
+                            possible_entries[letter].push(id);
+                        }
+                    }
+                });
+            }
+
             console.log(user_books);
             console.log(user_blogs);
-
+            console.log(possible_entries);
+            
             displayBar();
         });
 }
@@ -326,6 +347,7 @@ function displayGrid(book)
     var letters = Object.assign({}, book);
     delete letters['title'];
 
+    // Represents the array of blog_ids for a letter of the book.
     entries = Object.entries(letters);
     
     entries.forEach(pair => {
@@ -373,11 +395,9 @@ function displayGrid(book)
 
 function getBlogById(id)
 {
-    //console.log('searching');
     let result;
     user_blogs.forEach(blog => {
         if (blog.blog_id === id) {
-            //console.log(blog);
             result = blog;
         } 
     });
@@ -393,7 +413,7 @@ function clearContainer(container)
 
 function displayAvailableBlogs(letter, hasPending = false)
 {
-    selected_letter = letter;
+    selected_letter = letter.toUpperCase();
     console.log(letter);
     var blogCardType;
     var initialEntries = 0;
@@ -402,24 +422,19 @@ function displayAvailableBlogs(letter, hasPending = false)
     {
         case false:
             blogCardType = "modal";
-            initialEntries = current_book[letter].filter(value => (value != "")).length;
             break;
 
         case true:
             blogCardType = "modalpending";
-            initialEntries = pending_book[letter].filter(value => (value != "")).length;
             break;
     }
-
-    // Initial number of entries defined by book.
-    console.log(initialEntries);
 
     const noBlogs = document.getElementById('no-blogs');
     clearContainer(modalRow);
 
     var hasEntries = false;
     user_blogs.forEach(blog => {
-        if (blog.title[0] == letter) {
+        if (blog.title[0].toUpperCase() == letter) {
             if (!hasEntries)
             {
                 hasEntries = true;
@@ -525,7 +540,9 @@ function createBlogCard(blogOrChar, type = 'grid')
 
     function blank()
     {
-        var letter = blogOrChar;
+        var letter = blogOrChar.toUpperCase();
+        let entry = possible_entries[letter];
+        
         card.className = 'card a-grid';
         card.id = `${letter}-blank`;
         cardHeader.className = "card-header";
@@ -545,30 +562,51 @@ function createBlogCard(blogOrChar, type = 'grid')
         card.appendChild(cardBody);
         cardBody.appendChild(cardImage);
         cardBody.appendChild(cardLink);
+        if (entry != undefined) {
+            const multiNum = document.createElement('div');
+            multiNum.className = "entry-count-badge";
+            multiNum.innerHTML = `${entry.length} Available`
+            card.appendChild(multiNum);
+        }
         alpha_grid.appendChild(card);
     }
 
     function grid()
     {
         var blog = blogOrChar;
+        var letter = blog.title[0].toUpperCase();
+        let entry = possible_entries[letter];
+        var imgSrc;
+        if (blog.images.length != 0) {
+            imgSrc = `images/${blog.blog_id}/${blog.images[0]}`;
+        } else {
+            imgSrc = "images/blank-image.png";
+            cardImage.id = 'blank';
+        }
         card.className = 'card a-grid';
         card.id = blog.title[0];
         cardHeader.className = "card-header";
         cardHeader.innerHTML = `${blog.title}`;
         cardBody.className = "card-body";
         cardImage.className = "card-img";
-        cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
+        cardImage.src = imgSrc;
         cardLink.className = 'stretched-link';
         cardLink.setAttribute('data-bs-target', "#abook-modal");
         cardLink.setAttribute('data-bs-toggle', "modal");
         cardLink.addEventListener('click', function (e) {
             toggleCard(card, "blog");
-            displayAvailableBlogs(card.id);
+            displayAvailableBlogs(card.id.toUpperCase());
         });
         card.appendChild(cardHeader);
         card.appendChild(cardBody);
         cardBody.appendChild(cardImage);
         cardBody.appendChild(cardLink);
+        if (entry != undefined) {
+            const multiNum = document.createElement('div');
+            multiNum.className = "entry-count-badge";
+            multiNum.innerHTML = `${entry.length} Available`
+            card.appendChild(multiNum);
+        }
         alpha_grid.appendChild(card);
     }
 
@@ -576,9 +614,18 @@ function createBlogCard(blogOrChar, type = 'grid')
     {
         var blogArr = blogOrChar;
         var blog = blogArr[0];
+        var letter = blog.title[0].toUpperCase();
+        let entry = possible_entries[letter];
+        var imgSrc;
+        if (blog.images.length != 0) {
+            imgSrc = `images/${blog.blog_id}/${blog.images[0]}`;
+        } else {
+            imgSrc = "images/blank-image.png";
+            cardImage.id = 'blank';
+        }
         const multiNum = document.createElement('div');
-        multiNum.className = "multi-num";
-        multiNum.innerHTML = `${blogArr.length}+`
+        multiNum.className = "nested-count-badge";
+        multiNum.innerHTML = `${blogArr.length} Nested`;
         var headerText = `${blog.title}`;
         card.className = 'card a-grid';
         card.id = blog.title[0];
@@ -586,7 +633,7 @@ function createBlogCard(blogOrChar, type = 'grid')
         cardHeader.innerHTML = headerText;
         cardBody.className = "card-body";
         cardImage.className = "card-img";
-        cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
+        cardImage.src = imgSrc;
         cardLink.className = 'stretched-link';
         cardLink.setAttribute('data-bs-target', "#abook-modal");
         cardLink.setAttribute('data-bs-toggle', "modal");
@@ -599,6 +646,12 @@ function createBlogCard(blogOrChar, type = 'grid')
         card.appendChild(multiNum);
         cardBody.appendChild(cardImage);
         cardBody.appendChild(cardLink);
+        if (entry != undefined) {
+            const multiNum = document.createElement('div');
+            multiNum.className = "entry-count-badge";
+            multiNum.innerHTML = `${entry.length} Available`
+            card.appendChild(multiNum);
+        }
         alpha_grid.appendChild(card);
     }
 
@@ -607,13 +660,20 @@ function createBlogCard(blogOrChar, type = 'grid')
         var blog = blogOrChar;
         const letter = blog.title[0];
         const id = blog.blog_id;
+        var imgSrc;
+        if (blog.images.length != 0) {
+            imgSrc = `images/${blog.blog_id}/${blog.images[0]}`;
+        } else {
+            imgSrc = "images/blank-image.png";
+            cardImage.id = 'blank';
+        }
         card.className = 'card a-grid';
         card.id = blog.title[0];
         cardHeader.className = "card-header";
         cardHeader.innerHTML = `${blog.title}`;
         cardBody.className = "card-body";
         cardImage.className = "card-img";
-        cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
+        cardImage.src = imgSrc;
         cardLink.className = 'stretched-link';
         card.appendChild(cardHeader);
         card.appendChild(cardBody);
@@ -642,7 +702,7 @@ function createBlogCard(blogOrChar, type = 'grid')
 
         if (hasPending)
         {
-            if (pending_book[letter].includes(id))
+            if (pending_book[letter.toUpperCase()].includes(id))
             {
                 card.classList.add('selected');
                 selected_blogs.push(id);
@@ -650,7 +710,7 @@ function createBlogCard(blogOrChar, type = 'grid')
         }
         else
         {
-            if (current_book[letter].includes(id))
+            if (current_book[letter.toUpperCase()].includes(id))
             {
                 //console.log('Contains Blog: '+id);
                 card.classList.add('selected');
@@ -733,6 +793,7 @@ function updateSelectedCard(blogCount)
     var bId = selected_blogs[0];
     var letter = selected_letter;
     var blog = getBlogById(bId);
+    let entry = possible_entries[letter];
 
     const card = document.createElement("div");
     const cardHeader = document.createElement("div");
@@ -778,18 +839,31 @@ function updateSelectedCard(blogCount)
         card.classList.add('selected');
         cardBody.appendChild(cardImage);
         cardBody.appendChild(cardLink);
+        if (entry != undefined) {
+            const multiNum = document.createElement('div');
+            multiNum.className = "entry-count-badge";
+            multiNum.innerHTML = `${entry.length} Available`
+            card.appendChild(multiNum);
+        }
         selected_card.replaceWith(card);
     }
 
     function single()
     {
+        var imgSrc;
+        if (blog.images.length != 0) {
+            imgSrc = `images/${blog.blog_id}/${blog.images[0]}`;
+        } else {
+            imgSrc = "images/blank-image.png";
+            cardImage.id = 'blank';
+        }
         card.className = 'card a-grid';
         card.id = blog.title[0];
         cardHeader.className = "card-header";
         cardHeader.innerHTML = `${blog.title}`;
         cardBody.className = "card-body";
         cardImage.className = "card-img";
-        cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
+        cardImage.src = imgSrc;
         cardLink.className = 'stretched-link';
         cardLink.setAttribute('data-bs-target', "#abook-modal");
         cardLink.setAttribute('data-bs-toggle', "modal");
@@ -802,14 +876,27 @@ function updateSelectedCard(blogCount)
         card.classList.add('selected');
         cardBody.appendChild(cardImage);
         cardBody.appendChild(cardLink);
+        if (entry != undefined) {
+            const multiNum = document.createElement('div');
+            multiNum.className = "entry-count-badge";
+            multiNum.innerHTML = `${entry.length} Available`
+            card.appendChild(multiNum);
+        }
         selected_card.replaceWith(card);
     }
 
     function multi()
     {
+        var imgSrc;
+        if (blog.images.length != 0) {
+            imgSrc = `images/${blog.blog_id}/${blog.images[0]}`;
+        } else {
+            imgSrc = "images/blank-image.png";
+            cardImage.id = 'blank';
+        }
         const multiNum = document.createElement('div');
-        multiNum.className = "multi-num";
-        multiNum.innerHTML = `${blogCount}+`
+        multiNum.className = "nested-count-badge";
+        multiNum.innerHTML = `${blogCount} Nested`
         var headerText = `${blog.title}`;
         card.className = 'card a-grid';
         card.id = blog.title[0];
@@ -817,7 +904,7 @@ function updateSelectedCard(blogCount)
         cardHeader.innerHTML = headerText;
         cardBody.className = "card-body";
         cardImage.className = "card-img";
-        cardImage.src = `images/${blog.blog_id}/${blog.images[0]}`;
+        cardImage.src = imgSrc;
         cardLink.className = 'stretched-link';
         cardLink.setAttribute('data-bs-target', "#abook-modal");
         cardLink.setAttribute('data-bs-toggle', "modal");
@@ -831,9 +918,49 @@ function updateSelectedCard(blogCount)
         card.classList.add('selected');
         cardBody.appendChild(cardImage);
         cardBody.appendChild(cardLink);
+        if (entry != undefined) {
+            const multiNum = document.createElement('div');
+            multiNum.className = "entry-count-badge";
+            multiNum.innerHTML = `${entry.length} Available`
+            card.appendChild(multiNum);
+        }
         selected_card.replaceWith(card);
     }
 }
+
+// Print Blogs Function
+
+/**
+ * Returns an array of blogs from the current book object.
+ * 
+ * Uses a copy of the current_book object to prevent changes
+ * to the original object.
+ * 
+ * @returns Array of blogs from the current book
+ */
+function getBookBlogs()
+{
+    var abook = Object.assign({}, current_book);
+    var bookTitle = abook["title"];
+    var blogArr = [];
+    delete abook["title"];
+
+    for (const letter in abook) {
+        const idArr = abook[letter];
+        if (idArr != "") {
+            idArr.forEach(blog_id => {
+                const blog = getBlogById(blog_id);
+                blogArr.push(blog);
+            });
+        }
+    }
+
+    return blogArr;
+}
+
+bookPrintBtn.addEventListener("click", () => {
+    printBlogs(getBookBlogs());
+});
 
 // Grid Modal Confirm & Cancel
 const gridConfirmBtn = document.getElementById("confirm-selection-button");
@@ -855,7 +982,6 @@ gridCancelBtn.addEventListener("click", function (e) {
     selected_card = undefined;
     initialEntries = 0;
 })
-
 
 // New Book Modal Confirm
 const newBookConfirmBtn = document.getElementById("newbook-confirm-button");

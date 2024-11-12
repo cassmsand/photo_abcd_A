@@ -2,7 +2,7 @@
 include_once("includes/db-conn.php");
 session_start();
 
-$CURRENT_PAGE = "ABook";
+$CURRENT_PAGE = "Alphabet Book";
 
 ?>
 <!DOCTYPE html>
@@ -12,6 +12,7 @@ $CURRENT_PAGE = "ABook";
 
 <head>
     <link rel="stylesheet" href="css/alpha.css">
+    <link rel="stylesheet" href="css/print-page.css">
     <style>
 
     </style>
@@ -24,7 +25,7 @@ $CURRENT_PAGE = "ABook";
     <?php include("includes/abook.bookedit.modal.php");?>
     
     <div class='container' id="main-body">
-        <h2>Alphabet Book</h2>
+        <h2 style="text-align: center">Alphabet Book</h2>
         <div class="container" id='book-bar'>
             <div class="row" id="book-bar-row"></div>
         </div>
@@ -73,6 +74,7 @@ $CURRENT_PAGE = "ABook";
         </div>
     </div>
     <?php include("includes/footer.php");?>
+    <script src="js/print-blogs.js"></script>
     <script src="js/abook-grid.js"></script>
 </body>
 

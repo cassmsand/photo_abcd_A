@@ -48,6 +48,7 @@
 .card-header {
     background-color: #f8f9fa;
     padding: 10px;
+    text-align: center;
 }
 
 .card-title {
@@ -69,6 +70,7 @@
 .card-footer {
     padding: 10px;
     background-color: #f1f1f1;
+    text-align: center;
 }
 
 .card-text {
@@ -92,6 +94,7 @@ Modal
 
 .modal-header {
     padding: 10px;
+    justify-content: center;
 }
 
 .modal-content {
@@ -102,6 +105,7 @@ Modal
 .modal-body {
     padding: 10px;
 }
+
 
 img#card-modal-img {
     padding: 10px;

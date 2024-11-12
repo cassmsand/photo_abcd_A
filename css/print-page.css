@@ -1,0 +1,87 @@
+@media print {
+    body *:not(.printable, .printable *) {
+        display: none;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    @page {
+        margin: 0;
+        padding: 0;
+    }
+
+    .printable {
+        margin: 0;
+        align-content: center;
+        justify-content: center;
+        text-align: center;
+        max-width: max-content;
+        min-width: 100%;
+    }
+
+    .printelement {
+        max-width: 1080px;
+        display: grid;
+
+        page-break-after: always;
+        align-content: center;
+        justify-content: center;
+
+        *:not(.row, img, .print-footer *) {
+            border-style: solid;
+            border-width: 1px;
+        }
+
+        .print-header {
+            background-image: url("../images/banner.png");
+            border-bottom-width: 0px;
+            min-height: 15%;
+            max-height: none;
+            .row {
+                display: flex;
+                margin: auto;
+                padding: 10px;
+                justify-content: space-evenly;
+                align-content: center;
+
+                *{
+                    margin: auto;
+                    background-color: whitesmoke;
+                    border-radius: 15px;
+                    padding: 10px;
+                    min-height: inherit;
+                    max-width: fit-content;
+                }
+            }
+        }
+
+        .print-body {
+            background: linear-gradient(135deg, #ccdffc, #e2faed);
+            border-bottom-width: 0px;
+            min-height: 70%;
+            max-height: none;
+            max-width: fit-content;
+            padding: 15px;
+        }
+
+        .print-footer {
+            min-height: 15%;
+            max-height: none;
+            padding: 15px;
+            background-image: url("../images/banner.png");
+        }
+    }
+
+    img {
+        border-radius: 15px;
+        min-width: 800px;
+        max-width: 800px;
+        max-height: 600px;
+        object-fit: cover;
+
+    }
+
+}
