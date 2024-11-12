@@ -21,11 +21,8 @@ if ($result->num_rows > 0) {
         // Relative directory for scandir.
         $rel_dir = "../images/{$row['blog_id']}/";
 
-        // Absolute directory for image reference.
-        $blog_dir = "../photo_abcd_A/images/{$row['blog_id']}/";
-
         $blog_files = array_values(array_diff(scandir($rel_dir), array('..', '.')));
-        $blog_images = array('dir' => $blog_dir, 'images' => $blog_files);
+        $blog_images = array('images' => $blog_files);
         (array)$row = array_merge((array)$row, $blog_images);
         $blogs[] = $row;
     }

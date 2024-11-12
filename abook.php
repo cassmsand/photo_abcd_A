@@ -74,6 +74,7 @@ $CURRENT_PAGE = "ABook";
         </div>
     </div>
     <?php include("includes/footer.php");?>
+    <script src="js/print-blogs.js"></script>
     <script src="js/abook-grid.js"></script>
 </body>
 
