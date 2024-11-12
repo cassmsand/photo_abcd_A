@@ -928,6 +928,8 @@ function updateSelectedCard(blogCount)
     }
 }
 
+// Print Blogs Function
+
 /**
  * Dynamically creates printing elements for given blogs
  * and appends them to the body of the page.
@@ -939,7 +941,7 @@ function updateSelectedCard(blogCount)
  * Will automatically clear the body of print elements
  * after the menu has been called.
  */
-const printBook = () => {
+const printBlogs = () => {
     const printContainer = document.createElement("div");
     printContainer.classList.add("printable");
     
@@ -968,11 +970,6 @@ const printBook = () => {
     window.print();
     document.body.removeChild(printContainer);
 
-    /**
-     * 
-     * 
-     * @param {*} blog_id ID of the blog chosen for printing.
-     */
     function createPage(blog_id)
     {
         const blog = getBlogById(blog_id);
@@ -1029,7 +1026,7 @@ const printBook = () => {
 };
 
 bookPrintBtn.addEventListener("click", () => {
-    printBook();
+    printBlogs();
 });
 
 // Grid Modal Confirm & Cancel
