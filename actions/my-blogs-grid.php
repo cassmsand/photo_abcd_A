@@ -267,8 +267,8 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                     event.preventDefault();
 
                     const blogId = document.getElementById('blogId').value;
-                    const title = document.getElementById('editTitle').value;
-                    const description = document.getElementById('editDescription').value;
+                    var title = document.getElementById('editTitle').value;
+                    var description = document.getElementById('editDescription').value;
                     const privacyFilter = document.getElementById('privacyFilter').value;
                     const creatorEmail = document.getElementById('creatorEmail').value;
                     const eventDate = document.getElementById('eventDate').value;
@@ -284,14 +284,23 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                     console.log('Event Date:', eventDate);
                     console.log('Creation Date:', creationDate);
                     */
-                    // Ensure we are capturing the current values from the modal
-                    if (title.trim() === '' || description.trim() === '') {
+                    
+                    // ensure new title doesnt start with symbol
+                    // to validate the title of blog
+                    console.log(description);
+                    console.log(title);
+                    if(isFieldEmpty()){
                         alert('Title and Description cannot be empty!');
-                        return; // Exit if validation fails
+                    }
+                    else if(!checkTitle()){
+                        alert('Title must start with a letter or number only.');
+                    }
+                    else if(eventDateNull()){
+                        alert('Event must have a date');
                     }
 
-                    // Save changes via AJAX
-                    fetch(`actions/update-blog.php`, {
+                    else {
+                        fetch(`actions/update-blog.php`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -311,6 +320,42 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                         }
                     })
                     .catch(error => console.error('Error updating blog post:', error));
+
+                    }
+
+
+                    function eventDateNull(){
+                        if (eventDate === ''){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    }
+                    
+                    
+                    function isFieldEmpty(){
+                        if (title === '' || description === ''){
+                            return true;
+                        }else{
+                            return false;
+                        }
+
+                    }
+
+                    function checkTitle(){
+                        
+                        if (!/^[a-zA-Z0-9].*/.test(title.trim()[0])){
+                            
+                            return false;
+                            
+                          }
+                        else{
+                            return true;
+                        }
+                        
+                    }
+
+                   
                 };
 
                 
