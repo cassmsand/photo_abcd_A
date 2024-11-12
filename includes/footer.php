@@ -1,14 +1,17 @@
-<div class="footer" id='main-footer' style="background-image: url('<?php echo $base_url; ?>images/banner.png'); 
-            background-size: cover; 
-            background-position: center; 
-            height: 200px;
-			display: flex; 
-			justify-content: center; 
-			align-items: center;">
-    <span>
-        Alligator Group @ <?php echo date('Y'); ?>
-    </span>
-</div>
+<footer>
+    <div class="footer" id='main-footer' style="background-image: url('<?php echo $base_url; ?>images/banner.png'); 
+                background-size: cover; 
+                background-position: center; 
+                height: 200px;
+                display: flex; 
+                justify-content: center; 
+                align-items: center;">
+        <span>
+            Alligator Group @ <?php echo date('Y'); ?>
+        </span>
+    </div>
+</footer>
+    
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
