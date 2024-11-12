@@ -12,7 +12,15 @@
  * - Include print-page.css in head.
  * - Get array of blog rows
  * - Pass blog rows to printBlogs
- * 
+ * ---
+ * Structure of elements:
+ * - Page Container: Contains the pages. Is appeneded to the < body >.
+ *   - Page: A single page formatted for printing.
+ *     - Page Header: Contains the blog title and event date.
+ *     - Page Body: Contains the blog images.
+ *     - Page Footer: Contains the blog descriptions.
+ *    - Other Pages...
+ * ---
  * @param {*} blogArr Array of blog rows.
  */
 function printBlogs(blogArr) 
@@ -50,7 +58,7 @@ function printBlogs(blogArr)
         const printElement = document.createElement('div');
         printElement.classList.add("printelement");
 
-        // Page Header Container
+        // Page Header Container.
         const printHeader = document.createElement('div');
         printHeader.className = "print-header";
 
