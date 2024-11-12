@@ -66,21 +66,20 @@ session_start();
 
             <div class="container about-bar" id="left">
                 <div class="container image-container">
-                    <img class='img-fluid' src="images/about/samp3.jpg" alt="team image">
+                    <img class='img-fluid' src="images/about/justin.jpg" alt="team image">
                 </div>
                 <div class="container">
                     <div class="about-header">
-                        <h1>Issac Conner</h1>
+                        <h1>Justin Her</h1>
                     </div>
                     <div class="container about-content">
                         <p>
-                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                            unknown
-                            printer took a galley of type and scrambled it to make a type specimen book. It has survived
-                            not only five centuries, but also the leap into electronic typesetting, remaining
-                            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-                            containing Lorem Ipsum passages, and more recently with desktop publishing software like
-                            Aldus PageMaker including versions of Lorem Ipsum.
+                            Justin is a Minnesota native with a long standing relationship with computers and technology since his youth. As such,
+                            after graduating from Eastern Gateway Community College in 2021, he sought to attain a Bachelor's Degree in Computer Science
+                            and is set to graduate from Metropolitan State University in December, 2024. He is a member of Metrostate's Hmong Student 
+                            Organization, and has participated in various activities with other student organizations. He is an avid PC gamer with experience
+                            in game development (Unity) and modding. His prefrontal cortex is underdeveloped and given that no one is actually going to 
+                            fact check this statement, this should be taken as factually, ethically, and metaphysically true unless corrected otherwise.
                         </p>
                     </div>
                 </div>
