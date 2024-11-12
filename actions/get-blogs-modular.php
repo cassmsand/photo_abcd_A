@@ -21,51 +21,73 @@
     Output will give: 'A for Art'
 -->
 <?php
+session_start();
 include_once("includes/db-conn.php");
 
 /**
  * Use Cases:
- * 
+ *
  * Get All Public Blogs
  * Get Logged User Blogs
  * Get Other Users Public Blogs
  * Get Admin View?
  */
+$attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter';
+$where = "WHERE privacy_filter = 'public'";
+// Retrieve and sanitize filter inputs
+$title = isset($_GET['title']) ? $conn->real_escape_string($_GET['title']) : '';
+$startDate = isset($_GET['start_date']) ? $conn->real_escape_string($_GET['start_date']) : '';
+$endDate = isset($_GET['end_date']) ? $conn->real_escape_string($_GET['end_date']) : '';
+$sortOrder = isset($_GET['sort_order']) ? strtolower($_GET['sort_order']) : 'asc';
 
-function getBlogs() {
+// Build WHERE clause for filters
+if (!empty($title)) {
+    $searchTerm = $conn->real_escape_string($title);
+    $where .= " AND (title LIKE '%" . $searchTerm . "%' OR description LIKE '%" . $searchTerm . "%')"; // Match words in title or description
+}
+// Creation Date range sort
+if (!empty($startDate)) {
+    $where .= " AND creation_date >= '" . $conn->real_escape_string($startDate) . "'";
+}
+if (!empty($endDate)) {
+    $where .= " AND creation_date <= '" . $conn->real_escape_string($endDate) . "'";
+}
+function getBlogs($where) {
+    global $attributes;
     if (!isset($_SESSION['blog_display'])) {
         $_SESSION['blog_display'] = 'public';
     }
 
     $display_type = $_SESSION['blog_display'];
 
+
     // If not logged or selecting user from public blog
     switch ($display_type) {
         // All public blogs
         case 'public':
-            return "SELECT blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter FROM blogs WHERE privacy_filter = 'public'";
+            return "SELECT $attributes FROM blogs $where";
 
         // All logged in user blogs
         case 'self':
             $self = $_SESSION['current_user_email'];
-            return "SELECT blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter FROM blogs WHERE creator_email = '{$self}'";
+            return "SELECT $attributes FROM blogs $where AND WHERE creator_email = '{$self}'";
 
         // All selected user blogs
         case 'select':
             if (isset($_GET['select_user'])) {
                 $select_user = $_GET['select_user'];
             }
-            return "SELECT blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter FROM blogs WHERE creator_email = '{$select_user}' AND privacy_filter = 'public'";
-        
-        case 'test':
+            return "SELECT $attributes FROM blogs $where AND WHERE creator_email = '{$select_user}' AND privacy_filter = 'public'";
+
+        case 'default':
             $select_user = 'alice@example.com';
-            return "SELECT blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter FROM blogs WHERE creator_email = '{$select_user}' AND privacy_filter = 'public'";
+            return "SELECT $attributes FROM blogs WHERE $where";
     }
-    
+
 }
 
-$sql = getBlogs();
-
+$sql = getBlogs($where);
+//echo "<p>Generated SQL Query: $sql</p>";
 $result = $conn->query($sql);
 
 if (!$result) {

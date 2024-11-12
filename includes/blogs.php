@@ -6,6 +6,7 @@ $is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
 $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A' : '');
 $base_url = rtrim($base_url, '/') . '/'; // Ensure single trailing slash
 $blankIcon = $base_url . 'images/blankicon.jpg';
+if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +48,7 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
 
         <!-- Posts Container -->
         <div id="postsContainer"></div>
-
+        <div class="row" id="blog-row"></div>
         <!-- Modal for Photo Only View -->
         <div class="modal fade" id="card-modal">
             <div class="modal-dialog modal-dialog-centered">
@@ -73,11 +74,14 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
         </div>
 
         <!-- JavaScript Section -->
-        <script>
+        <script type="text/javascript">
             // Assign PHP variables to JavaScript variables
+            const blogModular = <?php echo $_GET['blog_pairs']; ?>;
+            const blogRow = document.getElementById('blog-row');
             var baseUrl = '<?php echo $base_url; ?>';
             var blankIcon = '<?php echo $blankIcon; ?>';
             let actionType1 = 'get-blogs'; // Declare actionType once
+            let actionType2 = 'get-blogs-modular'
 
             // Ensure baseUrl ends with a single slash
             if (!baseUrl.endsWith('/')) {
@@ -130,11 +134,10 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                             postsContainer.appendChild(noResultsMessage);
                             return;
                         }
-
                         if (viewOptions === 'photoOnly') {
-                            displayPhotoOnlyView(blogPosts, postsContainer, sortOrder);
+                            displaySortedBlogs(sortOrder)
                         } else {
-                            displayTraditionalView(blogPosts, postsContainer);
+                            displayTraditionalView(blogModular, postsContainer, sortOrder, blogPosts)
                         }
 
                     })
@@ -142,8 +145,36 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
             };
 
             // Function to display traditional view
-            function displayTraditionalView(blogPosts, postsContainer) {
-                blogPosts.forEach(post => {
+            function displayTraditionalView(blogModular, postsContainer, sortOrder, blogPosts) {
+                blogRow.innerHTML = ''; // Clear the container
+                let combinedGet = [];
+
+                // Sort blogs based on title in ascending or descending order
+                for (let j = 0; j<blogPosts.length; j++) {
+                    for (let i = 0; i < blogModular.length; i++) {
+                        if (blogPosts[j].blog_id === blogModular[i].table.blog_id) {
+                            combinedGet.push(blogModular[i])
+                            break;
+                        }
+                    }
+                }
+                combinedGet.sort((a, b) => {
+                    const titleA = a.table.title.toLowerCase();
+                    const titleB = b.table.title.toLowerCase();
+                    const dateA = a.table.event_date;
+                    const dateB = b.table.event_date;
+                    if (sortOrder === 'asc') {
+                        return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
+                    } else if (sortOrder === 'desc') {
+                        return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
+                    } else if (sortOrder === 'date_asc') {
+                        return dateA < dateB ? -1 : (dateA > dateB ? 1 : 0);
+                    } else {
+                        return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
+                    }
+                });
+                combinedGet.forEach(post => {
+                    const table = post.table;
                     const blogContainer = document.createElement('div');
                     blogContainer.className = 'blog-container';
 
@@ -157,7 +188,7 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
 
                     const username = document.createElement('p');
                     username.className = 'blog-username';
-                    username.textContent = post.creator_email;
+                    username.textContent = table.creator_email;
 
                     function formatCreationDate(dateString) {
                         const date = new Date(dateString);
@@ -182,11 +213,11 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
 
                     const creationDate = document.createElement('p');
                     creationDate.className = 'blog-creation-date';
-                    creationDate.textContent = '◦ ' + formatCreationDate(post.creation_date) + ' ◦ ' + formatCreationTime(post.creation_date);
+                    creationDate.textContent = '◦ ' + formatCreationDate(table.creation_date) + ' ◦ ' + formatCreationTime(table.creation_date);
 
                     const blogTitle = document.createElement('h2');
                     blogTitle.className = 'blog-title';
-                    blogTitle.textContent = post.title;
+                    blogTitle.textContent = table.title;
 
                     const imageContainer = document.createElement('div');
                     imageContainer.className = 'image-container';
@@ -202,11 +233,12 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                     rightArrow.style.display = 'none';
 
                     const img = document.createElement('img');
-                    img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '.jpg';
+                    const images = post.images;
+                    img.src = `${images.dir}${images.img_names[0]}`;
                     img.alt = 'Blog Image';
                     img.className = 'blog-photo';
 
-                    fetch(`actions/count-files.php?blog_id=${post.blog_id}`)
+                    fetch(`actions/count-files.php?blog_id=${table.blog_id}`)
                         .then(response => response.json())
                         .then(data => {
                             const fileCount = data.fileCount;
@@ -222,11 +254,11 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                                 currentImageIndex--;
                                 if (currentImageIndex < 0) {
                                     currentImageIndex = fileCount - 1;
-                                    img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '_' + currentImageIndex + '.jpg';
+                                    img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
                                 } else if (currentImageIndex == 0) {
-                                    img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '.jpg';
+                                    img.src = `${images.dir}${images.img_names[0]}`;
                                 } else {
-                                    img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '_' + currentImageIndex + '.jpg';
+                                    img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
                                 }
                             });
 
@@ -235,9 +267,9 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                                 currentImageIndex++;
                                 if (currentImageIndex == fileCount) {
                                     currentImageIndex = 0; // Reset to zero if it reaches fileCount
-                                    img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '.jpg';
+                                    img.src = `${images.dir}${images.img_names[0]}`;
                                 } else {
-                                    img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '_' + currentImageIndex + '.jpg';
+                                    img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
                                 }
                             });
                         })
@@ -245,7 +277,7 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
 
                     const blogDescription = document.createElement('p');
                     blogDescription.className = 'blog-description';
-                    blogDescription.textContent = post.description;
+                    blogDescription.textContent = table.description;
 
                     const blogSeparator = document.createElement('hr');
                     blogSeparator.className = 'blog-separator';
@@ -267,90 +299,165 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
             }
 
             // Function to display photo-only view
-            function displayPhotoOnlyView(blogPosts, postsContainer, sortOrder = 'asc') {
-                const row = document.createElement('div');
-                row.className = 'row';
-                blogPosts.sort((a, b) => {
-                    let compareA, compareB;
 
-                    if (sortOrder === 'asc' || sortOrder ==='des') {
-                        compareA = a.title.toLowerCase();
-                        compareB = b.title.toLowerCase();
-                    } else if (sortOrder === 'date_asc' || sortOrder === 'date_des') {
-                        compareA = new Date(a.eventDate);
-                        compareB = new Date(b.eventDate);
-                    }
-                    if (sortOrder === 'asc' || sortOrder === 'date_asc') {
-                        return compareA > compareB ? 1 : (compareA < compareB ? -1 : 0);
+            function displaySortedBlogs(sortOrder = 'asc') {
+                blogRow.innerHTML = ''; // Clear the container
+
+                // Sort blogs based on title in ascending or descending order
+                blogModular.sort((a, b) => {
+                    const titleA = a.table.title.toLowerCase();
+                    const titleB = b.table.title.toLowerCase();
+                    const dateA = a.table.event_date;
+                    const dateB = b.table.event_date;
+                    if (sortOrder === 'asc') {
+                        return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
+                    } else if (sortOrder === 'desc') {
+                        console.log(sortOrder)
+                        return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
+                    } else if (sortOrder === 'date_asc') {
+                        return dateA < dateB ? -1 : (dateA > dateB ? 1 : 0);
                     } else {
-                        return compareA < compareB ? 1 : (compareA > compareB ? -1 : 0);
+                        return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
                     }
                 });
+                blogModular.forEach(pair => {
+                    // Blog Row Attributes
+                    const table = pair.table;
+                    const blog_id = table.blog_id;
+                    const email = table.creator_email;
+                    const title = table.title;
 
-                blogPosts.forEach(post => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.id = `blog-${post.blog_id}`;
+                    const description = table.description;
+                    const event_date = table.event_date;
+                    const creation_date = table.creation_date;
+                    const modification_date = table.modification_date;
+                    const privacy_filter = table.privacy_filter;
 
-                    // Card header
-                    const cardHeader = document.createElement('div');
-                    cardHeader.className = "card-header";
-                    const cardTitle = document.createElement("h4");
-                    cardTitle.className = "card-title";
-                    cardTitle.textContent = post.title;
-                    cardHeader.appendChild(cardTitle);
-
-                    // Card body
-                    const cardBody = document.createElement("div");
-                    cardBody.className = "card-body";
-                    const cardLink = document.createElement("a");
-                    cardLink.setAttribute('href', '#');
-                    cardLink.onclick = function () { fillModal(post); };
-                    const cardImage = document.createElement("img");
-                    cardImage.className = "card-img";
-
-                    // Directly construct the image URL
-                    const imageUrl = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '.jpg';
-                    cardImage.src = imageUrl;
-                    cardImage.onerror = function() {
-                        cardImage.style.display = 'none';
-                        console.log('Failed to load image for blog_id ' + post.blog_id);
-                    };
-
-                    cardBody.appendChild(cardImage);
-                    cardBody.appendChild(cardLink);
-
-                    // Card footer
-                    const cardFooter = document.createElement("div");
-                    cardFooter.className = "card-footer";
-                    const cardEmail = document.createElement("p");
-                    cardEmail.className = "card-text";
-                    cardEmail.textContent = post.creator_email;
-                    cardFooter.appendChild(cardEmail);
-
-                    card.appendChild(cardHeader);
-                    card.appendChild(cardBody);
-                    card.appendChild(cardFooter);
-
-                    row.appendChild(card);
+                    // Image Array
+                    const images = pair.images;
+                    const img_src = `${images.dir}${images.img_names[0]}`;
+                    createCard(blogRow, title, email, img_src, blog_id, pair);
                 });
+            }
+            function createCard(container, title, email, img, id, pair) {
+                const card = document.createElement("div");
+                card.className='card';
+                card.id = `blog-${id}`;
+                // Header
+                const cardHeader = document.createElement("div");
+                cardHeader.className = "card-header";
+                const cardTitle = document.createElement("h4");
+                cardTitle.className = "card-title";
+                cardTitle.textContent = title;
+                cardHeader.appendChild(cardTitle);
+                // Body
+                const cardBody = document.createElement("div");
+                cardBody.className = "card-body";
+                const cardLink = document.createElement("a");
+                cardLink.setAttribute('data-bs-target', "#card-modal");
+                cardLink.setAttribute('data-bs-toggle', "modal");
+                cardLink.className = 'stretched-link';
+                cardLink.onclick = function() {fillModalPV(pair);};
+                const cardImage = document.createElement("img");
+                cardImage.className = "card-img";
+                cardImage.src = img;
+                cardBody.appendChild(cardImage);
+                cardBody.appendChild(cardLink);
+                // Footer
+                const cardFooter = document.createElement("div");
+                cardFooter.className = "card-footer";
+                const cardEmail = document.createElement("p");
+                cardEmail.className = "card-text";
+                cardEmail.textContent = email;
+                cardFooter.appendChild(cardEmail);
 
-                postsContainer.appendChild(row);
+                card.appendChild(cardHeader);
+                card.appendChild(cardBody);
+                card.appendChild(cardFooter);
+
+                // Attach to container.
+                container.appendChild(card);
             }
 
+            function fillModalPV(pair) {
+                const table = pair.table;
+                const blog_id = table.blog_id;
+                const email = table.creator_email;
+                const title = table.title;
+                const description = table.description;
+                const event_date = table.event_date;
+                const creation_date = table.creation_date;
+                const modification_date = table.modification_date;
+                const privacy_filter = table.privacy_filter;
 
-            // Function to fill modal in photo-only view
-            function fillModal(post) {
-                document.getElementById('card-modal-title').innerHTML = post.title;
-                if (post.images && post.images.length > 0) {
-                    document.getElementById('card-modal-img').setAttribute('src', baseUrl + 'images/' + post.blog_id + '/' + post.images[0]);
-                } else {
-                    // Optionally handle the case where there are no images
-                    document.getElementById('card-modal-img').style.display = 'none';
-                }
-                document.getElementById('card-modal-desc').innerHTML = post.description;
-                document.getElementById('card-modal-email').innerHTML = post.creator_email;
-                // Handle pagination if multiple images are present
+                // Image Array
+                const images = pair.images;
+
+                // Image Source
+                let img_src = `${images.dir}${images.img_names[0]}`;
+
+                document.getElementById('card-modal-title').innerHTML = title;
+                document.getElementById('card-modal-img').setAttribute('src', img_src);
+                document.getElementById('card-modal-desc').innerHTML = description;
+                document.getElementById('card-modal-email').innerHTML = email;
+
+                // Find a way to work an index with this.
+                // Assuming "Previous" and "Next" are part of the pagination component
+                const pagenav = document.getElementById('card-modal-img-nav');
+                const pageLinks = pagenav.querySelectorAll('.page-link');
+                let previousButton, nextButton, indexDisplay;
+
+// Find "Previous" and "Next" buttons by their text content
+                pageLinks.forEach(link => {
+                    if (link.textContent.trim() === "Previous") {
+                        previousButton = link;
+                    } else if (link.textContent.trim() === "Next") {
+                        nextButton = link;
+                    } else {
+                        indexDisplay = link;
+                    }
+                });
+
+                let currentImageIndex = 0;
+
+// Fetch file count and initialize arrows
+                fetch(`actions/count-files.php?blog_id=${table.blog_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const fileCount = data.fileCount;
+
+                        if (fileCount > 1) {
+                            previousButton.style.display = 'inline';
+                            nextButton.style.display = 'inline';
+                            indexDisplay.style.display = 'inline';
+                        }
+
+                        // "Previous" button click event
+                        previousButton.addEventListener('click', (event) => {
+                            event.preventDefault();  // Prevent default link behavior
+                            currentImageIndex--;
+                            if (currentImageIndex < 0) {
+                                currentImageIndex = fileCount - 1;  // Loop back to last image
+                            }
+                            img_src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                            document.getElementById('card-modal-img').setAttribute('src', img_src);
+                            indexDisplay.textContent = currentImageIndex + 1;
+                        });
+
+                        // "Next" button click event
+                        nextButton.addEventListener('click', (event) => {
+                            event.preventDefault();  // Prevent default link behavior
+                            currentImageIndex++;
+                            if (currentImageIndex >= fileCount) {
+                                currentImageIndex = 0;  // Loop back to first image
+                            }
+                            img_src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                            document.getElementById('card-modal-img').setAttribute('src', img_src);
+                            indexDisplay.textContent = currentImageIndex + 1;
+                        });
+                    })
+                    .catch(error => console.error('Error fetching file count:', error));
+
             }
 
             // Event listeners updated to include viewOptions
