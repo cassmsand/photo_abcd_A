@@ -57,23 +57,17 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         // Get the images for the blog post
         $blog_id = $row['blog_id'];
-        $imageDir = "../photo_abcd_A/images/$blog_id/";
+        $imageDir = "../images/$blog_id/";
         $images = array();
 
-        if (is_dir($imageDir)) {
-            // Scan for image files in the directory
-            $imageFiles = scandir($imageDir);
-            foreach ($imageFiles as $file) {
-                // Only include jpg and png files
-                if (preg_match('/\.(jpg|jpeg|png)$/i', $file)) {
-                    $images[] = $file;
-                }
-            }
-        }
+        $blog_files = array_values(array_diff(scandir($imageDir), array('..', '.')));
 
         // Add images array to the blog post
+        $blog_images = array('images' => $blog_files);
         $row['images'] = $images;
+        (array)$row = array_merge((array)$row, $blog_images);
         $blogPosts[] = $row;
+
     }
 }else {
     // Send a response indicating no blogs were found
