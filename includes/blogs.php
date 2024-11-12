@@ -144,6 +144,13 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
             // Function to display traditional view
             function displayTraditionalView(blogPosts, postsContainer) {
                 blogPosts.forEach(post => {
+                    //default photo for if no photo
+                    if (post.images.length == 0){
+                        default_path = "images/photoABCDLogo.png"
+                    } else {
+                        default_path= 'images/' + post.blog_id + '/' + post.images[0];
+                    }
+                    
                     const blogContainer = document.createElement('div');
                     blogContainer.className = 'blog-container';
 
@@ -202,7 +209,7 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                     rightArrow.style.display = 'none';
 
                     const img = document.createElement('img');
-                    img.src = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '.jpg';
+                    img.src = default_path;
                     img.alt = 'Blog Image';
                     img.className = 'blog-photo';
 
@@ -310,7 +317,8 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                     cardImage.className = "card-img";
 
                     // Directly construct the image URL
-                    const imageUrl = '<?php echo $base_url; ?>images/' + post.blog_id + '/' + post.blog_id + '.jpg';
+                    // for card view
+                    const imageUrl = 'images/' + post.blog_id + '/' + post.images[0];
                     cardImage.src = imageUrl;
                     cardImage.onerror = function() {
                         cardImage.style.display = 'none';
