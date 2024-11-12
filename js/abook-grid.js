@@ -928,13 +928,31 @@ function updateSelectedCard(blogCount)
     }
 }
 
-// Print Logic
+/**
+ * Dynamically creates printing elements for given blogs
+ * and appends them to the body of the page.
+ * 
+ * CSS styling hides all elements in the body that
+ * do not have or aren't children of the .printable class
+ * when printing.
+ * 
+ * Will automatically clear the body of print elements
+ * after the menu has been called.
+ */
 const printBook = () => {
     const printContainer = document.createElement("div");
     printContainer.classList.add("printable");
     
     document.body.appendChild(printContainer);
     
+    /**
+     * To get this to work, all you need to do is call the
+     * createPage function and pass a blog_id for all of the
+     * blogs selected for printing.
+     * 
+     * Issues with the print layout can be caused by the margins
+     * of higher order elements.
+     */
     var elements = Object.assign({}, current_book);
     var bookTitle = elements["title"];
     delete elements["title"];
@@ -947,30 +965,64 @@ const printBook = () => {
         }
     }
 
-    console.log(elements);
     window.print();
     document.body.removeChild(printContainer);
 
+    /**
+     * 
+     * 
+     * @param {*} blog_id ID of the blog chosen for printing.
+     */
     function createPage(blog_id)
     {
         const blog = getBlogById(blog_id);
+        var imgSrc;
+        if (blog.images.length != 0) {
+            imgSrc = `images/${blog_id}/${blog.images[0]}`
+        } else {
+            imgSrc = "images/photoABCDLogo.png";
+        }
 
         const printElement = document.createElement('div');
         printElement.classList.add("printelement");
-        const blogTitle = document.createElement("h1");
-        blogTitle.innerHTML = blog.title;
-        const blogImage = document.createElement('img');
-        blogImage.src = `images/${blog_id}/${blog.images[0]}`;
-        const blogDesc = document.createElement("p");
-        blogDesc.innerHTML = blog.description;
-        const blogEventDate = document.createElement("p");
-        blogEventDate.innerHTML = blog.event_date;
 
-        printElement.appendChild(blogTitle);
-        printElement.appendChild(blogImage);
-        printElement.appendChild(blogDesc);
-        printElement.appendChild(blogEventDate);
+        const printHeader = document.createElement('div');
+        printHeader.className = "print-header";
 
+            const headerRow = document.createElement('div');
+            headerRow.className = "row";
+
+                const blogTitle = document.createElement("h1");
+                blogTitle.className = "col";
+                blogTitle.innerHTML = blog.title;
+
+                const blogEventDate = document.createElement("p");
+                blogEventDate.className = "col";
+                blogEventDate.innerHTML = blog.event_date;
+
+            headerRow.appendChild(blogTitle);
+            headerRow.appendChild(blogEventDate);
+            printHeader.appendChild(headerRow);
+
+        const printBody = document.createElement('div');
+        printBody.className = "print-body";
+
+            const blogImage = document.createElement('img');
+            blogImage.src = imgSrc;
+
+            printBody.appendChild(blogImage);
+
+
+        const printFooter = document.createElement('div');
+        printFooter.className = "print-footer";
+            const blogDesc = document.createElement("p");
+            blogDesc.innerHTML = blog.description;
+
+            printFooter.appendChild(blogDesc);
+
+        printElement.appendChild(printHeader);
+        printElement.appendChild(printBody);
+        printElement.appendChild(printFooter);
         printContainer.appendChild(printElement);
     }
     
@@ -1000,7 +1052,6 @@ gridCancelBtn.addEventListener("click", function (e) {
     selected_card = undefined;
     initialEntries = 0;
 })
-
 
 // New Book Modal Confirm
 const newBookConfirmBtn = document.getElementById("newbook-confirm-button");

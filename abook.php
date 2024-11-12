@@ -12,6 +12,7 @@ $CURRENT_PAGE = "ABook";
 
 <head>
     <link rel="stylesheet" href="css/alpha.css">
+    <link rel="stylesheet" href="css/print-page.css">
     <style>
 
     </style>
