@@ -234,7 +234,16 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
 
                     const img = document.createElement('img');
                     const images = post.images;
-                    img.src = `${images.dir}${images.img_names[0]}`;
+                    var img_src;
+                    
+                    // define path for default image if none is uploaded
+                    if (images.img_names.length === 0){
+                        img_src = 'images/photoABCDLogo.png';
+                    }else{
+                        img_src = `${images.dir}${images.img_names[0]}`;
+                    }
+                    img.src = img_src;
+
                     img.alt = 'Blog Image';
                     img.className = 'blog-photo';
 
@@ -343,7 +352,16 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
 
                     // Image Array
                     const images = pair.images;
-                    const img_src = `${images.dir}${images.img_names[0]}`;
+                    var img_src;
+                    
+                    // define path for default image if none is uploaded
+                    if (images.img_names.length === 0){
+                        img_src = 'images/photoABCDLogo.png';
+                    }else{
+                        img_src = `${images.dir}${images.img_names[0]}`;
+                    }
+
+                    
                     createCard(blogRow, title, email, img_src, blog_id, pair);
                 });
             }
