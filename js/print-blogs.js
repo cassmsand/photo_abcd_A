@@ -81,7 +81,13 @@ function printBlogs(blogArr)
         printFooter.className = "print-footer";
             const blogEventDate = document.createElement("div");
                 blogEventDate.className = "event-date-badge";
-                blogEventDate.innerHTML = blog.event_date;
+                const dateStr = new Date(blog.event_date).toLocaleDateString(undefined, {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                });
+                blogEventDate.innerHTML = dateStr;
                 printFooter.appendChild(blogEventDate);
 
             const blogDesc = document.createElement("div");

@@ -39,7 +39,16 @@
 
         *:not(.row, img) {
             border-style: solid;
-            border-width: 1px;
+            border-width: 0.5px;
+        }
+
+        .desc,
+        img,
+        .event-date-badge,
+        .print-header * {
+            -webkit-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
+            -moz-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
+            box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
         }
 
         .print-header {
@@ -58,6 +67,7 @@
                 padding: 10px;
                 min-height: fit-content;
                 max-width: fit-content;
+                font-family: Georgia, serif;
             }
             
         }
@@ -84,6 +94,9 @@
             min-height: 2.5in;
             padding: 15px;
             background-image: url("../images/banner.png");
+            * {
+                font-family: Georgia, serif;
+            }
 
             .event-date-badge {
                 padding: 5px;
@@ -95,6 +108,7 @@
             }
 
             .desc {
+
                 text-align: left;
                 margin-top: 5%;
                 padding: 15px;
@@ -112,7 +126,6 @@
         max-width: 8in;
         max-height: 7in;
         object-fit: cover;
-
     }
 
 }
