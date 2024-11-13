@@ -2,35 +2,42 @@
     body *:not(.printable, .printable *) {
         display: none;
     }
-    
+
     body {
         margin: 0;
         padding: 0;
+        zoom: 100%;
     }
 
     @page {
         margin: 0;
         padding: 0;
+        size: letter;
+        
     }
 
     .printable {
-        margin: 0;
+        margin: auto;
+        max-width: inherit;
+        max-height: inherit;
         align-content: center;
         justify-content: center;
         text-align: center;
-        max-width: max-content;
-        min-width: 100%;
     }
 
     .printelement {
-        max-width: 1080px;
+        margin: inherit;
+        max-height: inherit;
+        max-width: inherit;
+        min-height: 100%;
+        min-width: 100%;
         display: grid;
 
         page-break-after: always;
         align-content: center;
         justify-content: center;
 
-        *:not(.row, img, .print-footer *) {
+        *:not(.row, img) {
             border-style: solid;
             border-width: 1px;
         }
@@ -38,48 +45,72 @@
         .print-header {
             background-image: url("../images/banner.png");
             border-bottom-width: 0px;
-            min-height: 15%;
-            max-height: none;
-            .row {
-                display: flex;
-                margin: auto;
-                padding: 10px;
-                justify-content: space-evenly;
-                align-content: center;
+            min-height: 1in;
+            display: flex;
+            min-width: inherit;
+            align-items: center;
+            justify-content: space-evenly;
 
-                *{
-                    margin: auto;
-                    background-color: whitesmoke;
-                    border-radius: 15px;
-                    padding: 10px;
-                    min-height: inherit;
-                    max-width: fit-content;
-                }
+            *{
+                background-color: whitesmoke;
+                margin: auto;
+                border-radius: 15px;
+                padding: 10px;
+                min-height: fit-content;
+                max-width: fit-content;
             }
+            
         }
 
         .print-body {
+            display: flex;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
             background: linear-gradient(135deg, #ccdffc, #e2faed);
             border-bottom-width: 0px;
-            min-height: 70%;
-            max-height: none;
-            max-width: fit-content;
-            padding: 15px;
+            min-height: 7.5in;
+            min-width: 8.5in;
+            margin: auto;
+            padding: 25px;
         }
 
         .print-footer {
-            min-height: 15%;
-            max-height: none;
+            position: relative;
+            display: flex;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.5in;
             padding: 15px;
             background-image: url("../images/banner.png");
+
+            .event-date-badge {
+                padding: 5px;
+                background-color: whitesmoke;
+                border-radius: 15px;
+                position: absolute;
+                top: 10px;
+                left: 25px;
+            }
+
+            .desc {
+                text-align: left;
+                margin-top: 5%;
+                padding: 15px;
+                background-color: whitesmoke;
+                border-radius: 15px;
+                min-width: 90%;
+                min-height: 80%;
+            }
+
         }
     }
 
     img {
         border-radius: 15px;
-        min-width: 800px;
-        max-width: 800px;
-        max-height: 600px;
+        max-width: 8in;
+        max-height: 7in;
         object-fit: cover;
 
     }

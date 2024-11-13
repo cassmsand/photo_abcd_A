@@ -56,44 +56,38 @@ function printBlogs(blogArr)
 
         // Page Element: Consists of 3 parts: Header, Body, and Footer.
         const printElement = document.createElement('div');
-        printElement.classList.add("printelement");
+            printElement.classList.add("printelement");
 
         // Page Header Container.
         const printHeader = document.createElement('div');
-        printHeader.className = "print-header";
+            printHeader.className = "print-header";
 
-            const headerRow = document.createElement('div');
-            headerRow.className = "row";
-
-                const blogTitle = document.createElement("h1");
-                blogTitle.className = "col";
+            const blogTitle = document.createElement("h1");
                 blogTitle.innerHTML = blog.title;
 
-                const blogEventDate = document.createElement("p");
-                blogEventDate.className = "col";
-                blogEventDate.innerHTML = blog.event_date;
-
-            headerRow.appendChild(blogTitle);
-            headerRow.appendChild(blogEventDate);
-            printHeader.appendChild(headerRow);
+        printHeader.appendChild(blogTitle);
 
         // Page Body Container
         const printBody = document.createElement('div');
-        printBody.className = "print-body";
+            printBody.className = "print-body";
 
             const blogImage = document.createElement('img');
-            blogImage.src = imgSrc;
-
-            printBody.appendChild(blogImage);
+                blogImage.src = imgSrc;
+                printBody.appendChild(blogImage);
 
 
         // Page Footer Container
         const printFooter = document.createElement('div');
         printFooter.className = "print-footer";
-            const blogDesc = document.createElement("p");
-            blogDesc.innerHTML = blog.description;
+            const blogEventDate = document.createElement("div");
+                blogEventDate.className = "event-date-badge";
+                blogEventDate.innerHTML = blog.event_date;
+                printFooter.appendChild(blogEventDate);
 
-            printFooter.appendChild(blogDesc);
+            const blogDesc = document.createElement("div");
+                blogDesc.className = "desc";
+                blogDesc.innerHTML = blog.description;
+                printFooter.appendChild(blogDesc);
 
         // Appending of page element parts.
         printElement.appendChild(printHeader);
