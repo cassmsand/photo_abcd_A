@@ -29,22 +29,9 @@
                 </div>
 
                 <!-- Posts Container -->
-                <div id="profilePostsContainer"></div>
-
-                 <!-- Modal for Photo Only Grid View -->
-                <div class="modal fade" id="profile-card-modal">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3 id="profile-card-modal-title"></h3>
-                            </div>
-                            <div class="modal-body">
-                                <img src="" alt="" id="profile-card-modal-img" class="img-fluid">
-                                <p class="lead" id="profile-card-modal-desc"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div id="profilePostsContainer" style="width: 100%; max-width: 800px; margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                    <!-- Posts will complete here -->
+                </div>               
 
             </div>
             <div class="modal-footer">
