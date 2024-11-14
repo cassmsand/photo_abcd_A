@@ -11,9 +11,25 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
         <div style="padding: 4rem 2rem; margin-bottom: 2rem; background-color: #; background-image: url('<?php echo $base_url; ?>images/banner.png'); background-size: cover; background-position: center;">
             <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
                 <img src="<?php echo $base_url; ?>images/photoABCDLogo.png" alt="Photo ABCD Logo" width="150px" height="auto" style="border:3px solid #000000; display: block; border-radius: 25%; object-fit: cover">
-                <?php if (isset($_SESSION['current_user_email'])): ?>
-                    <h3 style="padding-left: 10px; padding-right: 10px;">Welcome <?php echo $_SESSION['current_user_first_name'];?>!</h3>
-                <?php endif; ?>
+                <div style="text-align: center;">
+                    <span style="white-space: nowrap;">
+                        <h1 style="padding-left: 10px; padding-right: 10px; margin: 0;">
+                            Photo
+                            <span style="white-space: nowrap;">
+                                <span style="color: rgb(12, 106, 243); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">A</span>
+                                <span style="color: rgb(121, 172, 249); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">B</span>
+                                <span style="color: rgb(135, 210, 161); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">C</span>
+                                <span style="color: rgb(43, 152, 80); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">D</span>
+                            </span>
+                        </h1>
+                    </span>
+
+                    <?php if (isset($_SESSION['current_user_email'])): ?>
+                    <h3 style="color: rgb(78, 153, 149); padding-left: 10px; padding-right: 10px; margin-top: 5px;">
+                        Welcome <?php echo $_SESSION['current_user_first_name'];?>!
+                    </h3>
+                    <?php endif; ?>
+                </div>
                 
                 <!-- Center the nav pills here -->
                 <ul class="nav nav-pills" style="display: flex; justify-content: center; padding: 10px; background-color: white; border-radius: 30px; margin: 0 auto;">
