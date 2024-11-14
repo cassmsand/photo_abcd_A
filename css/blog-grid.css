@@ -43,6 +43,11 @@
     overflow: hidden;
     background-color: #fff;
     padding: 0px;
+    transition: transform 150ms ease-in-out;
+}
+
+.card:hover {
+    transform: scale(110%);
 }
 
 .card-header {

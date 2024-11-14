@@ -594,7 +594,7 @@ include ('view-profile-modal.php');
                         });
                     })
                     .catch(error => console.error('Error fetching file count:', error));
-
+                    indexDisplay.textContent = 1;
             }
 
             // Event listeners updated to include viewOptions
