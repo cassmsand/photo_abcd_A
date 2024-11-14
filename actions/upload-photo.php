@@ -20,7 +20,6 @@ if (isset($_FILES['photo']) && isset($_POST['blog_id'])) {
 
     // Check if there's an error with the upload
     if ($photo['error'] == 0) {
-        // Check file size (optional, you can adjust this as needed)
         if ($photo['size'] > 500000) {
             echo json_encode([
                 'success' => false,
@@ -34,7 +33,6 @@ if (isset($_FILES['photo']) && isset($_POST['blog_id'])) {
 
         // Move the uploaded file to the target directory
         if (move_uploaded_file($photo['tmp_name'], $targetFile)) {
-            // Optionally, you can log the success
             error_log("File uploaded successfully to: " . $targetFile);
 
             // Return success response
