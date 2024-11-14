@@ -16,7 +16,7 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
                         <h1 style="padding-left: 10px; padding-right: 10px; margin: 0;">
                             Photo
                             <span style="white-space: nowrap;">
-                                <span style="color: rgb(12, 106, 243); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">A</span>
+                                <span style="color: rgb(74, 100, 181); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">A</span>
                                 <span style="color: rgb(121, 172, 249); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">B</span>
                                 <span style="color: rgb(135, 210, 161); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">C</span>
                                 <span style="color: rgb(43, 152, 80); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">D</span>
