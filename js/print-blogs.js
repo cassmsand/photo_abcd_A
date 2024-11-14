@@ -30,6 +30,12 @@ function printBlogs(blogArr)
     printContainer.classList.add("printable");
     document.body.appendChild(printContainer);
 
+    // Page number tracker.
+    var pageNum = 1;
+
+    // Add Title Page
+    // Add Table of Contents Page
+
     // Create a page for every blog entry in blogArr parameter.
     blogArr.forEach((blog) => createPage(blog));
 
@@ -47,60 +53,86 @@ function printBlogs(blogArr)
      *
      * @param {*} blog Blog that is being printed.
      */
-    function createPage(blog)
+    function createPage(blog, image = undefined)
     {
         var imgSrc;
-        if (blog.images.length != 0) {
-            imgSrc = `images/${blog.blog_id}/${blog.images[0]}`
-        } else {
-            imgSrc = "images/photoABCDLogo.png";
-        }
-
-        // Page Element: Consists of 3 parts: Header, Body, and Footer.
+        const blogCount = blog.images.length;
         const printElement = document.createElement('div');
-        printElement.classList.add("printelement");
-
-        // Page Header Container.
         const printHeader = document.createElement('div');
-        printHeader.className = "print-header";
-
         const blogTitle = document.createElement("h1");
-        blogTitle.innerHTML = blog.title;
-
-        printHeader.appendChild(blogTitle);
-
-        // Page Body Container
         const printBody = document.createElement('div');
-        printBody.className = "print-body";
-
         const blogImage = document.createElement('img');
-        blogImage.src = imgSrc;
-        printBody.appendChild(blogImage);
-
-
-        // Page Footer Container
         const printFooter = document.createElement('div');
-        printFooter.className = "print-footer";
+        const numBadge = document.createElement('div');
         const blogEventDate = document.createElement("div");
-        blogEventDate.className = "event-date-badge";
         const dateStr = new Date(blog.event_date).toLocaleDateString(undefined, {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric',
         });
-        blogEventDate.innerHTML = dateStr;
-        printFooter.appendChild(blogEventDate);
-
         const blogDesc = document.createElement("div");
-        blogDesc.className = "desc";
-        blogDesc.innerHTML = blog.description;
-        printFooter.appendChild(blogDesc);
 
-        // Appending of page element parts.
-        printElement.appendChild(printHeader);
-        printElement.appendChild(printBody);
-        printElement.appendChild(printFooter);
-        printContainer.appendChild(printElement);
+        if (image == undefined) {
+            switch (blogCount)
+            {
+                case 0:
+                    imgSrc = "images/photoABCDLogo.png";
+                    createElements();
+                    pageNum++;
+                    break;
+
+                case 1:
+                    imgSrc = `images/${blog.blog_id}/${blog.images[0]}`
+                    createElements();
+                    pageNum++;
+                    break;
+
+                default:
+                    blog.images.forEach(blogImage => {
+                        createPage(blog, blogImage);
+                    });
+                    break;
+            }
+        } else {
+            imgSrc = `images/${blog.blog_id}/${image}`;
+            createElements();
+            pageNum++;
+        }
+
+        function createElements()
+        {
+            // Page Element: Consists of 3 parts: Header, Body, and Footer.
+            printElement.classList.add("printelement");
+
+            // Page Header Container.
+            printHeader.className = "print-header";
+                blogTitle.innerHTML = blog.title;
+            printHeader.appendChild(blogTitle);
+
+            // Page Body Container
+            printBody.className = "print-body";
+                blogImage.src = imgSrc;
+            printBody.appendChild(blogImage);
+
+
+            // Page Footer Container
+            printFooter.className = "print-footer";
+                numBadge.className = "page-num"
+                numBadge.innerHTML = `Pg. ${pageNum}`;
+                blogEventDate.className = "event-date-badge";
+                blogEventDate.innerHTML = dateStr;
+                blogDesc.className = "desc";
+                blogDesc.innerHTML = blog.description;
+            printFooter.appendChild(numBadge);
+            printFooter.appendChild(blogEventDate);
+            printFooter.appendChild(blogDesc);
+
+            // Appending of page element parts.
+            printElement.appendChild(printHeader);
+            printElement.appendChild(printBody);
+            printElement.appendChild(printFooter);
+            printContainer.appendChild(printElement);
+        }
     }
 };
