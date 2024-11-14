@@ -597,17 +597,6 @@ include ('view-profile-modal.php');
 
             }
 
-            $(document).ready(function() {
-                // When the modal is shown
-                $('#card-modal').on('shown.bs.modal', function() {
-                    // Add the click event listener to the email element
-                    $('#card-modal-email').on('click', function() {
-                        // Change the color of the email to red
-                        $(this).css('color', 'red');
-                    });
-                });
-            });
-
             // Event listeners updated to include viewOptions
             document.getElementById('searchButton').addEventListener('click', () => {
                 const title = document.getElementById('searchInput').value;
