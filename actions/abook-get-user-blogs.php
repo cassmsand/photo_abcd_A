@@ -27,7 +27,7 @@ if ($result->num_rows > 0) {
         // DOES NOT SORT OUT INVALID FILE EXTENSIONS
         $scanDir = @scandir($rel_dir);
 
-        if ($scanDir == true) {
+        if ($scanDir != false) {
             $blog_files = array_values(array_diff($scanDir, array('..', '.')));
         } else {
             $blog_files = [];
