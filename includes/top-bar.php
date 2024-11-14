@@ -12,36 +12,39 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
             <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
                 <img src="<?php echo $base_url; ?>images/photoABCDLogo.png" alt="Photo ABCD Logo" width="150px" height="auto" style="border:3px solid #000000; display: block; border-radius: 25%; object-fit: cover">
                 <?php if (isset($_SESSION['current_user_email'])): ?>
-                    <h3>Welcome <?php echo $_SESSION['current_user_first_name'];?>!</h3>
+                    <h3 style="padding-left: 10px; padding-right: 10px;">Welcome <?php echo $_SESSION['current_user_first_name'];?>!</h3>
                 <?php endif; ?>
-                <ul class="nav nav-pills" style="float: right; padding: 10px; background-color: white; border-radius: 30px; object-fit: cover">
+                
+                <!-- Center the nav pills here -->
+                <ul class="nav nav-pills" style="display: flex; justify-content: center; padding: 10px; background-color: white; border-radius: 30px; margin: 0 auto;">
                     <li class="nav-item">
-                        <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="index.php" style="font-size: 1.2rem; padding: 10px 20px;">Home</a>
+                        <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="index.php" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php" style="font-size: 1.2rem; padding: 10px 20px;">About Us</a>
+                        <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;">About Us</a>
                     </li>
                     <?php if (isset($_SESSION['current_user_email'])): ?>
                         <li class="nav-item">
-                            <a class="nav-link <?php if ($CURRENT_PAGE == "MyBlogs") {?>active<?php }?>" href="my-blogs.php" style="font-size: 1.2rem; padding: 10px 20px;">My Blogs</a>
+                            <a class="nav-link <?php if ($CURRENT_PAGE == "MyBlogs") {?>active<?php }?>" href="my-blogs.php" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;">My Blogs</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php if ($CURRENT_PAGE == "Alphabet Book") {?>active<?php }?>" href="abook.php" style="font-size: 1.2rem; padding: 10px 20px;">Alphabet Book</a>
+                            <a class="nav-link <?php if ($CURRENT_PAGE == "Alphabet Book") {?>active<?php }?>" href="abook.php" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;">Alphabet Book</a>
                         </li>
                     <?php endif; ?>
                     <?php if (isset($_SESSION['current_user_role']) && $_SESSION['current_user_role'] == 'admin'): ?>
                         <li class="nav-item">
-                            <a class="nav-link <?php if ($CURRENT_PAGE == "AdminDashboard") {?>active<?php }?>" href="admin-dashboard.php" style="font-size: 1.2rem; padding: 10px 20px;">Administration</a>
+                            <a class="nav-link <?php if ($CURRENT_PAGE == "AdminDashboard") {?>active<?php }?>" href="admin-dashboard.php" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;">Administration</a>
                         </li>
                     <?php endif; ?>
                     <li class="nav-item">
-                        <a id='log-button' class="nav-link" style="font-size: 1.2rem; padding: 10px 20px;"></a>
+                        <a id='log-button' class="nav-link" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;"></a>
                     </li>  
                 </ul>
             </div>    
         </div> 
     </div>
 </header>
+
 
 
 <?php 
