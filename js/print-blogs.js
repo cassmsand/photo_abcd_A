@@ -1,14 +1,14 @@
 /**
  * Dynamically creates and appends page elements for printing blogs.
  * Print elements are removed after print menu is displayed.
- * 
+ *
  * The layout of the printed pages requires the print-page.css file.
- * 
+ *
  * Blogs require an array of names from the blog images. Refer to
  * the abook-get-user-blogs.php file for implementation details.
- * 
+ *
  * ---
- * Usage: 
+ * Usage:
  * - Include print-page.css in head.
  * - Get array of blog rows
  * - Pass blog rows to printBlogs
@@ -23,7 +23,7 @@
  * ---
  * @param {*} blogArr Array of blog rows.
  */
-function printBlogs(blogArr) 
+function printBlogs(blogArr)
 {
     // Create and append container for print pages
     const printContainer = document.createElement("div");
@@ -36,13 +36,15 @@ function printBlogs(blogArr)
     // Open print menu.
     window.print();
 
-    // Clear print elements from body.
-    document.body.removeChild(printContainer);
+    // Clear print elements from body after a short delay for cross-platform compatibility.
+    setTimeout(() => {
+        document.body.removeChild(printContainer);
+    }, 100); // 100 ms delay to allow print dialog to load fully
 
     /**
      * Creates and appends a page with a given blogs info.
      * Requires that blogs contain an array of images.
-     * 
+     *
      * @param {*} blog Blog that is being printed.
      */
     function createPage(blog)
@@ -56,44 +58,44 @@ function printBlogs(blogArr)
 
         // Page Element: Consists of 3 parts: Header, Body, and Footer.
         const printElement = document.createElement('div');
-            printElement.classList.add("printelement");
+        printElement.classList.add("printelement");
 
         // Page Header Container.
         const printHeader = document.createElement('div');
-            printHeader.className = "print-header";
+        printHeader.className = "print-header";
 
-            const blogTitle = document.createElement("h1");
-                blogTitle.innerHTML = blog.title;
+        const blogTitle = document.createElement("h1");
+        blogTitle.innerHTML = blog.title;
 
         printHeader.appendChild(blogTitle);
 
         // Page Body Container
         const printBody = document.createElement('div');
-            printBody.className = "print-body";
+        printBody.className = "print-body";
 
-            const blogImage = document.createElement('img');
-                blogImage.src = imgSrc;
-                printBody.appendChild(blogImage);
+        const blogImage = document.createElement('img');
+        blogImage.src = imgSrc;
+        printBody.appendChild(blogImage);
 
 
         // Page Footer Container
         const printFooter = document.createElement('div');
         printFooter.className = "print-footer";
-            const blogEventDate = document.createElement("div");
-                blogEventDate.className = "event-date-badge";
-                const dateStr = new Date(blog.event_date).toLocaleDateString(undefined, {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                });
-                blogEventDate.innerHTML = dateStr;
-                printFooter.appendChild(blogEventDate);
+        const blogEventDate = document.createElement("div");
+        blogEventDate.className = "event-date-badge";
+        const dateStr = new Date(blog.event_date).toLocaleDateString(undefined, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+        blogEventDate.innerHTML = dateStr;
+        printFooter.appendChild(blogEventDate);
 
-            const blogDesc = document.createElement("div");
-                blogDesc.className = "desc";
-                blogDesc.innerHTML = blog.description;
-                printFooter.appendChild(blogDesc);
+        const blogDesc = document.createElement("div");
+        blogDesc.className = "desc";
+        blogDesc.innerHTML = blog.description;
+        printFooter.appendChild(blogDesc);
 
         // Appending of page element parts.
         printElement.appendChild(printHeader);
