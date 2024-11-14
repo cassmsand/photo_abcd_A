@@ -46,8 +46,6 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
             <div id="postsContainer" class="grid-container"></div>
 
             <!-- Edit Modal -->
-            <!-- Edit Modal -->
-            <!-- Edit Modal -->
             <div id="editModal" class="modal" style="display: none;"> <!-- Initially hidden -->
                 <div class="modal-content">
                     <span id="closeModal" style="cursor: pointer;">&times;</span>
@@ -72,6 +70,15 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
 
                     <input type="hidden" id="creatorEmail"> <!-- Hidden input for creator email -->
                     <input type="hidden" id="creationDate"> <!-- Hidden input for creation date -->
+
+                    <div id="photoGallery">
+                    <button id="prevPhoto" class="photo-nav-button" style="display:none;">&#10094;</button>
+                    <img id="photoDisplay" src="" alt="Blog Photo" class="photo-display" />
+                    <button id="nextPhoto" class="photo-nav-button">&#10095;</button>
+                    </div>
+
+                    <label for="photoUpload">Upload Photo:</label>
+                    <input type="file" id="photoUpload" name="photoUpload"><br>
 
                     <button id="saveButton">Save</button>
                 </div>
@@ -125,7 +132,7 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                                 const blogTitle = document.createElement('h2');
                                 blogTitle.className = 'blog-title';
                                 blogTitle.textContent = post.title;
-
+                                
                                 const img = document.createElement('img');
                                 img.src = path;
                                 img.alt = 'Blog Image';
@@ -181,14 +188,14 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                                 // blogContainer.appendChild(eventDate); // Removed event date
                                 blogContainer.appendChild(optionsDropdown); // Add dropdown to blogContainer
                                 postsContainer.appendChild(blogContainer);
+
                             });
                         })
                         .catch(error => console.error('Error fetching blog posts:', error));
                 };
 
 
-                fetchBlogs('get-my-blogs');
-                
+                fetchBlogs('get-my-blogs');       
 
                 document.getElementById('searchButton').addEventListener('click', () => {
                     const title = document.getElementById('searchInput').value;
@@ -253,10 +260,43 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                     document.getElementById('creatorEmail').value = post.creator_email; // Populate creator email
                     document.getElementById('eventDate').value = post.event_date; // Populate event date
                     document.getElementById('creationDate').value = post.creation_date; // Populate creation date
+
+                    // Set up photo gallery
+                    const photos = post.images || []; // If no photos, use empty array
+                    let currentPhotoIndex = 0; // Default to the first photo
                     
+                    // Function to update the displayed photo
+                    const updatePhotoDisplay = () => {
+                        const photoDisplay = document.getElementById('photoDisplay');
+                        if (photos.length > 0) {
+                            photoDisplay.src = baseUrl + `images/${post.blog_id}/${photos[currentPhotoIndex]}`;
+                        } else {
+                            photoDisplay.src = baseUrl + 'images/photoABCDLogo.png'; // Default photo if no images
+                        }
+                        // Show or hide navigation buttons based on the current photo index
+                        document.getElementById('prevPhoto').style.display = currentPhotoIndex > 0 ? 'inline-block' : 'none';
+                        document.getElementById('nextPhoto').style.display = currentPhotoIndex < photos.length - 1 ? 'inline-block' : 'none';
+                    };
+
+                    updatePhotoDisplay();
+
+                    // Next and previous photo navigation
+                    document.getElementById('prevPhoto').onclick = () => {
+                        if (currentPhotoIndex > 0) {
+                            currentPhotoIndex--;
+                            updatePhotoDisplay();
+                        }
+                    };
+
+                    document.getElementById('nextPhoto').onclick = () => {
+                        if (currentPhotoIndex < photos.length - 1) {
+                            currentPhotoIndex++;
+                            updatePhotoDisplay();
+                        }
+                    };
                 };
 
-
+                
 
                 document.getElementById('closeModal').onclick = () => {
                         document.getElementById('editModal').style.display = 'none';
@@ -273,18 +313,7 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                     const creatorEmail = document.getElementById('creatorEmail').value;
                     const eventDate = document.getElementById('eventDate').value;
                     const creationDate = document.getElementById('creationDate').value;
-                    
-                    /*
-                    console.log('Saving the following data:');
-                    console.log('Blog ID:', blogId);
-                    console.log('Title:', title);
-                    console.log('Description:', description);
-                    console.log('Privacy Filter:', privacyFilter);
-                    console.log('Creator Email:', creatorEmail);
-                    console.log('Event Date:', eventDate);
-                    console.log('Creation Date:', creationDate);
-                    */
-                    
+
                     // ensure new title doesnt start with symbol
                     // to validate the title of blog
                     console.log(description);
@@ -311,9 +340,33 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                     .then(data => {
                         console.log("Response from server:", data); // Debug log
                         if (data.success) {
-                            alert('Blog post updated successfully!');
-                            // Reload the posts to reflect changes
-                            fetchBlogs('get-my-blogs');
+                            alert('Blog post info updated successfully!');
+                            fetchBlogs('get-my-blogs'); // Reload blogs
+
+                            // Photo upload handling
+                            const photoUpload = document.getElementById('photoUpload').files[0];
+                            if (photoUpload) {
+                                const formData = new FormData();
+                                formData.append('photo', photoUpload); 
+                                formData.append('blog_id', blogId);   
+
+                                // Upload the photo
+                                fetch('actions/upload-photo.php', {
+                                    method: 'POST',
+                                    body: formData
+                                })
+                                .then(response => response.json())
+                                .then(photoData => {
+                                    if (photoData.success) {
+                                        alert('Photo uploaded successfully!');
+                                    } else {
+                                        alert('Failed to upload photo: ' + photoData.message);
+                                    }
+                                })
+                                .catch(error => console.error('Error uploading photo:', error));
+                            }
+
+
                             document.getElementById('editModal').style.display = 'none'; // Close modal
                         } else {
                             alert('Failed to update blog post: ' + data.message);

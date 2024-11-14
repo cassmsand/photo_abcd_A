@@ -40,7 +40,8 @@ if (!empty($startDate)) {
     $where .= " AND creation_date >= '" . $conn->real_escape_string($startDate) . "'";
 }
 if (!empty($endDate)) {
-    $where .= " AND creation_date <= '" . $conn->real_escape_string($endDate) . "'";
+    $endDate = $conn->real_escape_string($endDate) . ' 23:59:59';
+    $where .= " AND creation_date <= '" . $endDate . "'";
 }
 
 // Modify SQL query to dynamically add ORDER BY clause based on user input (title or event date)

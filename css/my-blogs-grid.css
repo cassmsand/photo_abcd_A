@@ -288,4 +288,39 @@ h2 {
 }
 
 
+/* Below is the modal image nav button css */
+.photo-nav-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+#photoGallery {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.photo-nav-button {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.photo-display {
+    max-width: 100%;
+    max-height: 300px;
+    margin: 0 10px;
+}
+
+#prevPhoto, #nextPhoto {
+    display: none; /* Initially hide buttons */
+}
+
+.photo-nav-button:hover {
+    color: #007BFF;
+}
+
 
