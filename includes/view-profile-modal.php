@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg"" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modal-title">View Profile</h3>
+                <h3 id="modal-title">View User's Blogs</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
