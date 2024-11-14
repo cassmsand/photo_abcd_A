@@ -7,6 +7,7 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
 $base_url = rtrim($base_url, '/') . '/'; // Ensure single trailing slash
 $blankIcon = $base_url . 'images/blankicon.jpg';
 if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');}
+include ('view-profile-modal.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,7 +81,7 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
             const blogRow = document.getElementById('blog-row');
             var baseUrl = '<?php echo $base_url; ?>';
             var blankIcon = '<?php echo $blankIcon; ?>';
-            let actionType1 = 'get-blogs'; // Declare actionType once
+            let actionType = ''; // Declare actionType once
             let actionType2 = 'get-blogs-modular'
 
             // Ensure baseUrl ends with a single slash
@@ -100,30 +101,34 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
 
             // Function to load traditional view
             function loadTraditionalView() {
+                let container = 'postsContainer';
+                let actionType = 'get-blogs';
                 const title = document.getElementById('searchInput').value;
                 const startDate = document.getElementById('startDate').value;
                 const endDate = document.getElementById('endDate').value;
                 const sortOrder = document.getElementById('sortOrder').value;
                 const viewOptions = 'traditional';
-                fetchBlogs(title, startDate, endDate, sortOrder, viewOptions);
+                fetchBlogs(container, actionType, title, startDate, endDate, sortOrder, viewOptions);
             }
 
             // Function to load photo-only view
             function loadPhotoOnlyView() {
+                let container = 'postsContainer';
+                let actionType = 'get-blogs';
                 const title = document.getElementById('searchInput').value;
                 const startDate = document.getElementById('startDate').value;
                 const endDate = document.getElementById('endDate').value;
                 const sortOrder = document.getElementById('sortOrder').value;
                 const viewOptions = 'photoOnly';
-                fetchBlogs(title, startDate, endDate, sortOrder, viewOptions);
+                fetchBlogs(container, actionType, title, startDate, endDate, sortOrder, viewOptions);
             }
 
             // Function to fetch blog posts with sorting and view options
-            const fetchBlogs = (title = '', startDate = '', endDate = '', sortOrder = 'asc', viewOptions = 'traditional') => {
-                fetch(`actions/${actionType1}.php?title=${encodeURIComponent(title)}&start_date=${startDate}&end_date=${endDate}&sort_order=${sortOrder}&view_options=${viewOptions}`)
+            const fetchBlogs = (container = '', actionType = '', title = '', startDate = '', endDate = '', sortOrder = 'asc', viewOptions = 'traditional') => {
+                fetch(`actions/${actionType}.php?title=${encodeURIComponent(title)}&start_date=${startDate}&end_date=${endDate}&sort_order=${sortOrder}&view_options=${viewOptions}`)
                     .then(response => response.json())
                     .then(blogPosts => {
-                        const postsContainer = document.getElementById('postsContainer');
+                        const postsContainer = document.getElementById(container);
                         postsContainer.innerHTML = ''; // Clear previous posts
 
                         if (blogPosts.message) {
@@ -143,6 +148,137 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
                     })
                     .catch(error => console.error('Error fetching blog posts:', error));
             };
+
+            // Function to load profile view
+            function loadProfileView(username) {
+                let actionType = 'get-profile-blogs';
+                const profileTitle = document.getElementById('profileSearchInput').value;
+                const profileStartDate = document.getElementById('profileStartDate').value;
+                const profileEndDate = document.getElementById('profileEndDate').value;
+                const profileSortOrder = document.getElementById('profileSortOrder').value;
+                const creatorId = username;
+                fetchProfileBlogs(actionType, profileTitle, profileStartDate, profileEndDate, profileSortOrder, creatorId);
+            }
+
+            // Function to fetch blog posts with sorting and view options
+            const fetchProfileBlogs = (actionType = '', profileTitle = '', profileStartDate = '', profileEndDate = '', profileSortOrder = 'asc', creatorId = '') => {
+                fetch(`actions/${actionType}.php?title=${encodeURIComponent(profileTitle)}&start_date=${profileStartDate}&end_date=${profileEndDate}&sort_order=${profileSortOrder}&creator_id=${encodeURIComponent(creatorId)}`)
+                    .then(response => response.json())
+                    .then(profilePosts => {
+                        const profileContainer = document.getElementById('profilePostsContainer');
+                        profileContainer.innerHTML = ''; // Clear previous posts
+
+                        if (profilePosts.message) {
+                            // Display a no-results message
+                            const noResultsMessage = document.createElement('p');
+                            noResultsMessage.textContent = profilePosts.message;
+                            noResultsMessage.className = 'no-results-message';
+                            profileContainer.appendChild(noResultsMessage);
+                            return;
+                        }
+
+                        // Call function to display posts as grid (without clickable actions)
+                        displayProfileBlogs(profileSortOrder, blogModular, profilePosts);
+
+                    })
+                    .catch(error => console.error('Error fetching blog posts:', error));
+            };
+
+            // Function to display photo-only grid view (no interaction)
+            function displayProfileBlogs(sortOrder = 'asc', blogModular, blogPosts) {
+                const profileBlogRow = document.getElementById('profilePostsContainer');
+                profileBlogRow.innerHTML = ''; // Clear the container
+                let combinedGet = [];
+
+                // Sort blogs based on title or date
+                for (let j = 0; j < blogPosts.length; j++) {
+                    for (let i = 0; i < blogModular.length; i++) {
+                        if (blogPosts[j].blog_id === blogModular[i].table.blog_id) {
+                            combinedGet.push(blogModular[i]);
+                            break;
+                        }
+                    }
+                }
+
+                combinedGet.sort((a, b) => {
+                    const titleA = a.table.title.toLowerCase();
+                    const titleB = b.table.title.toLowerCase();
+                    const dateA = a.table.event_date;
+                    const dateB = b.table.event_date;
+                    if (sortOrder === 'asc') {
+                        return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
+                    } else if (sortOrder === 'desc') {
+                        return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
+                    } else if (sortOrder === 'date_asc') {
+                        return dateA < dateB ? -1 : (dateA > dateB ? 1 : 0);
+                    } else {
+                        return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
+                    }
+                });
+
+                // Iterate through sorted blogs and create the grid view
+                combinedGet.forEach(pair => {
+                    const profileTable = pair.table;
+                    const blog_id = profileTable.blog_id;
+                    const profileEmail = profileTable.creator_email;
+                    const profileTitle = profileTable.title;
+                    const profileDescription = profileTable.description;
+                    const profileEvent_date = profileTable.event_date;
+                    const profileCreation_date = profileTable.creation_date;
+                    const profileModification_date = profileTable.modification_date;
+                    const profilePrivacy_filter = profileTable.privacy_filter;
+
+                    // Image Array
+                    const images = pair.images;
+                    let img_src = images.img_names.length === 0 ? 'images/photoABCDLogo.png' : `${images.dir}${images.img_names[0]}`;
+
+                    // Create profile cards in grid format
+                    createProfileCard(profileBlogRow, profileTitle, profileEmail, img_src, blog_id, pair);
+                });
+            }
+
+            // Function to create a profile card
+            function createProfileCard(container, title, email, img, id, pair) {
+                const card = document.createElement("div");
+                card.className = 'col-12 col-md-4 col-lg-3 mb-4'; // Grid column class to make it responsive
+                card.id = `blog-${id}`;
+
+                // Card Content
+                const cardContent = document.createElement("div");
+                cardContent.className = 'card';
+
+                // Header
+                const cardHeader = document.createElement("div");
+                cardHeader.className = "card-header";
+                const cardTitle = document.createElement("h4");
+                cardTitle.className = "card-title";
+                cardTitle.textContent = title;
+                cardHeader.appendChild(cardTitle);
+
+                // Body
+                const cardBody = document.createElement("div");
+                cardBody.className = "card-body";
+                const cardImage = document.createElement("img");
+                cardImage.className = "card-img";
+                cardImage.src = img;
+                cardBody.appendChild(cardImage);
+
+                // Footer
+                const cardFooter = document.createElement("div");
+                cardFooter.className = "card-footer";
+                const cardEmail = document.createElement("p");
+                cardEmail.className = "card-text";
+                cardEmail.textContent = email;
+                cardFooter.appendChild(cardEmail);
+
+                // Assemble the card and append it to the container
+                cardContent.appendChild(cardHeader);
+                cardContent.appendChild(cardBody);
+                cardContent.appendChild(cardFooter);
+                card.appendChild(cardContent);
+                container.appendChild(card);
+            }
+
 
             // Function to display traditional view
             function displayTraditionalView(blogModular, postsContainer, sortOrder, blogPosts) {
@@ -188,7 +324,23 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
 
                     const username = document.createElement('p');
                     username.className = 'blog-username';
-                    username.textContent = table.creator_email;
+                    username.textContent = table.creator_email;               
+
+                     // Add hover effect to create green glow around the username
+                    username.addEventListener('mouseover', () => {
+                        username.style.boxShadow = '0 0 8px 8px rgba(228, 253, 236, 1)';
+                    });
+                    username.addEventListener('mouseout', () => {
+                        username.style.boxShadow = '';
+                    });
+
+                    // Click listener for each username
+                    username.addEventListener('click', () => {
+                         // Open the modal
+                        $('#viewProfileModal').modal('show');
+                        loadProfileView(table.creator_email);
+                    });
+
 
                     function formatCreationDate(dateString) {
                         const date = new Date(dateString);
@@ -308,7 +460,6 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
             }
 
             // Function to display photo-only view
-
             function displaySortedBlogs(sortOrder = 'asc', blogModular, blogPosts) {
                 blogRow.innerHTML = ''; // Clear the container
                 let combinedGet = [];
@@ -365,6 +516,7 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
                     createCard(blogRow, title, email, img_src, blog_id, pair);
                 });
             }
+
             function createCard(container, title, email, img, id, pair) {
                 const card = document.createElement("div");
                 card.className='card';
@@ -433,7 +585,7 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
                 const pageLinks = pagenav.querySelectorAll('.page-link');
                 let previousButton, nextButton, indexDisplay;
 
-// Find "Previous" and "Next" buttons by their text content
+                // Find "Previous" and "Next" buttons by their text content
                 pageLinks.forEach(link => {
                     if (link.textContent.trim() === "Previous") {
                         previousButton = link;
@@ -446,7 +598,7 @@ if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');
 
                 let currentImageIndex = 0;
 
-// Fetch file count and initialize arrows
+                // Fetch file count and initialize arrows
                 fetch(`actions/count-files.php?blog_id=${table.blog_id}`)
                     .then(response => response.json())
                     .then(data => {
