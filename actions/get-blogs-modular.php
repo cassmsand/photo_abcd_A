@@ -103,8 +103,16 @@ if ($result->num_rows > 0) {
     while($table_row = $result->fetch_assoc()) {
         // Image directory
         $blog_dir = "../photo_abcd_A/images/{$table_row['blog_id']}/";
+
         // Image array of directory.
-        $img_names = array_values(array_diff(scandir($blog_dir), array('..', '.')));
+        $img_names = [];
+
+        // Check if directory is exists. If not, return an empty array.
+        $scanDir = @scandir($blog_dir);
+        if ($scanDir == true) {
+            $img_names = array_values(array_diff(scandir($blog_dir), array('..', '.')));
+        }
+
         // Bind directory and image array.
         $blog_images = array('dir' => $blog_dir, 'img_names' => $img_names);
 

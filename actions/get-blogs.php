@@ -59,8 +59,14 @@ if ($result->num_rows > 0) {
         $blog_id = $row['blog_id'];
         $imageDir = "../images/$blog_id/";
         $images = array();
+        $scanDir = @scandir($imageDir);
+        $blog_files;
 
-        $blog_files = array_values(array_diff(scandir($imageDir), array('..', '.')));
+        if ($scanDir != false) {
+            $blog_files = array_values(array_diff($scanDir, array('..', '.')));
+        } else {
+            $blog_files = [];
+        }
 
         // Add images array to the blog post
         $blog_images = array('images' => $blog_files);
