@@ -21,7 +21,7 @@
     Output will give: 'A for Art'
 -->
 <?php
-session_start();
+@session_start();
 include_once("includes/db-conn.php");
 
 /**
