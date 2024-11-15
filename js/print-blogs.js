@@ -52,6 +52,7 @@ function printBlogs(blogArr)
      * Requires that blogs contain an array of images.
      *
      * @param {*} blog Blog that is being printed.
+     * @param {*} image Blog image to display for multi-image blogs.
      */
     function createPage(blog, image = undefined)
     {
