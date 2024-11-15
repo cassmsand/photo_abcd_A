@@ -13,6 +13,7 @@ session_start();
 
 <body>
     <?php include("includes/top-bar.php");?>
+    <h2 style="width:500px; margin: 0 auto; text-align: center;">About Us</h2>
     <section>
         <div class="container" id='main-body'>
 
@@ -78,8 +79,7 @@ session_start();
                             after graduating from Eastern Gateway Community College in 2021, he sought to attain a Bachelor's Degree in Computer Science
                             and is set to graduate from Metropolitan State University in December, 2024. He is a member of Metrostate's Hmong Student 
                             Organization, and has participated in various activities with other student organizations. He is an avid PC gamer with experience
-                            in game development (Unity) and modding. His prefrontal cortex is underdeveloped and given that no one is actually going to 
-                            fact check this statement, this should be taken as factually, ethically, and metaphysically true unless corrected otherwise.
+                            in game development (Unity) and modding.
                         </p>
                     </div>
                 </div>
