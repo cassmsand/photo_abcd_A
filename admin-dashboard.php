@@ -531,7 +531,7 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 					const privacyFilter = selectedRow.find('td:eq(7)').text(); // Privacy Filter
 
 					// Fill in form fields in the modal
-					$('#BlogId').text(blogId);
+					$('#editBlogId').text(blogId);
 					$('#editCreatorEmail').text(creatorEmail);
 					$('#editTitle').val(title);
 					$('#editDescription').val(description);
