@@ -287,6 +287,7 @@ include ('view-profile-modal.php');
 
                     const img = document.createElement('img');
                     const images = post.images;
+                    console.log(images);
                     var img_src;
                     
                     // define path for default image if none is uploaded
