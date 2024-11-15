@@ -8,20 +8,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Email</label>
+                        <label style="font-weight: bold;">Email</label>
                         <div id="deleteEmail" class="form-control-plaintext">
                             <!-- This will be populated with the email value -->
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Would you like to delete this user?</label>
+                        <label style="font-weight: bold;">Would you like to delete this user?</label>
                         <select type="deleteUser" name="deleteUser" id="deleteUser" class="form-control" required>
                             <option value="no">No</option>
                             <option value="yes">Yes</option>
                         </select><br>
                     </div>
                     <div class="form-group">
-                        <label>Would you like to delete all of their associated blogs?</label>
+                        <label style="font-weight: bold;">Would you like to delete all of their associated blogs?</label>
                         <select type="deleteUserBlogs" name="deleteUserBlogs" id="deleteUserBlogs" class="form-control" required>
                             <option value="no">No</option>
                             <option value="yes">Yes</option>

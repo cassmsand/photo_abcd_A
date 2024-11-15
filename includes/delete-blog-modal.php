@@ -8,31 +8,31 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Blog ID</label>
+                        <label style="font-weight: bold;">Blog ID</label>
                         <div id="deleteBlogId" class="form-control-plaintext">
                             <!-- This will be populated with the blog_id value -->
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Creator Email</label>
+                        <label style="font-weight: bold;">Creator Email</label>
                         <div id="deleteCreatorEmail" class="form-control-plaintext">
                             <!-- This will be populated with the creator_email value -->
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Title</label>
+                        <label style="font-weight: bold;">Title</label>
                         <div id="deleteTitle" class="form-control-plaintext">
                             <!-- This will be populated with the title value -->
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Description</label>
+                        <label style="font-weight: bold;">Description</label>
                         <div id="deleteDescription" class="form-control-plaintext">
                             <!-- This will be populated with the description value -->
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Would you like to delete this blog?</label>
+                        <label style="font-weight: bold;">Would you like to delete this blog?</label>
                         <select type="deleteBlog" name="deleteBlog" id="deleteBlog" class="form-control" required>
                             <option value="no">No</option>
                             <option value="yes">Yes</option>

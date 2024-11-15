@@ -8,39 +8,39 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Blog ID</label>
+                        <label style="font-weight: bold;">Blog ID</label>
                         <div name="blogId" id="editBlogId" class="form-control-plaintext">
                             <!-- This will be populated with the blog_id value -->
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Creator Email</label>
+                        <label style="font-weight: bold;">Creator Email</label>
                         <div id="editCreatorEmail" class="form-control-plaintext">
                             <!-- This will be populated with the creator_email value -->
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Title</label>
+                        <label style="font-weight: bold;">Title</label>
                         <input type="text" name="title" id="editTitle" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Description</label>
+                        <label style="font-weight: bold;">Description</label>
                         <input type="text" name="description" id="editDescription" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Event Date</label>
+                        <label style="font-weight: bold;">Event Date</label>
                         <input type="datetime-local" name="eventDate" id="editEventDate" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Creation Date</label>
+                        <label style="font-weight: bold;">Creation Date</label>
                         <input type="datetime-local" name="creationDate" id="editCreationDate" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Modification Date</label>
+                        <label style="font-weight: bold;">Modification Date</label>
                         <input type="datetime-local" name="modificationDate" id="editModificationDate" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="privacyFilter">Privacy Filter:</label>
+                        <label style="font-weight: bold;" for="privacyFilter">Privacy Filter</label>
                         <select name="privacyFilter" id="editPrivacyFilter" class="form-control" required>
                             <option value="public">Public</option>
                             <option value="private">Private</option>
