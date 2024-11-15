@@ -959,7 +959,8 @@ function getBookBlogs()
 }
 
 bookPrintBtn.addEventListener("click", () => {
-    printBlogs(getBookBlogs());
+    var bookBlogs = getBookBlogs();
+    printBlogs(bookBlogs);
 });
 
 // Grid Modal Confirm & Cancel
