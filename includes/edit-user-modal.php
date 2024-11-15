@@ -33,7 +33,7 @@
                         </select><br>
                     </div>
                     <div class="form-group">
-                        <label style="font-weight: bold;" for="role">Role:</label>
+                        <label style="font-weight: bold;" for="role">Role</label>
                         <select type="role" name="role" id="editRole" class="form-control" required>
                             <option value="blogger">Blogger</option>
                             <option value="admin">Admin</option>
