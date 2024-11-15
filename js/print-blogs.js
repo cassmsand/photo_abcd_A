@@ -37,7 +37,9 @@ function printBlogs(blogArr)
     // Add Table of Contents Page
 
     // Create a page for every blog entry in blogArr parameter.
-    blogArr.forEach((blog) => createPage(blog));
+    blogArr.forEach(blog => {
+        createPage(blog);
+    });
 
     // Open print menu.
     window.print();
