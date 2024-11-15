@@ -36,24 +36,11 @@ function printBlogs(blogArr)
     // Add Title Page
 
     // Add Table of Contents Page
+    var tocPage;
     const tableOfContents = document.createElement('div');
         tableOfContents.classList.add("table-of-contents");
-
-        const titleWrap = document.createElement('div');
-            titleWrap.classList.add("table-title");
-
-            const title = document.createElement('h1');
-                title.innerHTML = "Table of Contents";
-                titleWrap.appendChild(title);
-
-        const entryContainer = document.createElement('div');
-            entryContainer.classList.add("entry-container");
-            
-            
-    tableOfContents.appendChild(titleWrap);
-    tableOfContents.appendChild(entryContainer);
     printContainer.appendChild(tableOfContents);
-    
+    createTOC();
 
     // Create a page for every blog entry in blogArr parameter.
     blogArr.forEach(blog => {
@@ -156,22 +143,56 @@ function printBlogs(blogArr)
             printElement.appendChild(printFooter);
             printContainer.appendChild(printElement);
 
-            const tableEntry = document.createElement('div');
+            entry();
+            
+            function entry()
+            {
+                var entryIndex = pageNum % 28 - 1;
+                if (entryIndex == 0 && pageNum != 1) {
+                    createTOC();
+                }
+                const tableEntry = document.createElement('div');
                 tableEntry.className = "table-entry";
 
                 const entryImage = document.createElement("img");
+                    entryImage.className = "entry-image";
                     entryImage.src = imgSrc;
                     tableEntry.appendChild(entryImage);
 
-                const entryTitle = document.createElement('h5');
+                const entryTitle = document.createElement('p');
                     entryTitle.innerHTML = `${blog.title}`;
+                    entryTitle.className = "entry-title";
                     tableEntry.appendChild(entryTitle);
 
                 const entryNum = document.createElement('p');
                     entryNum.innerHTML = `Pg. ${pageNum}`;
+                    entryNum.className = "entry-num";
                     tableEntry.appendChild(entryNum);
                 
-            entryContainer.appendChild(tableEntry);
+                tocPage.appendChild(tableEntry);
+            }
         }
+    }
+
+    function createTOC() 
+    {
+        const titleWrap = document.createElement('div');
+            titleWrap.classList.add("table-title");
+
+            const title = document.createElement('h1');
+                title.innerHTML = "Table of Contents";
+                titleWrap.appendChild(title);
+
+        const entryContainer = document.createElement('div');
+            entryContainer.classList.add("entry-container");
+        
+        tocPage = entryContainer;
+        tableOfContents.appendChild(titleWrap);
+        tableOfContents.appendChild(entryContainer);
+    }
+
+    function createTitlePage()
+    {
+        // Elements to make title page.
     }
 };

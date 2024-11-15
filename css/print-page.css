@@ -25,34 +25,59 @@
     }
 
     .table-of-contents {
-        display: grid;
-        page-break-after: always;
-        gap: 15px;
-        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        max-width: inherit;
+        max-height: inherit;
 
-        *:not(.table-title *, img) {
+        * {
+            font-family: Georgia, serif;
+        }
+
+        *:not(.entry-container *, .entry-container, .table-title) {
+            margin: 0;
             border-style: solid;
             border-width: 0.5px;
             border-radius: 15px;
         }
 
         .table-title {
-            background-color: turquoise;
+            display: flex;
+            min-height: 1in;
+            max-width: inherit;
+            min-width: 100%;
+            background-image: url("../images/banner.png");
+            border-bottom: 0.5px solid black;
+            justify-content: center;
+            align-items: center;
+            h1 {
+                padding: 15px;
+                margin: 0;
+                background-color: whitesmoke;
+                max-width: fit-content;
+                max-height: 0.75in;
+                align-content: center;
+                -webkit-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
+                -moz-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
+                box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
+            }
         }
+
 
         .entry-container {
             display: flex;
             flex-wrap: wrap;
-            background-color: gray;
-            border-radius: 15px;
+            page-break-after: always;
+            background: linear-gradient(135deg, #ccdffc, #e2faed);
             gap: 40px 15px;
             padding: 15px;
-            justify-content: space-between;
-            align-content: center;
+            max-height: 10in;
+            min-height: 10in;
+            justify-content: space-evenly;
+            align-content: start;
 
             .table-entry {
                 display: flex;
-                background-color: whitesmoke;
                 position: relative;
                 
                 max-width: 1.75in;
@@ -62,7 +87,20 @@
                 justify-content: space-between;
                 align-content: center;
 
-                h5 {
+                *:not(img) {
+                    margin: 0;
+                    border-style: solid;
+                    border-width: 0.5px;
+                    border-radius: 15px;
+                }
+
+                img {
+                    -webkit-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
+                    -moz-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
+                    box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
+                }
+
+                .entry-title {
                     position: absolute;
                     background-color: greenyellow;
                     border-radius: 15px;
@@ -71,7 +109,7 @@
                     left: 0px;
                 }
 
-                p {
+                .entry-num {
                     position: absolute;
                     background-color: greenyellow;
                     border-radius: 15px;
