@@ -102,7 +102,7 @@ $blogs = array();
 if ($result->num_rows > 0) {
     while($table_row = $result->fetch_assoc()) {
         // Image directory
-        $blog_dir = "../images/{$table_row['blog_id']}/";
+        $blog_dir = "images/{$table_row['blog_id']}/";
 
         // Image array of directory.
         $img_names = [];
