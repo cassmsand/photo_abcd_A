@@ -8,7 +8,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group row">
-                        <label for="userFullName" class="col-sm-1 col-form-label">User: </label>
+                        <label style="font-weight: bold;" for="userFullName" class="col-sm-1 col-form-label">User: </label>
                         <div class="col-sm-8">
                             <input id="userFullName" class="form-control-plaintext" readonly>
                         </div>

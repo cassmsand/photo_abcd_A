@@ -8,32 +8,32 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Email</label>
+                        <label style="font-weight: bold;">Email</label>
                         <div id="editEmail" class="form-control-plaintext">
                             <!-- This will be populated with the email value -->
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>First Name</label>
+                        <label style="font-weight: bold;">First Name</label>
                         <input type="firstName" name="firstName" id="editFirstName" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Last Name</label>
+                        <label style="font-weight: bold;">Last Name</label>
                         <input type="lastName" name="lastName" id="editLastName" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Password</label>
+                        <label style="font-weight: bold;">Password</label>
                         <input type="password" name="password" id="editPassword" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Active</label>
+                        <label style="font-weight: bold;">Active</label>
                         <select type="active" name="active" id="editActive" class="form-control" required>
                             <option value="1">Active</option>
                             <option value="0">Not Active</option>
                         </select><br>
                     </div>
                     <div class="form-group">
-                        <label for="role">Role:</label>
+                        <label style="font-weight: bold;" for="role">Role:</label>
                         <select type="role" name="role" id="editRole" class="form-control" required>
                             <option value="blogger">Blogger</option>
                             <option value="admin">Admin</option>
