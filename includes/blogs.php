@@ -299,7 +299,7 @@ include ('view-profile-modal.php');
 
                     img.alt = 'Blog Image';
                     img.className = 'blog-photo';
-
+                    console.log(img.src+ " Image Source Line 302 blogs.php");
                     fetch(`actions/count-files.php?blog_id=${table.blog_id}`)
                         .then(response => response.json())
                         .then(data => {
