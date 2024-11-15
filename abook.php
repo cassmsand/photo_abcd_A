@@ -3,7 +3,9 @@ include_once("includes/db-conn.php");
 session_start();
 
 $CURRENT_PAGE = "Alphabet Book";
-
+if (!isset($_SESSION['current_user_email'])) {
+    header("Location: index.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
