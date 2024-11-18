@@ -1,5 +1,11 @@
 <footer>
-    <div id='main-footer'>
+    <div class="footer" id='main-footer' style="background-image: url('<?php echo $base_url; ?>images/banner.png'); 
+                background-size: cover; 
+                background-position: center; 
+                height: 200px;
+                display: flex; 
+                justify-content: center; 
+                align-items: center;">
         <span>
             Alligator Group @ <?php echo date('Y'); ?>
         </span>
