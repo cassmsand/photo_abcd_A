@@ -184,46 +184,60 @@
         if (post.images.length <= 0) {
             path = baseUrl + "images/photoABCDLogo.png";
         }
-        // Generate HTML content for multiple images
-        let imagesContent = '';
+
+            // Generate the HTML content for multiple images
+        let imagesHtml = '';
         if (post.images && post.images.length > 0) {
-            imagesContent = post.images.map(image => {
+            imagesHtml = post.images.map(image => {
                 if (image && typeof image === 'string' && image.trim() !== '') {
                     const imageSrc = `${baseUrl}images/${post.blog_id}/${image}`;
                     return `
-                        <img src="${imageSrc}" alt="Blog Image" style="max-width:100%;height:auto;margin:5px;" 
+                        <img src="${imageSrc}" alt="Blog Image" style="width:100%;height:auto;margin-bottom:20px;" 
                             onerror="this.onerror=null;this.src='${path}';">
                     `;
                 }
-                return ''; // Skip invalid or empty images
+                return ''; // Skip invalid images
             }).join('');
-        } else {
-            // Fallback to the default image if no valid images are found
-            imagesContent = `
-                <img src="${path}" alt="Default Blog Image" style="max-width:100%;height:auto;">
-            `;
+        }else {
+        // Fallback to the default image if no valid images are found
+        imagesHtml = `
+            <img src="${path}" alt="Default Blog Image" style="max-width:100%;height:auto;">
+        `;
         }
 
-        // Generate the HTML content to print
+
+        // Generate the complete HTML for printing
         const printContent = `
             <div>
                 <h2>${post.title}</h2>
                 <p><strong>Created by:</strong> ${post.creator_email}</p>
                 <p><strong>Event Date:</strong> ${post.event_date}</p>
                 <p><strong>Description:</strong> ${post.description}</p>
-                <div>${imagesContent}</div>
+                ${imagesHtml}
             </div>
         `;
 
-        // Open a new window and write the content to print
+        // Open a new window and apply print-specific styles
         const newWindow = window.open('', '_blank');
         newWindow.document.write(`
             <html>
                 <head>
                     <title>Print Blog</title>
                     <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; }
-                        img { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+                        @media print {
+                            body {
+                                margin: 0;
+                                padding: 0;
+                            }
+                            img {
+                                page-break-inside: avoid; /* Prevent images from splitting across pages */
+                                max-width: 100%;
+                                height: auto;
+                            }
+                            div {
+                                page-break-after: auto; /* Allow page breaks between blog posts */
+                            }
+                        }
                     </style>
                 </head>
                 <body>${printContent}</body>
@@ -232,7 +246,6 @@
         newWindow.document.close();
         newWindow.print();
     };
-
 
     document.getElementById('searchButton').addEventListener('click', () => {
         const title = document.getElementById('searchInput').value;
