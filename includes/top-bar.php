@@ -43,28 +43,8 @@ if (isset($_SESSION['current_user_email'])) {
                         </span>
                     </h1>
                 </span>
-
-                <?php if (isset($_SESSION['current_user_email'])): ?>
-                    <div class="user-bar">
-                            <div class="user-info">
-                                <h3>Welcome <?php echo $_SESSION['current_user_first_name']; ?>!</h3>
-                                <div class="profile-image">
-                                    <img src="<?=$userImg?>" alt="userImage">
-                                </div>
-                            </div>
-                    </div>
-                    <div class="nav-bar">
-                        <ul class="nav nav-pills">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="settings.php">Settings</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a id='log-button' class="nav-link"></a>
-                                </li> 
-                        </ul>
-                    </div>
-                <?php endif; ?>
         </div>
+        
         <div class="nav-bar">
             <ul class="nav nav-pills">
                 <li class="nav-item">
@@ -91,13 +71,23 @@ if (isset($_SESSION['current_user_email'])) {
                 <li class="nav-item">
                     <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php">About Us</a>
                 </li>
-                <?php if (!isset($_SESSION['current_user_email'])): ?>
-                    <li class="nav-item">
-                            <a id='log-button' class="nav-link"></a>
-                    </li> 
-                <?php endif; ?>
             </ul>
         </div>
+        
+        <div class="user-widget">
+            
+            <div class="user-links">
+                <h4><?=$widget_name?></h4>
+                <a id='log-button'></a>
+                <a id="settings" href="settings.php">Settings</a>
+            </div>
+            
+            <div class="profile-image">
+                <img src=<?=$userImg?> alt="userImage">
+            </div>
+            
+        </div>
+
     </div>
 </header>
 
