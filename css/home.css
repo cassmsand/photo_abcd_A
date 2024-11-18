@@ -2,17 +2,14 @@
     padding: 2rem;
     padding-left: 60px;
     padding-right: 60px;
-    max-height: 200px;
     height: 300px;
     margin: auto;
     margin-bottom: 2rem;
     display: flex;
     flex-wrap: nowrap;
-    background-size: cover; 
     background-image: url('../images/banner.png');
     background-size: cover;
     background-position: center;
-        .logo-img {
     justify-content: center; /* Change this from space-between to center */
     align-items: center; /* Center vertically if needed */
 }
@@ -22,13 +19,13 @@
     flex-wrap: nowrap;
     align-items: center;
 
-        min-width: 300px;
     .logo-img {
         border: 3px solid #000000;
         background-color: white;
         display: block;
         min-width: 150px;
         max-width: 150px;
+        height: auto;
         border-radius: 30px;
         padding-left: 5px;
         padding-right: 5px;
@@ -57,7 +54,6 @@
     overflow: hidden;
 }
 
-            padding: 10px; 
 .user-info {
     display: flex;
     align-items: center;
