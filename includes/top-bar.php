@@ -35,26 +35,35 @@ if (isset($_SESSION['current_user_email'])) {
                     <h1 style="padding-left: 10px; padding-right: 10px; margin: 0;">
                         Photo
                         <span style="white-space: nowrap;">
-                            <span
-                                style="color: rgb(74, 100, 181); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">A</span>
-                            <span
-                                style="color: rgb(121, 172, 249); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">B</span>
-                            <span
-                                style="color: rgb(135, 210, 161); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">C</span>
-                            <span
-                                style="color: rgb(43, 152, 80); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">D</span>
+                            <span style="color: rgb(74, 100, 181); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">A</span>
+                            <span style="color: rgb(121, 172, 249); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">B</span>
+                            <span style="color: rgb(135, 210, 161); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">C</span>
+                            <span style="color: rgb(43, 152, 80); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">D</span>
                         </span>
                     </h1>
                 </span>
 
                 <?php if (isset($_SESSION['current_user_email'])): ?>
-                <h3>Welcome <?php echo $_SESSION['current_user_first_name'];?>!</h3>
+                    <div class="user-bar">
+                            <div class="user-info">
+                                <h3>Welcome <?php echo $_SESSION['current_user_first_name']; ?>!</h3>
+                                <div class="profile-image">
+                                    <img src="<?=$userImg?>" alt="userImage">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="nav-bar">
+                        <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="settings.php">Settings</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id='log-button' class="nav-link"></a>
+                                </li> 
+                        </ul>
+                    </div>
                 <?php endif; ?>
-            </div>
         </div>
-
-
-        <!-- Center the nav pills here -->
         <div class="nav-bar">
             <ul class="nav nav-pills">
                 <li class="nav-item">
@@ -69,7 +78,6 @@ if (isset($_SESSION['current_user_email'])) {
                         <a class="nav-link <?php if ($CURRENT_PAGE == "Alphabet Book") {?>active<?php }?>"
                             href="abook.php">Alphabet Book</a>
                     </li>
-
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION['current_user_role']) && $_SESSION['current_user_role'] == 'admin'): ?>
@@ -82,24 +90,13 @@ if (isset($_SESSION['current_user_email'])) {
                 <li class="nav-item">
                     <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php">About Us</a>
                 </li>
-
+                <?php if (!isset($_SESSION['current_user_email'])): ?>
+                    <li class="nav-item">
+                            <a id='log-button' class="nav-link"></a>
+                    </li> 
+                <?php endif; ?>
             </ul>
         </div>
-
-        <div class="user-widget">
-            
-            <div class="user-links">
-                <h4><?=$widget_name?></h4>
-                <a id='log-button'></a>
-                <a id="settings">Settings</a>
-            </div>
-            
-            <div class="profile-image">
-                <img src=<?=$userImg?> alt="userImage">
-            </div>
-            
-        </div>
-
     </div>
 </header>
 
