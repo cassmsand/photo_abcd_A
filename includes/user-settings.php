@@ -14,14 +14,14 @@
                 <div class="profile-contents">
                     <div class="section-contents">
                         <h5> My First Name: </h5>
-                        <h6> FIRST NAME <h6>
+                        <h6> <?php echo $_SESSION['current_user_first_name']; ?> <h6>
                     </div>
                     <button class="settings-button" id="edit-first-name" data-bs-toggle="modal" data-bs-target="#edit-first-name-modal">Edit First Name</button>
                 </div>
                 <div class="profile-contents">
                     <div class="section-contents">
                         <h5> My Last Name: </h5>
-                        <h6> LAST NAME <h6>
+                        <h6> <?php echo $_SESSION['current_user_last_name']; ?> <h6>
                     </div>
                     <button class="settings-button" id="edit-last-name" data-bs-toggle="modal" data-bs-target="#edit-last-name-modal">Edit Last Name</button>
                 </div>
