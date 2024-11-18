@@ -2,7 +2,7 @@
 <div class="modal fade" id="edit-profile-photo-modal" tabindex="-1" aria-labelledby="editProfilePhotoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="edit-profile-photo-form" action="actions/update-profile-photo.php" method="POST" enctype="multipart/form-data">
+            <form id="edit-profile-photo-form" action="actions/update-profile/update-profile-photo.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editProfilePhotoModalLabel">Edit Profile Photo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -15,7 +15,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="submit" class="btn btn-primary" onclick="saveProfilePhotoChange(event)">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -27,7 +27,7 @@
 <div class="modal fade" id="edit-first-name-modal" tabindex="-1" aria-labelledby="editFirstNameModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="edit-first-name-form" action="actions/update-first-name.php" method="POST">
+            <form id="edit-first-name-form" action="actions/update-profile/update-first-name.php" method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editFirstNameModalLabel">Edit First Name</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="submit" class="btn btn-primary" onclick="saveFirstNameChange(event)">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -50,7 +50,7 @@
 <div class="modal fade" id="edit-last-name-modal" tabindex="-1" aria-labelledby="editLastNameModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="edit-last-name-form" action="actions/update-last-name.php" method="POST">
+            <form id="edit-last-name-form" action="actions/update-profile/update-last-name.php" method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editLastNameModalLabel">Edit Last Name</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="submit" class="btn btn-primary" onclick="saveLastNameChange(event)">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -73,7 +73,7 @@
 <div class="modal fade" id="edit-password-modal" tabindex="-1" aria-labelledby="editPasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="edit-password-form" action="actions/update-password.php" method="POST">
+            <form id="edit-password-form" action="actions/update-profile/update-password.php" method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editPasswordModalLabel">Change Password</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="submit" class="btn btn-primary" onclick="savePasswordChange(event)">Save Changes</button>
                 </div>
             </form>
         </div>

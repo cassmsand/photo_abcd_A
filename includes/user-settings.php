@@ -56,6 +56,129 @@
             editPasswordModal.style.display = 'block';
         });
 
+        function saveProfilePhotoChange(event) {
+            // Prevent form submission
+            event.preventDefault();
+
+            const formData = new FormData();
+            const fileInput = document.getElementById('profile-photo');
+
+            if (fileInput.files.length === 0) {
+                alert('Please select a file');
+                return;
+            }
+
+            formData.append('profile-photo', fileInput.files[0]);
+
+            fetch('actions/update-profile/update-profile-photo.php', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Profile photo updated successfully!');
+                    location.reload();
+                } else {
+                    alert('Error updating profile photo: ' + data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+
+        function saveFirstNameChange(event) {
+            // Prevent form submission
+            event.preventDefault();
+
+            const formData = {
+                firstName: document.getElementById('first-name').value.trim()
+            };
+
+            // AJAX request
+            fetch('actions/update-profile/update-first-name.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('First name updated successfully!');
+                    location.reload();
+                } else {
+                    alert('Error updating name: ' + data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function saveLastNameChange(event) {
+            // Prevent form submission
+            event.preventDefault();
+
+            const formData = {
+                lastName: document.getElementById('last-name').value.trim()
+            };
+
+            // AJAX request
+            fetch('actions/update-profile/update-last-name.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Last name updated successfully!');
+                    location.reload();
+                } else {
+                    alert('Error updating name: ' + data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function savePasswordChange(event) {
+            // Prevent form submission
+            event.preventDefault();
+
+            const formData = {
+                password: document.getElementById('password').value.trim()
+            };
+
+            // AJAX request
+            fetch('actions/update-profile/update-password.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Password updated successfully!');
+                    location.reload();
+                } else {
+                    alert('Error updating password: ' + data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
     </script>
 </body>
 
