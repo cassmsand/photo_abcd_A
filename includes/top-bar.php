@@ -23,6 +23,7 @@ if (isset($_SESSION['current_user_email'])) {
 ?>
 
 <header>
+    <link rel="stylesheet" href="css/home.css">
     <div class="main-header">
 
         <div class="logo">
