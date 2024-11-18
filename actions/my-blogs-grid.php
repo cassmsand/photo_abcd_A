@@ -123,6 +123,14 @@
                     const dropdownContent = document.createElement('div');
                     dropdownContent.className = 'dropdown-content';
 
+                    const printLink = document.createElement('a');
+                    printLink.href = '#';
+                    printLink.textContent = 'Print';
+                    printLink.onclick = (e) => {
+                        e.preventDefault();
+                        printBlog(post); // Call the print function with the current post data
+                    };
+
                     const editLink = document.createElement('a');
                     editLink.href = '#';
                     editLink.textContent = 'Edit';
@@ -142,7 +150,8 @@
                                 .description);
                         }
                     };
-
+                    
+                    dropdownContent.appendChild(printLink);
                     dropdownContent.appendChild(editLink);
                     dropdownContent.appendChild(deleteLink);
                     optionsDropdown.appendChild(optionsButton);
@@ -167,6 +176,63 @@
 
 
     fetchBlogs('get-my-blogs');
+
+    const printBlog = (post) => {
+        // Set base URL for images
+        var path = baseUrl + `images/${post.blog_id}/${post.images[0]}`;
+        // if the newly uploaded image is gone, resort to default
+        if (post.images.length <= 0) {
+            path = baseUrl + "images/photoABCDLogo.png";
+        }
+        // Generate HTML content for multiple images
+        let imagesContent = '';
+        if (post.images && post.images.length > 0) {
+            imagesContent = post.images.map(image => {
+                if (image && typeof image === 'string' && image.trim() !== '') {
+                    const imageSrc = `${baseUrl}images/${post.blog_id}/${image}`;
+                    return `
+                        <img src="${imageSrc}" alt="Blog Image" style="max-width:100%;height:auto;margin:5px;" 
+                            onerror="this.onerror=null;this.src='${path}';">
+                    `;
+                }
+                return ''; // Skip invalid or empty images
+            }).join('');
+        } else {
+            // Fallback to the default image if no valid images are found
+            imagesContent = `
+                <img src="${path}" alt="Default Blog Image" style="max-width:100%;height:auto;">
+            `;
+        }
+
+        // Generate the HTML content to print
+        const printContent = `
+            <div>
+                <h2>${post.title}</h2>
+                <p><strong>Created by:</strong> ${post.creator_email}</p>
+                <p><strong>Event Date:</strong> ${post.event_date}</p>
+                <p><strong>Description:</strong> ${post.description}</p>
+                <div>${imagesContent}</div>
+            </div>
+        `;
+
+        // Open a new window and write the content to print
+        const newWindow = window.open('', '_blank');
+        newWindow.document.write(`
+            <html>
+                <head>
+                    <title>Print Blog</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        img { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+                    </style>
+                </head>
+                <body>${printContent}</body>
+            </html>
+        `);
+        newWindow.document.close();
+        newWindow.print();
+    };
+
 
     document.getElementById('searchButton').addEventListener('click', () => {
         const title = document.getElementById('searchInput').value;
