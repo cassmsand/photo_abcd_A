@@ -18,7 +18,41 @@ h2 {
     position: relative;
     padding-bottom: 20px; /* Adds some space at the bottom for the date */
 }
+/*
+.photo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+*/
 
+.photo-container {
+    display: flex;
+    height: auto;
+    align-items: center;
+    margin-bottom: 20px;  
+    text-align: center;  
+}
+
+.photo-container img {
+    max-width: 90%; /* Ensure the image doesn't overflow the container */
+    height: auto;
+}
+
+.photo-nav-button {
+    background-color: #ddd;
+    border: none;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.photo-nav-button:hover {
+    background-color: #bbb;
+}
 
 .blog-creation-date {
     font-size: 14px;

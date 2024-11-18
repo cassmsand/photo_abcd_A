@@ -75,6 +75,11 @@
                     if (post.images.length <= 0) {
                         path = baseUrl + "images/photoABCDLogo.png";
                     }
+                    
+                    const hasMultiplePhotos = post.images.length > 1;
+
+                    let currentPhotoIndex = 0;
+
                     const blogContainer = document.createElement('div');
                     blogContainer.className = 'blog-container';
 
@@ -103,10 +108,37 @@
                     blogTitle.className = 'blog-title';
                     blogTitle.textContent = post.title;
 
+                    const photoContainer = document.createElement('div');
+                    photoContainer.className = 'photo-container';
+
+                    const leftArrow = document.createElement('button');
+                    leftArrow.className = 'photo-nav-button';
+                    leftArrow.innerHTML = '&#9664;'; 
+                    leftArrow.style.display = hasMultiplePhotos ? 'inline-block' : 'none';
+
+                    const rightArrow = document.createElement('button');
+                    rightArrow.className = 'photo-nav-button';
+                    rightArrow.innerHTML = '&#9654;'; 
+                    rightArrow.style.display = hasMultiplePhotos ? 'inline-block' : 'none';
+
                     const img = document.createElement('img');
                     img.src = path;
                     img.alt = 'Blog Image';
                     img.className = 'blog-photo';
+
+                    const updatePhoto = () => {
+                        img.src = baseUrl + `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
+                    };
+
+                    leftArrow.onclick = () => {
+                        currentPhotoIndex = (currentPhotoIndex - 1 + post.images.length) % post.images.length;
+                        updatePhoto();
+                    };
+
+                    rightArrow.onclick = () => {
+                        currentPhotoIndex = (currentPhotoIndex + 1) % post.images.length;
+                        updatePhoto();
+                    };
 
                     const blogDescription = document.createElement('p');
                     blogDescription.className = 'blog-description';
@@ -150,6 +182,10 @@
                                 .description);
                         }
                     };
+
+                    photoContainer.appendChild(leftArrow);
+                    photoContainer.appendChild(img);
+                    photoContainer.appendChild(rightArrow);
                     
                     dropdownContent.appendChild(printLink);
                     dropdownContent.appendChild(editLink);
@@ -163,11 +199,13 @@
                     blogUserContainer.appendChild(creationDate);
                     blogContainer.appendChild(blogUserContainer);
                     blogContainer.appendChild(blogTitle);
-                    blogContainer.appendChild(img);
+                    blogContainer.appendChild(photoContainer);
                     blogContainer.appendChild(blogDescription);
                     // blogContainer.appendChild(eventDate); // Removed event date
                     blogContainer.appendChild(optionsDropdown); // Add dropdown to blogContainer
+                    
                     postsContainer.appendChild(blogContainer);
+
 
                 });
             })
