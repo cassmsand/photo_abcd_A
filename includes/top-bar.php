@@ -44,28 +44,33 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
                 <li class="nav-item">
                     <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="index.php">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php">About
-                        Us</a>
-                </li>
                 <?php if (isset($_SESSION['current_user_email'])): ?>
-                <li class="nav-item">
-                    <a class="nav-link <?php if ($CURRENT_PAGE == "My Blogs") {?>active<?php }?>" href="my-blogs.php">My Blogs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php if ($CURRENT_PAGE == "Alphabet Book") {?>active<?php }?>"
-                        href="abook.php">Alphabet Book</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php if ($CURRENT_PAGE == "My Blogs") {?>active<?php }?>" href="my-blogs.php">My Blogs</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link <?php if ($CURRENT_PAGE == "Alphabet Book") {?>active<?php }?>"
+                            href="abook.php">Alphabet Book</a>
+                    </li>
+
                 <?php endif; ?>
+
                 <?php if (isset($_SESSION['current_user_role']) && $_SESSION['current_user_role'] == 'admin'): ?>
-                <li class="nav-item">
-                    <a class="nav-link <?php if ($CURRENT_PAGE == "Administration") {?>active<?php }?>"
-                        href="admin-dashboard.php">Administration</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php if ($CURRENT_PAGE == "Administration") {?>active<?php }?>"
+                            href="admin-dashboard.php">Administration</a>
+                    </li>
                 <?php endif; ?>
+
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php">About Us</a>
+                </li>
+
                 <li class="nav-item">
                     <a id='log-button' class="nav-link"></a>
                 </li>
+
             </ul>
         </div>
 
