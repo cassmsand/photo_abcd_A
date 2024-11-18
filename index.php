@@ -6,11 +6,11 @@ $CURRENT_PAGE = "Index";
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
-    <?php include("includes/head-tag-contents.php");?>
-
     <head>
+        <?php include("includes/head-tag-contents.php");?>
         <link href="css/blogs.css" rel="stylesheet" type="text/css">
+        <link href="css/blog-grid.css" rel="stylesheet" type="text/css">
+        <link href="css/sorting.css" rel="stylesheet" type="text/css">
     </head>
 
     <body>
@@ -20,6 +20,9 @@ $CURRENT_PAGE = "Index";
         <?php include("includes/footer.php");?>
         <script>
             const actionType = 'get-blogs'; // Set action to fetch my blogs
+
+            // Remove view dropdown (not used in my-blogs page)
+            document.getElementById("newBlogButton").remove();
         </script>
     </body>
 </html>

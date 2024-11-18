@@ -7,57 +7,68 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
 ?>
 
 <header>
-    <div class="header">
-        <div style="padding: 4rem 2rem; margin-bottom: 2rem; background-color: #; background-image: url('<?php echo $base_url; ?>images/banner.png'); background-size: cover; background-position: center;">
-            <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-                <img src="<?php echo $base_url; ?>images/photoABCDLogo.png" alt="Photo ABCD Logo" width="150px" height="auto" style="border:3px solid #000000; display: block; border-radius: 25%; object-fit: cover">
-                <div style="text-align: center;">
-                    <span style="white-space: nowrap;">
-                        <h1 style="padding-left: 10px; padding-right: 10px; margin: 0;">
-                            Photo
-                            <span style="white-space: nowrap;">
-                                <span style="color: rgb(74, 100, 181); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">A</span>
-                                <span style="color: rgb(121, 172, 249); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">B</span>
-                                <span style="color: rgb(135, 210, 161); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">C</span>
-                                <span style="color: rgb(43, 152, 80); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">D</span>
-                            </span>
-                        </h1>
-                    </span>
+    <div class="main-header">
 
-                    <?php if (isset($_SESSION['current_user_email'])): ?>
-                    <h3 style="color: rgb(78, 153, 149); padding-left: 10px; padding-right: 10px; margin-top: 5px;">
-                        Welcome <?php echo $_SESSION['current_user_first_name'];?>!
-                    </h3>
-                    <?php endif; ?>
-                </div>
-                
-                <!-- Center the nav pills here -->
-                <ul class="nav nav-pills" style="display: flex; justify-content: center; padding: 10px; background-color: white; border-radius: 30px; margin: 0 auto;">
-                    <li class="nav-item">
-                        <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="index.php" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;">About Us</a>
-                    </li>
-                    <?php if (isset($_SESSION['current_user_email'])): ?>
-                        <li class="nav-item">
-                            <a class="nav-link <?php if ($CURRENT_PAGE == "MyBlogs") {?>active<?php }?>" href="my-blogs.php" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;">My Blogs</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?php if ($CURRENT_PAGE == "Alphabet Book") {?>active<?php }?>" href="abook.php" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;">Alphabet Book</a>
-                        </li>
-                    <?php endif; ?>
-                    <?php if (isset($_SESSION['current_user_role']) && $_SESSION['current_user_role'] == 'admin'): ?>
-                        <li class="nav-item">
-                            <a class="nav-link <?php if ($CURRENT_PAGE == "AdminDashboard") {?>active<?php }?>" href="admin-dashboard.php" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;">Administration</a>
-                        </li>
-                    <?php endif; ?>
-                    <li class="nav-item">
-                        <a id='log-button' class="nav-link" style="font-size: 1.2rem; padding: 10px 20px; text-align: center;"></a>
-                    </li>  
-                </ul>
-            </div>    
-        </div> 
+        <div class="logo">
+            <div class="logo-img">
+                <img src="images/photoABCDLogo.png" alt="Photo ABCD Logo">
+            </div>
+
+            <div class="logo-title">
+                <span style="white-space: nowrap;">
+                    <h1 style="padding-left: 10px; padding-right: 10px; margin: 0;">
+                        Photo
+                        <span style="white-space: nowrap;">
+                            <span
+                                style="color: rgb(74, 100, 181); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">A</span>
+                            <span
+                                style="color: rgb(121, 172, 249); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">B</span>
+                            <span
+                                style="color: rgb(135, 210, 161); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">C</span>
+                            <span
+                                style="color: rgb(43, 152, 80); text-shadow: 3px 3px 0 rgba(255, 255, 255, 1);">D</span>
+                        </span>
+                    </h1>
+                </span>
+
+                <?php if (isset($_SESSION['current_user_email'])): ?>
+                <h3>Welcome <?php echo $_SESSION['current_user_first_name'];?>!</h3>
+                <?php endif; ?>
+            </div>
+        </div>
+
+
+        <!-- Center the nav pills here -->
+        <div class="nav-bar">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($CURRENT_PAGE == "Index") {?>active<?php }?>" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php">About
+                        Us</a>
+                </li>
+                <?php if (isset($_SESSION['current_user_email'])): ?>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($CURRENT_PAGE == "My Blogs") {?>active<?php }?>" href="my-blogs.php">My Blogs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($CURRENT_PAGE == "Alphabet Book") {?>active<?php }?>"
+                        href="abook.php">Alphabet Book</a>
+                </li>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['current_user_role']) && $_SESSION['current_user_role'] == 'admin'): ?>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($CURRENT_PAGE == "Administration") {?>active<?php }?>"
+                        href="admin-dashboard.php">Administration</a>
+                </li>
+                <?php endif; ?>
+                <li class="nav-item">
+                    <a id='log-button' class="nav-link"></a>
+                </li>
+            </ul>
+        </div>
+
     </div>
 </header>
 
@@ -72,26 +83,25 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
     }
 ?>
 
-    
+
 <script>
-    log_button = document.getElementById('log-button');
+log_button = document.getElementById('log-button');
 
-    type = '<?php print $type;?>'
+type = '<?php print $type;?>'
 
-    switch (type) {
-        case 'login':
-            log_button.innerHTML = 'Login';
-            log_button.href = "#";
-            log_button.setAttribute('data-bs-toggle', "modal");
-            log_button.setAttribute('data-bs-target', "#login_modal");
-            break;
+switch (type) {
+    case 'login':
+        log_button.innerHTML = 'Login';
+        log_button.href = "#";
+        log_button.setAttribute('data-bs-toggle', "modal");
+        log_button.setAttribute('data-bs-target', "#login_modal");
+        break;
 
-        case 'logout':
-            log_button.innerHTML = 'Logout';
-            log_button.href = "actions/logout.php";
-            log_button.removeAttribute('data-bs-toggle');
-            log_button.removeAttribute('data-bs-target');
-            break;
-    }
-    
+    case 'logout':
+        log_button.innerHTML = 'Logout';
+        log_button.href = "actions/logout.php";
+        log_button.removeAttribute('data-bs-toggle');
+        log_button.removeAttribute('data-bs-target');
+        break;
+}
 </script>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-$CURRENT_PAGE = "AdminDashboard";
+$CURRENT_PAGE = "Administration";
 include_once("includes/db-conn.php");
 
 $base_url = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/photo_abcd_A/';
@@ -13,9 +13,8 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 
 <!DOCTYPE html>
 <html lang="en">
-		<?php include("includes/head-tag-contents.php");?>
-
 	<head>
+		<?php include("includes/head-tag-contents.php");?>
 		<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
 		<link href="css/tables.css" rel="stylesheet" type="text/css">
     </head>

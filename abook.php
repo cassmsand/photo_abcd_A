@@ -9,15 +9,10 @@ if (!isset($_SESSION['current_user_email'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
-<?php include("includes/head-tag-contents.php");?>
-
 <head>
+    <?php include("includes/head-tag-contents.php");?>
     <link rel="stylesheet" href="css/alpha.css">
     <link rel="stylesheet" href="css/print-page.css">
-    <style>
-
-    </style>
 </head>
 
 <body>
