@@ -4,6 +4,22 @@ $is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
 
 // If the server is localhost, include 'photo_abcd_A' in the base URL
 $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A/' : '/');
+
+if (isset($_SESSION['current_user_email'])) {
+    $userImgDir = "images/users/".$_SESSION['current_user_email'];
+    $userImg = @scandir($userImgDir);
+    if ($userImg != false) {
+        $userImg = $userImgDir."/".array_values(array_diff($userImg, array('..', '.')))[0];
+    } else {
+        $userImg = "images/blankicon.jpg";
+    }
+    $widget_name = $_SESSION['current_user_first_name'];
+
+} else {
+    $userImg = "images/blankicon.jpg";
+    $widget_name = "Guest";
+}
+
 ?>
 
 <header>
@@ -67,17 +83,25 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
                     <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php">About Us</a>
                 </li>
 
-                <li class="nav-item">
-                    <a id='log-button' class="nav-link"></a>
-                </li>
-
             </ul>
+        </div>
+
+        <div class="user-widget">
+            
+            <div class="user-links">
+                <h4><?=$widget_name?></h4>
+                <a id='log-button'></a>
+                <a id="settings">Settings</a>
+            </div>
+            
+            <div class="profile-image">
+                <img src=<?=$userImg?> alt="userImage">
+            </div>
+            
         </div>
 
     </div>
 </header>
-
-
 
 <?php 
     include "login-register_modal.php";
@@ -88,25 +112,26 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
     }
 ?>
 
-
 <script>
-log_button = document.getElementById('log-button');
+    log_button = document.getElementById('log-button');
+    settings_button = document.getElementById('settings');
 
-type = '<?php print $type;?>'
+    type = '<?=$type?>';
 
-switch (type) {
-    case 'login':
-        log_button.innerHTML = 'Login';
-        log_button.href = "#";
-        log_button.setAttribute('data-bs-toggle', "modal");
-        log_button.setAttribute('data-bs-target', "#login_modal");
-        break;
+    switch (type) {
+        case 'login':
+            log_button.innerHTML = 'Login';
+            log_button.href = "#";
+            log_button.setAttribute('data-bs-toggle', "modal");
+            log_button.setAttribute('data-bs-target', "#login_modal");
+            settings_button.remove();
+            break;
 
-    case 'logout':
-        log_button.innerHTML = 'Logout';
-        log_button.href = "actions/logout.php";
-        log_button.removeAttribute('data-bs-toggle');
-        log_button.removeAttribute('data-bs-target');
-        break;
-}
+        case 'logout':
+            log_button.innerHTML = 'Logout';
+            log_button.href = "actions/logout.php";
+            log_button.removeAttribute('data-bs-toggle');
+            log_button.removeAttribute('data-bs-target');
+            break;
+    }
 </script>

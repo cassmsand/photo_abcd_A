@@ -1,7 +1,8 @@
 .main-header {
     padding: 2rem;
-    padding-left: 80px;
-    padding-right: 80px;
+    padding-left: 60px;
+    padding-right: 60px;
+    max-height: 200px;
     margin: auto;
     margin-bottom: 2rem; 
     display: flex;
@@ -22,15 +23,9 @@
             display: block;
             max-width: 150px;
             
-            border-radius: 25%;
+            border-radius: 30px;
             padding-left: 5px;
             padding-right: 5px;
-
-            img {
-                border-radius: 25%;
-                object-fit: cover;
-                max-width: 100%;
-            }
 
             .logo-title {
                 text-align: center;
@@ -42,6 +37,52 @@
             padding-left: 10px; 
             padding-right: 10px; 
             margin-top: 5px;
+        }
+    }
+
+    .user-widget {
+        display: flex; 
+        flex-wrap: nowrap;
+        flex-direction: row;
+        align-content: center;
+        min-width: 300px;
+        min-height: 125px;
+        max-width: 300px;
+        max-height: 125px;
+        background-color: white;
+        border-radius: 30px;
+
+        .profile-image {
+            max-width: 125px;
+            img {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+        }
+
+        .user-links {
+            margin: 0;
+            display: flex; 
+            flex-wrap: wrap;
+            flex-direction: column;
+            max-width: 175px;
+            min-width: 175px;
+            align-content: center;
+            * {
+                margin: 0;
+                display: flex;
+                flex-wrap: nowrap;
+                flex-direction: row;
+                max-width: inherit;
+                min-width: 175px;
+                text-align: center;
+                justify-content: center;
+            }
+
+            h4 {
+                padding:5px;
+                border-bottom: 1px solid grey;
+            }
         }
     }
 
@@ -64,6 +105,12 @@
         font-size: 1.2rem; 
         padding: 10px 20px; 
         text-align: center;
+    }
+
+    img {
+        border-radius: 30px;
+        object-fit: cover;
+        max-width: 100%;
     }
     
 }
