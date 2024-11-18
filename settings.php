@@ -30,6 +30,7 @@ if (isset($_SESSION['current_user_email'])) {
         <?php include("includes/top-bar.php");?>
         <h2>Settings</h2>
         <?php include("includes/user-settings.php");?>
+        <?php include("includes/settings-modals.php");?>
         <?php include("includes/footer.php");?>
     </body>
 </html>
