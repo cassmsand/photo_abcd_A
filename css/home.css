@@ -4,7 +4,6 @@
     padding-right: 60px;
     height: 300px;
     margin: auto;
-    margin-bottom: 2rem;
     display: flex;
     flex-wrap: nowrap;
     background-image: url('../images/banner.png');
@@ -12,6 +11,17 @@
     background-position: center;
     justify-content: center; /* Change this from space-between to center */
     align-items: center; /* Center vertically if needed */
+}
+
+body > h2 {
+    margin: 0;
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 10%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.363), rgba(0, 0, 0, 0));
+    text-align: center;
+    align-content: center;
+    color: white;
 }
 
 .logo {
