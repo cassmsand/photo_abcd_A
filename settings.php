@@ -18,6 +18,7 @@ if (isset($_SESSION['current_user_email'])) {
     $widget_name = "Guest";
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
