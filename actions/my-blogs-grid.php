@@ -1,357 +1,336 @@
-<?php
-$host = $_SERVER['HTTP_HOST'];
-$is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
+<div class="container" id="main-content">
+    <?php include('includes/sort-util-bar.php')?>
 
-// If the server is localhost, include 'photo_abcd_A' in the base URL
-$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A/' : '/');
-$blankIcon = $base_url . 'images/blankicon.jpg';
-?>
+    <div id="photosOnly">
+        <label for="P">
+    </div>
 
-<!DOCTYPE html>
-<html lang="en">
+    <!-- Posts Container for Grid -->
+    <div id="postsContainer" class="grid-container"></div>
 
-<head>
-    <link href="css/my-blogs-grid.css" rel="stylesheet" type="text/css">
-</head>
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal" style="display: none;">
+        <!-- Initially hidden -->
+        <div class="modal-content">
+            <span id="closeModal" style="cursor: pointer;">&times;</span>
+            <h2>Edit Blog Post</h2>
 
-<body>
-    <section>
-        <div class="container" id="main-content">
+            <input type="hidden" id="blogId"> <!-- Hidden input for blog ID -->
 
-            <!-- Search Form -->
-            <div id="searchContainer">
-                <input type="text" id="searchInput" placeholder="Search by title...">
-                <label for="startDate">Sort by creation date:</label>
-                <input type="date" id="startDate" placeholder="Start Date" style="margin-left: 5px;">
-                <span class="date-range-separator">to</span>
-                <input type="date" id="endDate" placeholder="End Date">
-                <button id="searchButton">Search</button>
+            <label for="title">Title:</label>
+            <input type="text" id="editTitle" required placeholder="Enter blog title"><br>
+
+            <label for="description">Description:</label>
+            <textarea id="editDescription" required placeholder="Enter blog description"></textarea><br>
+
+            <label for="eventDate">Event Date:</label>
+            <input type="date" id="eventDate" required><br>
+
+            <label for="privacyFilter">Privacy Filter:</label>
+            <select id="privacyFilter" name="privacyFilter">
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+            </select><br>
+
+            <input type="hidden" id="creatorEmail"> <!-- Hidden input for creator email -->
+            <input type="hidden" id="creationDate"> <!-- Hidden input for creation date -->
+
+            <div id="photoGallery">
+                <button id="prevPhoto" class="photo-nav-button" style="display:none;">&#10094;</button>
+                <img id="photoDisplay" src="" alt="Blog Photo" class="photo-display" />
+                <button id="nextPhoto" class="photo-nav-button">&#10095;</button>
             </div>
 
-            <div id="sortContainer">
-                <label for="sortOrder">Display:</label>
-                <select id="sortOrder">
-                    <option value="asc">Alphabetically (A-Z)</option>
-                    <option value="desc">Alphabetically (Z-A)</option>
-                    <option value="date_asc">Event Date (Oldest to Newest)</option>
-                    <option value="date_des">Event Date (Newest to Oldest)</option>
-                </select>
-            </div>
+            <label for="photoUpload">Upload Photo:</label>
+            <input type="file" id="photoUpload" name="photoUpload"><br>
 
-            <div id="photosOnly">
-                <label for="P"
-            </div>
+            <button id="saveButton">Save</button>
+        </div>
+    </div>
 
-            <!-- Posts Container for Grid -->
-            <div id="postsContainer" class="grid-container"></div>
+    <script>
+    const baseUrl = '<?php echo $base_url; ?>';
 
-            <!-- Edit Modal -->
-            <div id="editModal" class="modal" style="display: none;"> <!-- Initially hidden -->
-                <div class="modal-content">
-                    <span id="closeModal" style="cursor: pointer;">&times;</span>
-                    <h2>Edit Blog Post</h2>
-                    
-                    <input type="hidden" id="blogId"> <!-- Hidden input for blog ID -->
-                    
-                    <label for="title">Title:</label>
-                    <input type="text" id="editTitle" required placeholder="Enter blog title"><br>
+    const fetchBlogs = (actionType, title = '', startDate = '', endDate = '', sortOrder = 'asc') => {
+        fetch(
+                `actions/${actionType}.php?title=${title}&start_date=${startDate}&end_date=${endDate}&sort_order=${sortOrder}`
+            )
+            .then(response => response.json())
+            .then(blogPosts => {
+                const postsContainer = document.getElementById('postsContainer');
+                postsContainer.innerHTML = ''; // Clear previous posts
 
-                    <label for="description">Description:</label>
-                    <textarea id="editDescription" required placeholder="Enter blog description"></textarea><br>
+                if (blogPosts.message) {
+                    const noResultsMessage = document.createElement('p');
+                    noResultsMessage.textContent = blogPosts.message; // "No matching blogs found"
+                    noResultsMessage.className = 'no-results-message';
+                    postsContainer.appendChild(noResultsMessage);
+                    return;
+                }
 
-                    <label for="eventDate">Event Date:</label>
-                    <input type="date" id="eventDate" required><br>
-
-                    <label for="privacyFilter">Privacy Filter:</label>
-                    <select id="privacyFilter" name ="privacyFilter">
-                        <option value="public">Public</option>
-                        <option value="private">Private</option>
-                    </select><br>
-
-                    <input type="hidden" id="creatorEmail"> <!-- Hidden input for creator email -->
-                    <input type="hidden" id="creationDate"> <!-- Hidden input for creation date -->
-
-                    <div id="photoGallery">
-                    <button id="prevPhoto" class="photo-nav-button" style="display:none;">&#10094;</button>
-                    <img id="photoDisplay" src="" alt="Blog Photo" class="photo-display" />
-                    <button id="nextPhoto" class="photo-nav-button">&#10095;</button>
-                    </div>
-
-                    <label for="photoUpload">Upload Photo:</label>
-                    <input type="file" id="photoUpload" name="photoUpload"><br>
-
-                    <button id="saveButton">Save</button>
-                </div>
-            </div>
-
-            <script>
-                const baseUrl = '<?php echo $base_url; ?>';
-
-                const fetchBlogs = (actionType, title = '', startDate = '', endDate = '', sortOrder = 'asc') => {
-                    fetch(`actions/${actionType}.php?title=${title}&start_date=${startDate}&end_date=${endDate}&sort_order=${sortOrder}`)
-                        .then(response => response.json())
-                        .then(blogPosts => {
-                            const postsContainer = document.getElementById('postsContainer');
-                            postsContainer.innerHTML = ''; // Clear previous posts
-
-                            if (blogPosts.message) {
-                                const noResultsMessage = document.createElement('p');
-                                noResultsMessage.textContent = blogPosts.message; // "No matching blogs found"
-                                noResultsMessage.className = 'no-results-message';
-                                postsContainer.appendChild(noResultsMessage);
-                                return;
-                            }
-
-                            blogPosts.forEach(post => {
-                                // set path to the newly uploaded image first
-                                var path = baseUrl + `images/${post.blog_id}/${post.images[0]}`;
-                                // if the newly uploaded image is gone, resort to default
-                                if (post.images.length <= 0){
-                                    path = baseUrl + "images/photoABCDLogo.png";
-                                }
-                                const blogContainer = document.createElement('div');
-                                blogContainer.className = 'blog-container';
-
-                                const blogUserContainer = document.createElement('div');
-                                blogUserContainer.className = 'blog-user-container';
-
-                                const userImage = document.createElement('img');
-                                userImage.src = baseUrl + 'images/blankicon.jpg';
-                                userImage.alt = 'User Image';
-                                userImage.className = 'blog-user-image';
-
-                                const username = document.createElement('p');
-                                username.className = 'blog-username';
-                                username.textContent = post.creator_email;
-
-                                const creationDate = document.createElement('p');
-                                creationDate.className = 'blog-creation-date';
-                                const creationDateObject = new Date(post.creation_date);
-                                creationDate.textContent = creationDateObject.toLocaleDateString() + ' ' + creationDateObject.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-                                const blogTitle = document.createElement('h2');
-                                blogTitle.className = 'blog-title';
-                                blogTitle.textContent = post.title;
-                                
-                                const img = document.createElement('img');
-                                img.src = path;
-                                img.alt = 'Blog Image';
-                                img.className = 'blog-photo';
-
-                                const blogDescription = document.createElement('p');
-                                blogDescription.className = 'blog-description';
-                                blogDescription.textContent = post.description;
-
-                                // Create dropdown for edit/delete options
-                                const optionsDropdown = document.createElement('div');
-                                optionsDropdown.className = 'dropdown';
-
-                                const optionsButton = document.createElement('button');
-                                optionsButton.className = 'options-button';
-                                optionsButton.innerHTML = '▼'; // Down caret
-
-                                const dropdownContent = document.createElement('div');
-                                dropdownContent.className = 'dropdown-content';
-                                
-                                const editLink = document.createElement('a');
-                                editLink.href = '#';
-                                editLink.textContent = 'Edit';
-                                editLink.onclick = (e) => {
-                                    e.preventDefault();
-                                    openEditModal(post); // Open the modal with the current post data
-                                };
-
-                                const deleteLink = document.createElement('a');
-                                deleteLink.href = '#'; // Link to delete functionality
-                                deleteLink.textContent = 'Delete';
-                                deleteLink.onclick = (e) => {
-                                    e.preventDefault();
-                                    // Confirmation dialog
-                                    if (confirm('Are you sure you want to delete this blog post?')) {
-                                        deleteBlog(post.blog_id, post.creator_email, post.title, post.description);
-                                    }
-                                };
-
-                                dropdownContent.appendChild(editLink);
-                                dropdownContent.appendChild(deleteLink);
-                                optionsDropdown.appendChild(optionsButton);
-                                optionsDropdown.appendChild(dropdownContent);
-
-                                // Append elements to blogContainer
-                                blogUserContainer.appendChild(userImage);
-                                blogUserContainer.appendChild(username);
-                                blogUserContainer.appendChild(creationDate);
-                                blogContainer.appendChild(blogUserContainer);
-                                blogContainer.appendChild(blogTitle);
-                                blogContainer.appendChild(img);
-                                blogContainer.appendChild(blogDescription);
-                                // blogContainer.appendChild(eventDate); // Removed event date
-                                blogContainer.appendChild(optionsDropdown); // Add dropdown to blogContainer
-                                postsContainer.appendChild(blogContainer);
-
-                            });
-                        })
-                        .catch(error => console.error('Error fetching blog posts:', error));
-                };
-
-
-                fetchBlogs('get-my-blogs');       
-
-                document.getElementById('searchButton').addEventListener('click', () => {
-                    const title = document.getElementById('searchInput').value;
-                    const startDate = document.getElementById('startDate').value;
-                    const endDate = document.getElementById('endDate').value;
-                    const sortOrder = document.getElementById('sortOrder').value;
-                    fetchBlogs('get-my-blogs', title, startDate, endDate, sortOrder);
-                });
-
-                document.getElementById('searchInput').addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter') {
-                        event.preventDefault();
-                        const title = document.getElementById('searchInput').value;
-                        const startDate = document.getElementById('startDate').value;
-                        const endDate = document.getElementById('endDate').value;
-                        const sortOrder = document.getElementById('sortOrder').value;
-                        fetchBlogs('get-my-blogs', title, startDate, endDate, sortOrder);
+                blogPosts.forEach(post => {
+                    // set path to the newly uploaded image first
+                    var path = baseUrl + `images/${post.blog_id}/${post.images[0]}`;
+                    // if the newly uploaded image is gone, resort to default
+                    if (post.images.length <= 0) {
+                        path = baseUrl + "images/photoABCDLogo.png";
                     }
-                });
+                    const blogContainer = document.createElement('div');
+                    blogContainer.className = 'blog-container';
 
-                document.getElementById('sortOrder').addEventListener('change', () => {
-                    const title = document.getElementById('searchInput').value;
-                    const startDate = document.getElementById('startDate').value;
-                    const endDate = document.getElementById('endDate').value;
-                    const sortOrder = document.getElementById('sortOrder').value;
-                    fetchBlogs('get-my-blogs', title, startDate, endDate, sortOrder);
-                });
+                    const blogUserContainer = document.createElement('div');
+                    blogUserContainer.className = 'blog-user-container';
 
-                document.addEventListener('DOMContentLoaded', () => {
-                    // Toggle the dropdown menu visibility when the button is clicked
-                    document.addEventListener('click', function (event) {
-                        // Get all dropdowns
-                        const dropdowns = document.querySelectorAll('.dropdown-content');
-                        
-                        // Close all dropdowns if the click is outside
-                        dropdowns.forEach(dropdown => {
-                            if (!dropdown.parentElement.contains(event.target)) {
-                                dropdown.style.display = 'none';
-                            }
+                    const userImage = document.createElement('img');
+                    userImage.src = baseUrl + 'images/blankicon.jpg';
+                    userImage.alt = 'User Image';
+                    userImage.className = 'blog-user-image';
+
+                    const username = document.createElement('p');
+                    username.className = 'blog-username';
+                    username.textContent = post.creator_email;
+
+                    const creationDate = document.createElement('p');
+                    creationDate.className = 'blog-creation-date';
+                    const creationDateObject = new Date(post.creation_date);
+                    creationDate.textContent = creationDateObject.toLocaleDateString() + ' ' +
+                        creationDateObject.toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit'
                         });
 
-                        // If the clicked element is the dropdown button, toggle its dropdown
-                        const optionsButton = event.target.closest('.options-button');
-                        if (optionsButton) {
-                            const dropdownContent = optionsButton.nextElementSibling;
-                            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+                    const blogTitle = document.createElement('h2');
+                    blogTitle.className = 'blog-title';
+                    blogTitle.textContent = post.title;
+
+                    const img = document.createElement('img');
+                    img.src = path;
+                    img.alt = 'Blog Image';
+                    img.className = 'blog-photo';
+
+                    const blogDescription = document.createElement('p');
+                    blogDescription.className = 'blog-description';
+                    blogDescription.textContent = post.description;
+
+                    // Create dropdown for edit/delete options
+                    const optionsDropdown = document.createElement('div');
+                    optionsDropdown.className = 'dropdown';
+
+                    const optionsButton = document.createElement('button');
+                    optionsButton.className = 'options-button';
+                    optionsButton.innerHTML = '▼'; // Down caret
+
+                    const dropdownContent = document.createElement('div');
+                    dropdownContent.className = 'dropdown-content';
+
+                    const editLink = document.createElement('a');
+                    editLink.href = '#';
+                    editLink.textContent = 'Edit';
+                    editLink.onclick = (e) => {
+                        e.preventDefault();
+                        openEditModal(post); // Open the modal with the current post data
+                    };
+
+                    const deleteLink = document.createElement('a');
+                    deleteLink.href = '#'; // Link to delete functionality
+                    deleteLink.textContent = 'Delete';
+                    deleteLink.onclick = (e) => {
+                        e.preventDefault();
+                        // Confirmation dialog
+                        if (confirm('Are you sure you want to delete this blog post?')) {
+                            deleteBlog(post.blog_id, post.creator_email, post.title, post
+                                .description);
                         }
-                    });
+                    };
+
+                    dropdownContent.appendChild(editLink);
+                    dropdownContent.appendChild(deleteLink);
+                    optionsDropdown.appendChild(optionsButton);
+                    optionsDropdown.appendChild(dropdownContent);
+
+                    // Append elements to blogContainer
+                    blogUserContainer.appendChild(userImage);
+                    blogUserContainer.appendChild(username);
+                    blogUserContainer.appendChild(creationDate);
+                    blogContainer.appendChild(blogUserContainer);
+                    blogContainer.appendChild(blogTitle);
+                    blogContainer.appendChild(img);
+                    blogContainer.appendChild(blogDescription);
+                    // blogContainer.appendChild(eventDate); // Removed event date
+                    blogContainer.appendChild(optionsDropdown); // Add dropdown to blogContainer
+                    postsContainer.appendChild(blogContainer);
+
                 });
+            })
+            .catch(error => console.error('Error fetching blog posts:', error));
+    };
 
-                const openEditModal = (post) => {
-                    document.getElementById('editModal').style.display = 'block';
 
-                    console.log("Opening modal for post:", post); // Debug log
+    fetchBlogs('get-my-blogs');
 
-                    // Populate the fields with the existing data from the post object
-                    document.getElementById('blogId').value = post.blog_id; // Should be defined
-                    document.getElementById("editTitle").value = post.title; // Auto-fill title with current title
-                    document.getElementById("editDescription").value = post.description; // Auto-fill description with current description
-                    document.getElementById('privacyFilter').value = post.privacy_filter; // Set privacy filter value
+    document.getElementById('searchButton').addEventListener('click', () => {
+        const title = document.getElementById('searchInput').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const sortOrder = document.getElementById('sortOrder').value;
+        fetchBlogs('get-my-blogs', title, startDate, endDate, sortOrder);
+    });
 
-                    document.getElementById('creatorEmail').value = post.creator_email; // Populate creator email
-                    document.getElementById('eventDate').value = post.event_date; // Populate event date
-                    document.getElementById('creationDate').value = post.creation_date; // Populate creation date
+    document.getElementById('searchInput').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const title = document.getElementById('searchInput').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const sortOrder = document.getElementById('sortOrder').value;
+            fetchBlogs('get-my-blogs', title, startDate, endDate, sortOrder);
+        }
+    });
 
-                    // Set up photo gallery
-                    const photos = post.images || []; // If no photos, use empty array
-                    let currentPhotoIndex = 0; // Default to the first photo
-                    
-                    // Function to update the displayed photo
-                    const updatePhotoDisplay = () => {
-                        const photoDisplay = document.getElementById('photoDisplay');
-                        if (photos.length > 0) {
-                            photoDisplay.src = baseUrl + `images/${post.blog_id}/${photos[currentPhotoIndex]}`;
-                        } else {
-                            photoDisplay.src = baseUrl + 'images/photoABCDLogo.png'; // Default photo if no images
-                        }
-                        // Show or hide navigation buttons based on the current photo index
-                        document.getElementById('prevPhoto').style.display = currentPhotoIndex > 0 ? 'inline-block' : 'none';
-                        document.getElementById('nextPhoto').style.display = currentPhotoIndex < photos.length - 1 ? 'inline-block' : 'none';
-                    };
+    document.getElementById('sortOrder').addEventListener('change', () => {
+        const title = document.getElementById('searchInput').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const sortOrder = document.getElementById('sortOrder').value;
+        fetchBlogs('get-my-blogs', title, startDate, endDate, sortOrder);
+    });
 
-                    updatePhotoDisplay();
+    document.addEventListener('DOMContentLoaded', () => {
+        // Toggle the dropdown menu visibility when the button is clicked
+        document.addEventListener('click', function(event) {
+            // Get all dropdowns
+            const dropdowns = document.querySelectorAll('.dropdown-content');
 
-                    // Next and previous photo navigation
-                    document.getElementById('prevPhoto').onclick = () => {
-                        if (currentPhotoIndex > 0) {
-                            currentPhotoIndex--;
-                            updatePhotoDisplay();
-                        }
-                    };
+            // Close all dropdowns if the click is outside
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.parentElement.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
 
-                    document.getElementById('nextPhoto').onclick = () => {
-                        if (currentPhotoIndex < photos.length - 1) {
-                            currentPhotoIndex++;
-                            updatePhotoDisplay();
-                        }
-                    };
-                };
+            // If the clicked element is the dropdown button, toggle its dropdown
+            const optionsButton = event.target.closest('.options-button');
+            if (optionsButton) {
+                const dropdownContent = optionsButton.nextElementSibling;
+                dropdownContent.style.display = dropdownContent.style.display === 'block' ?
+                    'none' : 'block';
+            }
+        });
+    });
 
-                
+    const openEditModal = (post) => {
+        document.getElementById('editModal').style.display = 'block';
 
-                document.getElementById('closeModal').onclick = () => {
-                        document.getElementById('editModal').style.display = 'none';
-                    };
+        console.log("Opening modal for post:", post); // Debug log
 
-                
-                document.getElementById('saveButton').onclick = () => {
-                    event.preventDefault();
+        // Populate the fields with the existing data from the post object
+        document.getElementById('blogId').value = post.blog_id; // Should be defined
+        document.getElementById("editTitle").value = post.title; // Auto-fill title with current title
+        document.getElementById("editDescription").value = post
+            .description; // Auto-fill description with current description
+        document.getElementById('privacyFilter').value = post.privacy_filter; // Set privacy filter value
 
-                    const blogId = document.getElementById('blogId').value;
-                    var title = document.getElementById('editTitle').value;
-                    var description = document.getElementById('editDescription').value;
-                    const privacyFilter = document.getElementById('privacyFilter').value;
-                    const creatorEmail = document.getElementById('creatorEmail').value;
-                    const eventDate = document.getElementById('eventDate').value;
-                    const creationDate = document.getElementById('creationDate').value;
+        document.getElementById('creatorEmail').value = post.creator_email; // Populate creator email
+        document.getElementById('eventDate').value = post.event_date; // Populate event date
+        document.getElementById('creationDate').value = post.creation_date; // Populate creation date
 
-                    // ensure new title doesnt start with symbol
-                    // to validate the title of blog
-                    console.log(description);
-                    console.log(title);
-                    if(isFieldEmpty()){
-                        alert('Title and Description cannot be empty!');
-                    }
-                    else if(!checkTitle()){
-                        alert('Title must start with a letter or number only.');
-                    }
-                    else if(eventDateNull()){
-                        alert('Event must have a date');
-                    }
+        // Set up photo gallery
+        const photos = post.images || []; // If no photos, use empty array
+        let currentPhotoIndex = 0; // Default to the first photo
 
-                    else {
-                        fetch(`actions/update-blog.php`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ blogId, title, description, privacyFilter, creatorEmail, eventDate, creationDate }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Response from server:", data); // Debug log
-                        if (data.success) {
-                            alert('Blog post info updated successfully!');
-                            fetchBlogs('get-my-blogs'); // Reload blogs
+        // Function to update the displayed photo
+        const updatePhotoDisplay = () => {
+            const photoDisplay = document.getElementById('photoDisplay');
+            if (photos.length > 0) {
+                photoDisplay.src = baseUrl + `images/${post.blog_id}/${photos[currentPhotoIndex]}`;
+            } else {
+                photoDisplay.src = baseUrl + 'images/photoABCDLogo.png'; // Default photo if no images
+            }
+            // Show or hide navigation buttons based on the current photo index
+            document.getElementById('prevPhoto').style.display = currentPhotoIndex > 0 ?
+                'inline-block' : 'none';
+            document.getElementById('nextPhoto').style.display = currentPhotoIndex < photos.length - 1 ?
+                'inline-block' : 'none';
+        };
 
-                            // Photo upload handling
-                            const photoUpload = document.getElementById('photoUpload').files[0];
-                            if (photoUpload) {
-                                const formData = new FormData();
-                                formData.append('photo', photoUpload); 
-                                formData.append('blog_id', blogId);   
+        updatePhotoDisplay();
 
-                                // Upload the photo
-                                fetch('actions/upload-photo.php', {
+        // Next and previous photo navigation
+        document.getElementById('prevPhoto').onclick = () => {
+            if (currentPhotoIndex > 0) {
+                currentPhotoIndex--;
+                updatePhotoDisplay();
+            }
+        };
+
+        document.getElementById('nextPhoto').onclick = () => {
+            if (currentPhotoIndex < photos.length - 1) {
+                currentPhotoIndex++;
+                updatePhotoDisplay();
+            }
+        };
+    };
+
+
+
+    document.getElementById('closeModal').onclick = () => {
+        document.getElementById('editModal').style.display = 'none';
+    };
+
+
+    document.getElementById('saveButton').onclick = () => {
+        event.preventDefault();
+
+        const blogId = document.getElementById('blogId').value;
+        var title = document.getElementById('editTitle').value;
+        var description = document.getElementById('editDescription').value;
+        const privacyFilter = document.getElementById('privacyFilter').value;
+        const creatorEmail = document.getElementById('creatorEmail').value;
+        const eventDate = document.getElementById('eventDate').value;
+        const creationDate = document.getElementById('creationDate').value;
+
+        // ensure new title doesnt start with symbol
+        // to validate the title of blog
+        console.log(description);
+        console.log(title);
+        if (isFieldEmpty()) {
+            alert('Title and Description cannot be empty!');
+        } else if (!checkTitle()) {
+            alert('Title must start with a letter or number only.');
+        } else if (eventDateNull()) {
+            alert('Event must have a date');
+        } else {
+            fetch(`actions/update-blog.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        blogId,
+                        title,
+                        description,
+                        privacyFilter,
+                        creatorEmail,
+                        eventDate,
+                        creationDate
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Response from server:", data); // Debug log
+                    if (data.success) {
+                        alert('Blog post info updated successfully!');
+                        fetchBlogs('get-my-blogs'); // Reload blogs
+
+                        // Photo upload handling
+                        const photoUpload = document.getElementById('photoUpload').files[0];
+                        if (photoUpload) {
+                            const formData = new FormData();
+                            formData.append('photo', photoUpload);
+                            formData.append('blog_id', blogId);
+
+                            // Upload the photo
+                            fetch('actions/upload-photo.php', {
                                     method: 'POST',
                                     body: formData
                                 })
@@ -364,87 +343,79 @@ $blankIcon = $base_url . 'images/blankicon.jpg';
                                     }
                                 })
                                 .catch(error => console.error('Error uploading photo:', error));
-                            }
-
-
-                            document.getElementById('editModal').style.display = 'none'; // Close modal
-                        } else {
-                            alert('Failed to update blog post: ' + data.message);
                         }
-                    })
-                    .catch(error => console.error('Error updating blog post:', error));
 
+
+                        document.getElementById('editModal').style.display = 'none'; // Close modal
+                    } else {
+                        alert('Failed to update blog post: ' + data.message);
                     }
+                })
+                .catch(error => console.error('Error updating blog post:', error));
+
+        }
 
 
-                    function eventDateNull(){
-                        if (eventDate === ''){
-                            return true;
-                        }else{
-                            return false;
-                        }
-                    }
-                    
-                    
-                    function isFieldEmpty(){
-                        if (title === '' || description === ''){
-                            return true;
-                        }else{
-                            return false;
-                        }
-
-                    }
-
-                    function checkTitle(){
-                        
-                        if (!/^[a-zA-Z0-9].*/.test(title.trim()[0])){
-                            
-                            return false;
-                            
-                          }
-                        else{
-                            return true;
-                        }
-                        
-                    }
-
-                   
-                };
-
-                
-                const deleteBlog = (blogId, creatorEmail, title, description) => {
-                    fetch(`actions/delete-blog.php`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            blogId,
-                            creatorEmail,
-                            title,
-                            description,
-                            deleteBlog: 'yes', // Flag to indicate deletion
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Response from server:", data); // Debug log
-                        if (data.success) {
-                            alert('Blog post deleted successfully!');
-                            // Reload the posts to reflect changes
-                            fetchBlogs('get-my-blogs');
-                        } else {
-                            alert('Failed to delete blog post: ' + data.message);
-                        }
-                    })
-                    .catch(error => console.error('Error deleting blog post:', error));
-                };
+        function eventDateNull() {
+            if (eventDate === '') {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
 
-            </script>
-        </div>
-    </section>
-</body>
-</html>
+        function isFieldEmpty() {
+            if (title === '' || description === '') {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+        function checkTitle() {
+
+            if (!/^[a-zA-Z0-9].*/.test(title.trim()[0])) {
+
+                return false;
+
+            } else {
+                return true;
+            }
+
+        }
 
 
+    };
+
+
+    const deleteBlog = (blogId, creatorEmail, title, description) => {
+        fetch(`actions/delete-blog.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    blogId,
+                    creatorEmail,
+                    title,
+                    description,
+                    deleteBlog: 'yes', // Flag to indicate deletion
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Response from server:", data); // Debug log
+                if (data.success) {
+                    alert('Blog post deleted successfully!');
+                    // Reload the posts to reflect changes
+                    fetchBlogs('get-my-blogs');
+                } else {
+                    alert('Failed to delete blog post: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error deleting blog post:', error));
+    };
+    </script>
+</div>

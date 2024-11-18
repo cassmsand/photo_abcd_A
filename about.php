@@ -5,9 +5,8 @@ session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<?php include("includes/head-tag-contents.php");?>
-
 <head>
+    <?php include("includes/head-tag-contents.php");?>
     <link rel="stylesheet" href="css/about.css">
 </head>
 
