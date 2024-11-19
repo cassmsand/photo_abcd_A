@@ -23,10 +23,10 @@ if (isset($_SESSION['current_user_email'])) {
 ?>
 
 <header>
-    <link rel="stylesheet" href="css/home.css">
     <div class="main-header">
 
         <div class="logo">
+            
             <div class="logo-img">
                 <img src="images/photoABCDLogo.png" alt="Photo ABCD Logo">
             </div>
@@ -43,6 +43,8 @@ if (isset($_SESSION['current_user_email'])) {
                         </span>
                     </h1>
                 </span>
+            </div>
+
         </div>
         
         <div class="nav-bar">
