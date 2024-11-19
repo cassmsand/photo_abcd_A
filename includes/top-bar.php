@@ -25,8 +25,8 @@ if (isset($_SESSION['current_user_email'])) {
 <header>
     <div class="main-header">
 
+
         <div class="logo">
-            
             <div class="logo-img">
                 <img src="images/photoABCDLogo.png" alt="Photo ABCD Logo">
             </div>
@@ -44,9 +44,9 @@ if (isset($_SESSION['current_user_email'])) {
                     </h1>
                 </span>
             </div>
-
         </div>
         
+
         <div class="nav-bar">
             <ul class="nav nav-pills">
                 <li class="nav-item">
@@ -76,8 +76,9 @@ if (isset($_SESSION['current_user_email'])) {
             </ul>
         </div>
         
+
+
         <div class="user-widget">
-            
             <div class="user-links">
                 <h4><?=$widget_name?></h4>
                 <a id='log-button'></a>
@@ -87,9 +88,10 @@ if (isset($_SESSION['current_user_email'])) {
             <div class="profile-image">
                 <img src=<?=$userImg?> alt="userImage">
             </div>
-            
         </div>
 
+
+        
     </div>
 </header>
 
