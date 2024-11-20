@@ -43,34 +43,7 @@ if (isset($_POST['new-register'])) {
                 // If on a local server, use the relative path to the default blank icon
                 $_SESSION['user_img'] = "/photo_abcd_A/images/blankicon.jpg";
             } else {
-                // Set the most recent profile photo as the user's profile image
-                $userDir = $_SERVER['DOCUMENT_ROOT'] . "/images/users/" . $email;
-                if (is_dir($userDir)) {
-                    $files = array_diff(scandir($userDir), array('.', '..'));
-                    
-                    if (!empty($files)) {
-                        // Find the most recent file (based on last modified time)
-                        $mostRecentFile = null;
-                        $mostRecentTime = 0;
-
-                        foreach ($files as $file) {
-                            $filePath = $userDir . "/" . $file;
-                            // Get the last modified time of the file
-                            $fileTime = filemtime($filePath);
-
-                            // Update if this file is more recent
-                            if ($fileTime > $mostRecentTime) {
-                                $mostRecentFile = $file;
-                                $mostRecentTime = $fileTime;
-                            }
-                        }
-
-                        // If a file was found, set the session to point to it
-                        if ($mostRecentFile) {
-                            $_SESSION['user_img'] = "/images/users/" . $email . "/" . $mostRecentFile;
-                        }
-                    }
-                }
+                $_SESSION['user_img'] = "/images/blankicon.jpg";
             }
 
             $conn->close();
