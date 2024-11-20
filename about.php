@@ -105,22 +105,18 @@ session_start();
 
             <div class="container about-bar" id="left">
                 <div class="container image-container">
-                    <img class='img-fluid' src="images/about/samp5.jpg" alt="team image">
+                    <img class='img-fluid' src="images/about/logan.jpg" alt="team image">
                 </div>
 
                 <div class="container">
                     <div class="about-header">
-                        <h1>Darryl Mathews</h1>
+                        <h1>Logan Johansson</h1>
                     </div>
                     <div class="container about-content">
                         <p>
-                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                            unknown
-                            printer took a galley of type and scrambled it to make a type specimen book. It has survived
-                            not only five centuries, but also the leap into electronic typesetting, remaining
-                            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-                            containing Lorem Ipsum passages, and more recently with desktop publishing software like
-                            Aldus PageMaker including versions of Lorem Ipsum.
+                        Logan was born in Wisconsin and attended UW-Madison majoring in Biology. Logan moved to Minnesota nearly 10 years ago to pursue a career opportunity, and has been 
+                        residing in the state ever since. After gaining valuable experience in the workforce, Logan decided to further his education and pursue a bachelor's degree in Computer Science at 
+                        Metropolitan State University. Logan is set to graduate in December 2024 and is excited to continue building his career in the tech field.
                         </p>
                     </div>
                 </div>
