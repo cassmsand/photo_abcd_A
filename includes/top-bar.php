@@ -5,21 +5,6 @@ $is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
 // If the server is localhost, include 'photo_abcd_A' in the base URL
 $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A/' : '/');
 
-if (isset($_SESSION['current_user_email'])) {
-    $userImgDir = "images/users/".$_SESSION['current_user_email'];
-    $userImg = @scandir($userImgDir);
-    if ($userImg != false) {
-        $userImg = $userImgDir."/".array_values(array_diff($userImg, array('..', '.')))[0];
-    } else {
-        $userImg = "images/blankicon.jpg";
-    }
-    $widget_name = $_SESSION['current_user_first_name'];
-
-} else {
-    $userImg = "images/blankicon.jpg";
-    $widget_name = "Guest";
-}
-
 ?>
 
 <header>
@@ -73,24 +58,29 @@ if (isset($_SESSION['current_user_email'])) {
                 <li class="nav-item">
                     <a class="nav-link <?php if ($CURRENT_PAGE == "About") {?>active<?php }?>" href="about.php">About Us</a>
                 </li>
+
+                <?php if (!isset($_SESSION['current_user_email'])): ?>
+                    <li class="nav-item">
+                            <a id='log-button' class="nav-link"></a>
+                    </li> 
+                <?php endif; ?>
             </ul>
         </div>
         
 
-
-        <div class="user-widget">
-            <div class="user-links">
-                <h4><?=$widget_name?></h4>
-                <a id='log-button'></a>
-                <a id="settings" href="settings.php">Settings</a>
+        <?php if (isset($_SESSION['current_user_email'])): ?>
+            <div class="user-widget">
+                <div class="user-links">
+                    <h4><?=$_SESSION['current_user_first_name']?></h4>
+                    <a id='log-button'></a>
+                    <a id="settings" href="settings.php">Settings</a>
+                </div>
+                
+                <div class="profile-image">
+                    <img src=<?=$_SESSION['user_img']?> alt="userImage">
+                </div>
             </div>
-            
-            <div class="profile-image">
-                <img src=<?=$userImg?> alt="userImage">
-            </div>
-        </div>
-
-
+        <?php endif; ?>
         
     </div>
 </header>

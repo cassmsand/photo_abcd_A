@@ -5,7 +5,8 @@
                 <div class="section-contents">
                     <h5> Profile Photo: </h5>
                     <div class="settings-profile-photo">
-                        <img src="<?=$userImg?>" alt="userImage">
+                        <!-- Display the user's profile photo -->
+                        <img src="<?= isset($_SESSION['user_img']) ? $_SESSION['user_img'] : '/images/blankicon.jpg' ?>" alt="userImage">
                     </div>
                 </div>
                 <button class="settings-button" id="edit-profile-photo" data-bs-toggle="modal" data-bs-target="#edit-profile-photo-modal">Edit Profile Photo</button>
@@ -34,7 +35,6 @@
     </div>
 
     <script>
-        // Get elements
         const editProfilePhotoButton = document.getElementById('edit-profile-photo');
         const editFirstNameButton = document.getElementById('edit-first-name');
         const editLastNameButton = document.getElementById('edit-last-name');
@@ -78,16 +78,16 @@
             .then(data => {
                 if (data.success) {
                     alert('Profile photo updated successfully!');
+                    document.querySelector('.settings-profile-photo img').src = data.filePath;
                     location.reload();
                 } else {
-                    alert('Error updating profile photo: ' + data.message);
+                    alert('Error: ' + data.message);
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
         }
-
 
         function saveFirstNameChange(event) {
             // Prevent form submission
@@ -97,7 +97,6 @@
                 firstName: document.getElementById('first-name').value.trim()
             };
 
-            // AJAX request
             fetch('actions/update-profile/update-first-name.php', {
                 method: 'POST',
                 headers: {
@@ -127,7 +126,6 @@
                 lastName: document.getElementById('last-name').value.trim()
             };
 
-            // AJAX request
             fetch('actions/update-profile/update-last-name.php', {
                 method: 'POST',
                 headers: {
@@ -157,7 +155,6 @@
                 password: document.getElementById('password').value.trim()
             };
 
-            // AJAX request
             fetch('actions/update-profile/update-password.php', {
                 method: 'POST',
                 headers: {
@@ -178,7 +175,5 @@
                 console.error('Error:', error);
             });
         }
-
     </script>
 </body>
-
