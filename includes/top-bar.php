@@ -66,7 +66,6 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
                 <?php endif; ?>
             </ul>
         </div>
-        
 
         <?php if (isset($_SESSION['current_user_email'])): ?>
             <div class="user-widget">
@@ -75,7 +74,6 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
                     <a id='log-button'></a>
                     <a id="settings" href="settings.php">Settings</a>
                 </div>
-                
                 <div class="profile-image">
                     <img src=<?=$_SESSION['user_img']?> alt="userImage">
                 </div>
