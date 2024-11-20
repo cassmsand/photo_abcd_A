@@ -145,8 +145,10 @@ and site title & logo.
             flex-wrap: nowrap;
             max-width: 40%;
             img {
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
+                width: 100%;
+                height: auto;
+                border-radius: 20px;
+                object-fit: cover;
             }
         }
     }
