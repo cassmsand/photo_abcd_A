@@ -21,8 +21,8 @@ if (!isset($_SESSION['current_user_email'])) {
     <?php include("includes/abook.newbook.modal.php");?>
     <?php include("includes/abook.bookedit.modal.php");?>
     
+    <h2 style="text-align: center">Alphabet Book</h2>
     <div class='container' id="main-body">
-        <h2 style="text-align: center">Alphabet Book</h2>
         <div class="container" id='book-bar'>
             <div class="row" id="book-bar-row"></div>
         </div>

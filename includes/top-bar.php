@@ -81,7 +81,6 @@ $base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_l
                 </div>
             </div>
         <?php endif; ?>
-
         
     </div>
 </header>

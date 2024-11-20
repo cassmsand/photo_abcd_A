@@ -12,8 +12,8 @@ session_start();
 
 <body>
     <?php include("includes/top-bar.php");?>
-    <h2 style="width:500px; margin: 0 auto; text-align: center;">About Us</h2>
-    <section>
+    <h2>About Us</h2>
+
         <div class="container" id='main-body'>
 
             <div class="container about-bar row align-items-start" id="left">
@@ -127,7 +127,7 @@ session_start();
             </div>
 
         </div>
-    </section>
+
     <?php include("includes/footer.php");?>
 </body>
 
