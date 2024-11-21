@@ -69,7 +69,7 @@ if ($result->num_rows > 0) {
             $imageFiles = scandir($imageDir);
             foreach ($imageFiles as $file) {
                 // Only include jpg and png files
-                if (preg_match('/\.(jpg|jpeg|png)$/i', $file)) {
+                if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $file)) {
                     $images[] = $file;
                 }
                 
