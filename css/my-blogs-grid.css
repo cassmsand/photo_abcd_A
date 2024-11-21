@@ -34,7 +34,8 @@ h2 {
     height: auto;
     align-items: center;
     margin-bottom: 20px;  
-    text-align: center;  
+    text-align: center;
+    justify-content: center;
 }
 
 .photo-container img {
