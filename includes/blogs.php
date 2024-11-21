@@ -37,7 +37,6 @@ include ('view-profile-modal.php');
                         <li class="page-item"><a class="page-link" href="#">1</a></li>
                         <li class="page-item"><a class="page-link" href="#">Next</a></li>
                     </ul>
-                    <button type="button" class="btn btn-primary">Edit</button>
                 </div>
             </div>
         </div>
