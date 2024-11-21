@@ -507,8 +507,18 @@ include ('view-profile-modal.php');
         // Image Array
         const images = pair.images;
 
+
         // Image Source
-        let img_src = `${images.dir}${images.img_names[0]}`;
+        var img_src;
+
+        // define path for default image if none is uploaded
+        if (images.img_names.length === 0) {
+            img_src = 'images/photoABCDLogo.png';
+        } else {
+            img_src = `${images.dir}${images.img_names[0]}`;
+        }
+
+
 
         document.getElementById('card-modal-title').innerHTML = title;
         document.getElementById('card-modal-img').setAttribute('src', img_src);
@@ -549,11 +559,13 @@ include ('view-profile-modal.php');
                 // "Previous" button click event
                 previousButton.addEventListener('click', (event) => {
                     event.preventDefault(); // Prevent default link behavior
-                    currentImageIndex--;
-                    if (currentImageIndex < 0) {
-                        currentImageIndex = fileCount - 1; // Loop back to last image
+                    if (images.img_names.length > 1) {
+                        currentImageIndex--;
+                        if (currentImageIndex < 0) {
+                            currentImageIndex = fileCount - 1; // Loop back to last image
+                        }
+                        img_src = `${images.dir}${images.img_names[currentImageIndex]}`;
                     }
-                    img_src = `${images.dir}${images.img_names[currentImageIndex]}`;
                     document.getElementById('card-modal-img').setAttribute('src', img_src);
                     indexDisplay.textContent = currentImageIndex + 1;
                 });
@@ -561,11 +573,13 @@ include ('view-profile-modal.php');
                 // "Next" button click event
                 nextButton.addEventListener('click', (event) => {
                     event.preventDefault(); // Prevent default link behavior
-                    currentImageIndex++;
-                    if (currentImageIndex >= fileCount) {
-                        currentImageIndex = 0; // Loop back to first image
+                    if (images.img_names.length > 1) {
+                        currentImageIndex++;
+                        if (currentImageIndex >= fileCount) {
+                            currentImageIndex = 0; // Loop back to first image
+                        }
+                        img_src = `${images.dir}${images.img_names[currentImageIndex]}`;
                     }
-                    img_src = `${images.dir}${images.img_names[currentImageIndex]}`;
                     document.getElementById('card-modal-img').setAttribute('src', img_src);
                     indexDisplay.textContent = currentImageIndex + 1;
                 });
