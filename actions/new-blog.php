@@ -33,29 +33,31 @@ if (isset($_POST['create-new-blog'])) {
             // Handle multiple file uploads
             if (isset($_FILES['new-blog-images'])) {
                 $files = $_FILES['new-blog-images'];
-                $allowedSize = 1000000; // Max file size
-                $maxWidth = 1000;       // Max width for resizing
-                $maxHeight = 1000;      // Max height for resizing
+                $maxWidth = 500; // Max width for resizing
+                $maxHeight = 500; // Max height for resizing
 
                 foreach ($files['tmp_name'] as $key => $tmp_name) {
                     if ($files['error'][$key] == 0) {
                         $originalName = $files['name'][$key];
                         $finalPath = $blog_dir . '/' . $originalName;
 
-                        if ($files['size'][$key] > $allowedSize) {
-                            // Resize the image if it exceeds the size limit
+                        // Determine the file type
+                        $fileType = mime_content_type($tmp_name);
+
+                        if ($fileType === "image/gif") {
+                            // Skip resizing for GIFs, move directly
+                            if (move_uploaded_file($tmp_name, $finalPath)) {
+                                echo "Uploaded GIF: " . $originalName . "<br>";
+                            } else {
+                                echo "Failed to upload GIF: " . $originalName . "<br>";
+                            }
+                        } else {
+                            // Resize non-GIF images
                             try {
                                 resizeImage($tmp_name, $finalPath, $maxWidth, $maxHeight);
                                 echo "Resized and uploaded: " . $originalName . "<br>";
                             } catch (Exception $e) {
                                 echo "Failed to resize image: " . $originalName . ". Error: " . $e->getMessage() . "<br>";
-                            }
-                        } else {
-                            // Move the file directly if within the size limit
-                            if (move_uploaded_file($tmp_name, $finalPath)) {
-                                echo "Uploaded: " . $originalName . "<br>";
-                            } else {
-                                echo "Failed to upload file: " . $originalName . "<br>";
                             }
                         }
                     } else {
@@ -101,9 +103,6 @@ function resizeImage($sourcePath, $targetPath, $maxWidth, $maxHeight) {
         case IMAGETYPE_PNG:
             $sourceImage = imagecreatefrompng($sourcePath);
             break;
-        case IMAGETYPE_GIF:
-            $sourceImage = imagecreatefromgif($sourcePath);
-            break;
         default:
             throw new Exception("Unsupported image type.");
     }
@@ -111,9 +110,8 @@ function resizeImage($sourcePath, $targetPath, $maxWidth, $maxHeight) {
     // Create a new blank image with the new dimensions
     $newImage = imagecreatetruecolor($newWidth, $newHeight);
 
-    // Preserve transparency for PNG and GIF
-    if ($imageType == IMAGETYPE_PNG || $imageType == IMAGETYPE_GIF) {
-        imagecolortransparent($newImage, imagecolorallocatealpha($newImage, 0, 0, 0, 127));
+    // Preserve transparency for PNG
+    if ($imageType == IMAGETYPE_PNG) {
         imagealphablending($newImage, false);
         imagesavealpha($newImage, true);
     }
@@ -129,9 +127,6 @@ function resizeImage($sourcePath, $targetPath, $maxWidth, $maxHeight) {
         case IMAGETYPE_PNG:
             imagepng($newImage, $targetPath, 8); // Compression level (0-9)
             break;
-        case IMAGETYPE_GIF:
-            imagegif($newImage, $targetPath);
-            break;
     }
 
     // Free memory
@@ -139,4 +134,5 @@ function resizeImage($sourcePath, $targetPath, $maxWidth, $maxHeight) {
     imagedestroy($newImage);
 }
 ?>
+
 
