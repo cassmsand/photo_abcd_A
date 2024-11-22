@@ -239,7 +239,7 @@ include ('view-profile-modal.php');
 
             const creationDate = document.createElement('p');
             creationDate.className = 'blog-creation-date';
-            creationDate.textContent = '◦ ' + formatCreationDate(table.creation_date) + ' ◦ ' +
+            creationDate.textContent = '   ' + formatCreationDate(table.creation_date) + ' ◦ ' +
                 formatCreationTime(table.creation_date);
 
             const blogTitle = document.createElement('h2');

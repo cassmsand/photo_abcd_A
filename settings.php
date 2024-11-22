@@ -3,6 +3,13 @@ session_start();
 include_once("includes/db-conn.php");
 $CURRENT_PAGE = "Settings";
 
+$base_url = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/photo_abcd_A/';
+
+if (!isset($_SESSION['current_user_email'])) {
+    header('Location: ' . $base_url . 'index.php');
+    exit();
+}
+
 if (isset($_SESSION['current_user_email'])) {
     $userImgDir = "images/users/".$_SESSION['current_user_email'];
     $userImg = @scandir($userImgDir);
