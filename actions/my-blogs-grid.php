@@ -89,10 +89,36 @@
                     const blogUserContainer = document.createElement('div');
                     blogUserContainer.className = 'blog-user-container';
 
+                    const email = post.creator_email;
+                    function sanitizeEmailForFilename(email) {
+                        return email.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                    }
+
+                    // Construct the URL to get the latest image from the server-side script
+                    const getImageUrl = `actions/get-latest-image.php?email=${encodeURIComponent(email)}`;
+
+                    // Create user image element and default to blank icon initially
                     const userImage = document.createElement('img');
-                    userImage.src = baseUrl + 'images/blankicon.jpg';
                     userImage.alt = 'User Image';
                     userImage.className = 'blog-user-image';
+
+                    // Fetch the latest image from the server
+                    fetch(getImageUrl)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Fetched image URL:', data.image);
+                            const userImagePath = data.image;
+
+                            if (userImagePath) {
+                                userImage.src = userImagePath;
+                            } else {
+                                userImage.src = 'images/blankicon.jpg'; // Fallback image
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching user image:', error);
+                            userImage.src = 'images/blankicon.jpg'; // Fallback on error
+                        });
 
                     const username = document.createElement('p');
                     username.className = 'blog-username';
