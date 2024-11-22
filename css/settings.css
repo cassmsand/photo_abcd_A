@@ -21,15 +21,18 @@ h2 {
 }
 
 .profile-section {
-    width: 80%;
+    width: 90%;
     max-width: 800px;
     border: 2px solid #ccc;
     padding: 20px;
     border-radius: 10px;
     background-color: #c7daf761;
-    margin: 0 auto;
-    margin-bottom: 50px;
-    margin-bottom: 50px;
+    margin: 5% auto;
+    overflow: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
 }
 
 .profile-contents {
@@ -43,6 +46,9 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box; 
     gap: 20px;
 }
 
@@ -54,8 +60,9 @@ h2 {
 }
 
 .settings-profile-photo {
-    width: 150px;
-    height: 150px;
+    width: 10vw;
+    height: auto;
+    max-width: 150px;
     overflow: hidden;
     display: flex;
     justify-content: center;
