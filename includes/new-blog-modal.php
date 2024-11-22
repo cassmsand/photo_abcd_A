@@ -18,7 +18,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="new-blog-images" class="form-label">Upload Images</label>
-                        <input type="file" class="form-control" id="new-blog-images" name="new-blog-images" accept=".jpg, .jpeg, .png">
+                        <input type="file" class="form-control" id="new-blog-images" name="new-blog-images[]" accept=".jpg, .jpeg, .png, .gif" multiple>
                     </div>
                     <div class="mb-3">
                         <label for="event-date" class="form-label">Event Date</label>
