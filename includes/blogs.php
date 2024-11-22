@@ -507,7 +507,6 @@ include ('view-profile-modal.php');
         // Image Array
         const images = pair.images;
 
-
         // Image Source
         var img_src;
 
@@ -517,8 +516,6 @@ include ('view-profile-modal.php');
         } else {
             img_src = `${images.dir}${images.img_names[0]}`;
         }
-
-
 
         document.getElementById('card-modal-title').innerHTML = title;
         document.getElementById('card-modal-img').setAttribute('src', img_src);
@@ -541,6 +538,19 @@ include ('view-profile-modal.php');
                 indexDisplay = link;
             }
         });
+
+        // Hide pagination if there is only one image
+        if (images.length > 1) {
+            // Show pagination if there are multiple images
+            previousButton.style.display = 'inline';
+            nextButton.style.display = 'inline';
+            indexDisplay.style.display = 'inline';
+        } else {
+            // Hide pagination if there is only one image
+            previousButton.style.display = 'none';
+            nextButton.style.display = 'none';
+            indexDisplay.style.display = 'none';
+        }
 
         let currentImageIndex = 0;
 
