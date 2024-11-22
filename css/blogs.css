@@ -129,7 +129,7 @@ h2 {
     margin-left: 10px;
     display: block;
     text-align: center;
-    font-size: 1.25vw;
+    font-size: 1vw;
     max-width: 80%;
 }
 
@@ -137,7 +137,7 @@ h2 {
     margin-left: 20px;
     display: block;
     text-align: center;
-    font-size: 1.25vw;
+    font-size: 1vw;
     max-width: 80%;
     white-space: nowrap;
     overflow: hidden;
