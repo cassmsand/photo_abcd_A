@@ -66,13 +66,13 @@ if (isset($_GET['email']) && isset($_GET['password'])) {
             exit();
         } else {
             // Incorrect password
-            $_SESSION['login_error'] = 'Invalid credentials';
+            $_SESSION['login_error'] = 'Sorry, your username or password was incorrect. Please double-check your information. ';
             header("Location: ../index.php");
             exit();
         }
     } else {
         // No user found with that email
-        $_SESSION['login_error'] = 'Invalid credentials';
+        $_SESSION['login_error'] = 'Sorry, your username or password was incorrect. Please double-check your information.';
         header("Location: ../index.php");
         exit();
     }
