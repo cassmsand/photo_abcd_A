@@ -45,7 +45,7 @@
             </div>
 
             <label for="photoUpload">Upload Photo:</label>
-            <input type="file" id="photoUpload" name="photoUpload" accept=".jpg, .jpeg, .png, .gif"><br>
+            <input type="file" id="photoUpload" name="photos[]" accept=".jpg, .jpeg, .png, .gif" multiple><br>
 
             <button id="saveButton">Save</button>
         </div>
@@ -514,26 +514,28 @@
                         fetchBlogs('get-my-blogs'); // Reload blogs
 
                         // Photo upload handling
-                        const photoUpload = document.getElementById('photoUpload').files[0];
-                        if (photoUpload) {
+                        const photoUpload = document.getElementById('photoUpload').files;
+                        if (photoUpload.length > 0) {
                             const formData = new FormData();
-                            formData.append('photo', photoUpload);
+                            for (let i = 0; i < photoUpload.length; i++) {
+                                formData.append('photos[]', photoUpload[i]); // Using 'photos[]' to handle multiple files
+                            }
                             formData.append('blog_id', blogId);
 
-                            // Upload the photo
+                            // Upload the photos
                             fetch('actions/upload-photo.php', {
-                                    method: 'POST',
-                                    body: formData
-                                })
+                                method: 'POST',
+                                body: formData
+                            })
                                 .then(response => response.json())
                                 .then(photoData => {
                                     if (photoData.success) {
-                                        alert('Blog photo updated successfully!');
+                                        alert('Blog photos updated successfully!');
                                     } else {
-                                        alert('Failed to upload photo: ' + photoData.message);
+                                        alert('Failed to upload photos: ' + photoData.message);
                                     }
                                 })
-                                .catch(error => console.error('Error uploading photo:', error));
+                                .catch(error => console.error('Error uploading photos:', error));
                         }
 
 
