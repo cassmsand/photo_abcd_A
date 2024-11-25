@@ -45,7 +45,7 @@
             </div>
 
             <label for="photoUpload">Upload Photo:</label>
-            <input type="file" id="photoUpload" name="photoUpload"><br>
+            <input type="file" id="photoUpload" name="photoUpload" accept=".jpg, .jpeg, .png, .gif"><br>
 
             <button id="saveButton">Save</button>
         </div>
