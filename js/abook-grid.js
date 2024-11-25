@@ -38,6 +38,9 @@ let selected_card;
 let selected_book;
 let selected_letter;
 var selected_blogs = [];
+var initialBlogs = [];
+var changed_entries = [];
+var hasChanges = false;
 
 
 /**
@@ -305,7 +308,8 @@ function displayBar()
         displayGrid(user_books[0]);
 
     } else {
-        
+        var bookCard = document.getElementById(`${current_book.title}`);
+        toggleCard(bookCard);
         displayGrid(current_book);
     }
 
@@ -340,6 +344,7 @@ function displayGrid(book)
 {
     current_book = Object.assign({}, book);
     pending_book = Object.assign({}, book);
+    changed_entries = [];
 
     clearContainer(alpha_grid);
 
@@ -442,6 +447,8 @@ function displayAvailableBlogs(letter, hasPending = false)
             createBlogCard(blog, blogCardType);
         }
     });
+
+    initialBlogs = Array.from(selected_blogs);
 
     if (hasEntries) {
         if (noBlogs != null) {
@@ -686,8 +693,8 @@ function createBlogCard(blogOrChar, type = 'grid')
                 card.classList.add('selected');
                 selected_blogs.push(id);
 
-                console.log(selected_blogs);
-
+                console.log("Selected: \n", selected_blogs);
+                console.log("Initial: \n", initialBlogs);
             } 
             else 
             {
@@ -695,7 +702,14 @@ function createBlogCard(blogOrChar, type = 'grid')
                 var index = selected_blogs.indexOf(id);
                 selected_blogs.splice(index,1);
 
-                console.log(selected_blogs);
+                console.log("Selected: \n", selected_blogs);
+                console.log("Initial: \n", initialBlogs);
+            }
+            if (JSON.stringify(initialBlogs) != JSON.stringify(selected_blogs)) {
+                console.log("Savable");
+                gridConfirmBtn.classList.remove("disabled");
+            } else {
+                gridConfirmBtn.classList.add("disabled");
             }
         });
         modalRow.appendChild(card);
@@ -753,9 +767,10 @@ function createBookCard(book = null, isblank = false)
         cardImage.src = "images/blank-book.png";
         cardLink.id = `link-${book.title}`;
         cardLink.className = 'stretched-link';
-        //cardLink.onclick = function () { displayGrid(book) };
         cardLink.addEventListener('click', function (e) {
             displayGrid(book);
+            bookSaveBtn.classList.add("disabled");
+            bookSaveBtn.classList.remove("selected");
         });
         cardLink.addEventListener('click', function (e) {
             toggleCard(card, 'book');
@@ -966,10 +981,17 @@ bookPrintBtn.addEventListener("click", () => {
 // Grid Modal Confirm & Cancel
 const gridConfirmBtn = document.getElementById("confirm-selection-button");
 gridConfirmBtn.addEventListener("click", function (e) {
+    gridConfirmBtn.classList.add("disabled");
     updatePending();
-    //selected_card.classList.remove("selected");
+    if (!changed_entries.includes(selected_letter)) {
+        changed_entries.push(selected_letter);
+        console.log(changed_entries);
+    }
+    bookSaveBtn.classList.add("selected");
+    bookSaveBtn.classList.remove("disabled");
     selected_letter = undefined;
     selected_blogs = [];
+    initialBlogs = [];
     selected_card = undefined;
     initialEntries = 0;
     setProgress();
@@ -977,11 +999,28 @@ gridConfirmBtn.addEventListener("click", function (e) {
 
 const gridCancelBtn = document.getElementById("cancel-selection-button");
 gridCancelBtn.addEventListener("click", function (e) {
+    if (!changed_entries.includes(selected_letter)) {
+        selected_card.classList.remove("selected");
+    }
     selected_letter = undefined;
     selected_blogs = [];
-    selected_card.classList.remove("selected");
+    initialBlogs = [];
     selected_card = undefined;
     initialEntries = 0;
+})
+
+// Book Save
+const bookSaveBtn = document.getElementById("update-button");
+bookSaveBtn.addEventListener("click", function (e) {
+    updateBook();
+    bookSaveBtn.classList.add("disabled");
+    bookSaveBtn.classList.remove("selected");
+})
+
+// Book Delete
+const bookDeleteBtn = document.getElementById("delete-button");
+bookDeleteBtn.addEventListener("click", function (e) {
+    deleteBook();
 })
 
 // New Book Modal Confirm

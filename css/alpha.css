@@ -30,16 +30,12 @@
 
 .card.bar-card {
     padding: 0px;
-    min-width: 180px;
-    min-height: 180px;
     max-width: 180px;
     max-height: 180px;
 }
 
 .card.bar-card#new-book {
-    margin-block: auto;
     padding: 0px;
-    min-width: 70px;
     min-height: 120px;
     max-width: 70px;
     max-height: 120px;
@@ -53,6 +49,19 @@
     background: linear-gradient(135deg, #ccdffc, #e2faed);
     display: flex;
     overflow-y: hidden;
+    
+    #blank {
+        object-fit: scale-down;
+        object-position: center;
+        padding: 50px;
+    }
+
+    #blank-bar,
+    #book-img {
+        object-fit: scale-down;
+        object-position: center;
+        padding: 15px;
+    }
 }
 
 .card-header {
@@ -60,29 +69,14 @@
     justify-items: center;
 }
 
-.card-img {
+img {
     object-fit: cover;
+    max-width: 100%;
+}
+
+.card-img {
     border-top-right-radius: 0%;
     border-top-left-radius: 0%;
-}
-
-.card-img#book-img {
-    margin: auto;
-    max-width: 120px;
-    height: 120px;
-    object-fit: cover;
-}
-
-.card-img#blank {
-    padding: 25%;
-    object-fit: contain;
-}
-
-.card-img#blank-bar {
-    margin: auto;
-    max-width: 30px;
-    height: 30px;
-    object-fit: cover;
 }
 
 /* Modal Styles */
@@ -228,8 +222,7 @@
 #book-bar-row {
     display: flex;
     align-items: center;
-    align-items: start;
-    flex: nowrap;
+    flex-wrap: nowrap;
     overflow-x: scroll;
     margin: auto;
     padding: 20px;
