@@ -384,19 +384,29 @@
         const photos = post.images || []; // If no photos, use empty array
         let currentPhotoIndex = 0; // Default to the first photo
 
+        const defaultImagePath = baseUrl + 'images/photoABCDLogo.png';
+
         // Function to update the displayed photo
         const updatePhotoDisplay = () => {
             const photoDisplay = document.getElementById('photoDisplay');
+            const deletePhotoButton = document.getElementById('deletePhotoButton');
+
             if (photos.length > 0) {
                 photoDisplay.src = baseUrl + `images/${post.blog_id}/${photos[currentPhotoIndex]}`;
+                // Check if the displayed photo is the default image
+                if (photoDisplay.src === defaultImagePath) {
+                    deletePhotoButton.style.display = 'none';
+                } else {
+                    deletePhotoButton.style.display = 'inline-block';
+                }
             } else {
-                photoDisplay.src = baseUrl + 'images/photoABCDLogo.png'; // Default photo if no images
+                photoDisplay.src = defaultImagePath; // Default photo if no images
+                deletePhotoButton.style.display = 'none';
             }
+
             // Show or hide navigation buttons based on the current photo index
-            document.getElementById('prevPhoto').style.display = currentPhotoIndex > 0 ?
-                'inline-block' : 'none';
-            document.getElementById('nextPhoto').style.display = currentPhotoIndex < photos.length - 1 ?
-                'inline-block' : 'none';
+            document.getElementById('prevPhoto').style.display = currentPhotoIndex > 0 ? 'inline-block' : 'none';
+            document.getElementById('nextPhoto').style.display = currentPhotoIndex < photos.length - 1 ? 'inline-block' : 'none';
         };
 
         updatePhotoDisplay();
@@ -531,6 +541,7 @@
                                 .then(photoData => {
                                     if (photoData.success) {
                                         alert('Blog photos updated successfully!');
+                                        fetchBlogs('get-my-blogs');
                                     } else {
                                         alert('Failed to upload photos: ' + photoData.message);
                                     }
