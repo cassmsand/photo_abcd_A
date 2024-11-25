@@ -61,7 +61,9 @@ if (isset($_POST['create-new-blog'])) {
                             }
                         }
                     } else {
+                        header('Location: ../index.php');
                         echo "Error uploading file: " . $files['name'][$key] . "<br>";
+                        exit;
                     }
                 }
             }
