@@ -414,6 +414,7 @@ include ('view-profile-modal.php');
             }
 
 
+
             createCard(blogRow, title, email, img_src, blog_id, pair);
         });
     }
@@ -476,48 +477,65 @@ include ('view-profile-modal.php');
         const card = document.createElement("div");
         card.className = 'card';
         card.id = `blog-${id}`;
+
         // Header
         const cardHeader = document.createElement("div");
         cardHeader.className = "card-header";
+        cardHeader.setAttribute('data-bs-target', "#card-modal");
+        cardHeader.setAttribute('data-bs-toggle', "modal");
+        cardHeader.onclick = function() {
+            fillModalPV(pair);
+        };
+
         const cardTitle = document.createElement("h4");
         cardTitle.className = "card-title";
         cardTitle.textContent = title;
         cardHeader.appendChild(cardTitle);
+
         // Body
         const cardBody = document.createElement("div");
         cardBody.className = "card-body";
-        const cardLink = document.createElement("a");
-        cardLink.setAttribute('data-bs-target', "#card-modal");
-        cardLink.setAttribute('data-bs-toggle', "modal");
-        cardLink.className = 'stretched-link';
-        cardLink.onclick = function() {
+        cardBody.setAttribute('data-bs-target', "#card-modal");
+        cardBody.setAttribute('data-bs-toggle', "modal");
+        cardBody.onclick = function() {
             fillModalPV(pair);
         };
+
         const cardImage = document.createElement("img");
         cardImage.className = "card-img";
         cardImage.src = img;
         cardBody.appendChild(cardImage);
-        cardBody.appendChild(cardLink);
+
         // Footer
         const cardFooter = document.createElement("div");
         cardFooter.className = "card-footer";
+
         const cardEmail = document.createElement("p");
         cardEmail.className = "card-text";
         cardEmail.textContent = email;
         cardFooter.appendChild(cardEmail);
 
+        cardFooter.addEventListener('click', () => {
+            $('#viewProfileModal').modal('show');
+            loadProfileView(email);
+        });
+
+        // Assemble card
         card.appendChild(cardHeader);
         card.appendChild(cardBody);
         card.appendChild(cardFooter);
 
-        // Attach to container.
+        // Attach to container
         container.appendChild(card);
 
+        // Style container for layout
         container.style.display = 'flex';
         container.style.flexWrap = 'wrap'; // Allows wrapping of cards
         container.style.justifyContent = 'center'; // Centers cards horizontally
         container.style.alignItems = 'center'; // Centers cards vertically
     }
+
+
 
     function fillModalPV(pair) {
         const table = pair.table;
@@ -547,6 +565,9 @@ include ('view-profile-modal.php');
         document.getElementById('card-modal-img').setAttribute('src', img_src);
         document.getElementById('card-modal-desc').innerHTML = description;
         document.getElementById('card-modal-email').innerHTML = email;
+
+
+
 
         // Find a way to work an index with this.
         // Assuming "Previous" and "Next" are part of the pagination component
