@@ -468,9 +468,53 @@
         }
     };
 
+    const closeModal = () => {
+        // Hide the modal
+        document.getElementById('editModal').style.display = 'none';
+        // Reset all modal fields
+        clearEditModal();
+    };
+
+
+    const clearEditModal = () => {
+        // Clear text fields
+        document.getElementById("editTitle").value = ''; 
+        document.getElementById("editDescription").value = ''; 
+        document.getElementById('eventDate').value = ''; 
+        document.getElementById('privacyFilter').value = 'public'; 
+
+        // Hidden fields
+        document.getElementById('creatorEmail').value = ''; 
+        document.getElementById('creationDate').value = ''; 
+
+        // Reset photo display
+        const photoDisplay = document.getElementById('photoDisplay');
+        const defaultImagePath = baseUrl + 'images/photoABCDLogo.png';
+        photoDisplay.src = defaultImagePath; 
+
+        // Hide navigation and delete buttons
+        document.getElementById('deletePhotoButton').style.display = 'none';
+        document.getElementById('prevPhoto').style.display = 'none';
+        document.getElementById('nextPhoto').style.display = 'none';
+
+        // Clear file input
+        const uploadPhotoInput = document.getElementById('photoUpload');
+        uploadPhotoInput.value = ''; 
+
+        
+        window.currentPhotoIndex = 0; 
+    };
+
+    window.onclick = (event) => {
+        const modal = document.getElementById('editModal');
+        if (event.target === modal) {
+            closeModal(); // Close modal if user clicks outside of it
+        }
+    };
+
 
     document.getElementById('closeModal').onclick = () => {
-        document.getElementById('editModal').style.display = 'none';
+        closeModal();
     };
 
 
@@ -536,9 +580,11 @@
                                 .then(photoData => {
                                     if (photoData.success) {
                                         alert('Blog photos updated successfully!');
+                                        closeModal();
                                         fetchBlogs('get-my-blogs');
                                     } else {
                                         alert('Failed to upload photos: ' + photoData.message);
+                                        closeModal();
                                     }
                                 })
                                 .catch(error => console.error('Error uploading photos:', error));
