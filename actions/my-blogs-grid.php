@@ -5,6 +5,10 @@
         <label for="P">
     </div>
 
+    <div id="printButtonContainer">
+        <button id="printBlogsButton">Print Blogs</button>
+    </div>
+
     <!-- Posts Container for Grid -->
     <div id="postsContainer" class="grid-container"></div>
 
@@ -50,7 +54,8 @@
             <button id="saveButton">Save</button>
         </div>
     </div>
-
+    <link rel="stylesheet" href="css/print-page.css">
+    <script src="js/print-blogs.js"></script>
     <script>
     const baseUrl = '<?php echo $base_url; ?>';
 
@@ -243,6 +248,47 @@
 
 
     fetchBlogs('get-my-blogs');
+
+    document.getElementById('printBlogsButton').addEventListener('click', async function() {
+        const blogData = await getBlogData('date_asc'); //ensure blogs are sorted by event_date asc.
+        if (blogData.length > 0) {
+            printBlogs(blogData); // Ensure this is defined
+        } else {
+            alert('No blogs available to print');
+        }
+    });
+
+    async function getBlogData(sortOrder) {
+        try {
+            const url = baseUrl + 'actions/get-my-blogs.php?sort_order' + sortOrder; 
+            
+            // Fetch blog data from the server
+            const response = await fetch(url);
+
+            // Check if the response was successful
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+
+            // Parse the JSON response
+            const blogData = await response.json();
+
+            // Check the content of the fetched data
+            console.log('Fetched blog data:', blogData);
+
+            // Return the blog data
+            return blogData;
+
+        } catch (error) {
+            // Log the error for debugging
+            console.error('Error fetching blog data:', error);
+            alert('Error fetching blog data: ' + error.message);
+            return [];  // Return an empty array if there was an error
+        }
+    }
+
+
+
 
     const printBlog = (post) => {
         // Set base URL for images
