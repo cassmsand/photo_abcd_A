@@ -3,12 +3,20 @@ h2 {
     text-align: center;
 }
 
-
+/*
 #postsContainer {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
     gap: 20px; 
     margin: 20px auto; 
+}
+*/
+
+#postsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 20px; 
+    margin: 20px auto;
 }
 
 .blog-container {
