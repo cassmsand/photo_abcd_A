@@ -28,6 +28,7 @@ function printBlogs(blogArr)
     // Create and append container for print pages
     const printContainer = document.createElement("div");
     printContainer.classList.add("printable");
+    printContainer.id = "print-cont";
     document.body.appendChild(printContainer);
 
     // Page number tracker.
@@ -49,11 +50,6 @@ function printBlogs(blogArr)
 
     // Open print menu.
     window.print();
-
-    // Clear print elements from body after a short delay for cross-platform compatibility.
-    setTimeout(() => {
-        document.body.removeChild(printContainer);
-    }, 100); // 100 ms delay to allow print dialog to load fully
 
     /**
      * Creates and appends a page with a given blogs info.
@@ -196,3 +192,14 @@ function printBlogs(blogArr)
         // Elements to make title page.
     }
 };
+
+/**
+ * Event Listener. Deletes print elements from body after
+ * triggering the aftrprint event.
+ * 
+ * The afterprint event is executed either after printing
+ * or exiting the print menu.
+ */
+window.addEventListener("afterprint", (event) => {
+    document.getElementById("print-cont").remove();
+});
