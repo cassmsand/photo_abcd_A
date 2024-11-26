@@ -364,6 +364,31 @@
         });
     });
 
+    const updatePhotoDisplay = (photos, currentPhotoIndex, blogId) => {
+        const photoDisplay = document.getElementById('photoDisplay');
+        const deletePhotoButton = document.getElementById('deletePhotoButton');
+        const defaultImagePath = baseUrl + 'images/photoABCDLogo.png';
+
+        if (photos.length > 0) {
+            photoDisplay.src = baseUrl + `images/${blogId}/${photos[currentPhotoIndex]}`;
+            // Check if the displayed photo is the default image
+            if (photoDisplay.src === defaultImagePath) {
+                deletePhotoButton.style.display = 'none';
+            } else {
+                deletePhotoButton.style.display = 'inline-block';
+            }
+        } else {
+            photoDisplay.src = defaultImagePath; // Default photo if no images
+            deletePhotoButton.style.display = 'none';
+        }
+
+        // Show or hide navigation buttons based on the current photo index
+        document.getElementById('prevPhoto').style.display = currentPhotoIndex > 0 ? 'inline-block' : 'none';
+        document.getElementById('nextPhoto').style.display = currentPhotoIndex < photos.length - 1 ? 'inline-block' : 'none';
+    };
+
+
+
     const openEditModal = (post) => {
         document.getElementById('editModal').style.display = 'block';
 
@@ -372,8 +397,7 @@
         // Populate the fields with the existing data from the post object
         document.getElementById('blogId').value = post.blog_id; // Should be defined
         document.getElementById("editTitle").value = post.title; // Auto-fill title with current title
-        document.getElementById("editDescription").value = post
-            .description; // Auto-fill description with current description
+        document.getElementById("editDescription").value = post.description; // Auto-fill description with current description
         document.getElementById('privacyFilter').value = post.privacy_filter; // Set privacy filter value
 
         document.getElementById('creatorEmail').value = post.creator_email; // Populate creator email
@@ -384,55 +408,31 @@
         const photos = post.images || []; // If no photos, use empty array
         let currentPhotoIndex = 0; // Default to the first photo
 
-        const defaultImagePath = baseUrl + 'images/photoABCDLogo.png';
-
-        // Function to update the displayed photo
-        const updatePhotoDisplay = () => {
-            const photoDisplay = document.getElementById('photoDisplay');
-            const deletePhotoButton = document.getElementById('deletePhotoButton');
-
-            if (photos.length > 0) {
-                photoDisplay.src = baseUrl + `images/${post.blog_id}/${photos[currentPhotoIndex]}`;
-                // Check if the displayed photo is the default image
-                if (photoDisplay.src === defaultImagePath) {
-                    deletePhotoButton.style.display = 'none';
-                } else {
-                    deletePhotoButton.style.display = 'inline-block';
-                }
-            } else {
-                photoDisplay.src = defaultImagePath; // Default photo if no images
-                deletePhotoButton.style.display = 'none';
-            }
-
-            // Show or hide navigation buttons based on the current photo index
-            document.getElementById('prevPhoto').style.display = currentPhotoIndex > 0 ? 'inline-block' : 'none';
-            document.getElementById('nextPhoto').style.display = currentPhotoIndex < photos.length - 1 ? 'inline-block' : 'none';
-        };
-
-        updatePhotoDisplay();
+        // Call updatePhotoDisplay to initialize the photo display
+        updatePhotoDisplay(photos, currentPhotoIndex, post.blog_id);
 
         // Next and previous photo navigation
         document.getElementById('prevPhoto').onclick = () => {
             if (currentPhotoIndex > 0) {
                 currentPhotoIndex--;
-                updatePhotoDisplay();
+                updatePhotoDisplay(photos, currentPhotoIndex, post.blog_id);
             }
         };
 
         document.getElementById('nextPhoto').onclick = () => {
             if (currentPhotoIndex < photos.length - 1) {
                 currentPhotoIndex++;
-                updatePhotoDisplay();
+                updatePhotoDisplay(photos, currentPhotoIndex, post.blog_id);
             }
         };
     };
+
 
     document.getElementById('deletePhotoButton').onclick = () => {
         if (confirm('Are you sure you want to delete this photo?')) {
             const blogId = document.getElementById('blogId').value;
             const photoPath = document.getElementById('photoDisplay').src.replace(window.location.origin, '');
             console.log('Sending photo path:', photoPath);
-
 
             fetch(`actions/delete-photo.php`, {
                 method: 'POST',
@@ -446,20 +446,19 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Response from server:', data); 
+                    console.log('Response from server:', data);
                     if (data.success) {
                         alert('Photo deleted successfully!');
-                        // Update photo gallery
+                        // Fetch updated blog data and update the modal with the new photos
                         const photos = data.remainingPhotos || [];
-                        if (photos.length > 0) {
-                            currentPhotoIndex = 0; // Reset to first photo
-                            updatePhotoDisplay();
-                        } else {
-                            // Fallback if no photos remain
-                            document.getElementById('photoDisplay').src = baseUrl + 'images/photoABCDLogo.png';
+                        let currentPhotoIndex = 0; // Reset to first photo
+                        updatePhotoDisplay(photos, currentPhotoIndex, blogId);
+
+                        // If there are no photos left, hide the delete button and navigation
+                        if (photos.length === 0) {
+                            document.getElementById('deletePhotoButton').style.display = 'none';
                             document.getElementById('prevPhoto').style.display = 'none';
                             document.getElementById('nextPhoto').style.display = 'none';
-                            document.getElementById('deletePhotoButton').style.display = 'none';
                         }
                     } else {
                         alert('Failed to delete photo. Please try again.');
@@ -468,10 +467,6 @@
                 .catch(error => console.error('Error deleting photo:', error));
         }
     };
-
-
-
-
 
 
     document.getElementById('closeModal').onclick = () => {
