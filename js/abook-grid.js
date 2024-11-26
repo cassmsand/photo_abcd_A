@@ -421,7 +421,6 @@ function displayAvailableBlogs(letter, hasPending = false)
     selected_letter = letter.toUpperCase();
     console.log(letter);
     var blogCardType;
-    var initialEntries = 0;
 
     switch (hasPending)
     {

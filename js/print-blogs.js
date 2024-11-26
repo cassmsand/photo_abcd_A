@@ -143,27 +143,23 @@ function printBlogs(blogArr)
             
             function entry()
             {
-                var entryIndex = pageNum % 28 - 1;
+                var entryIndex = pageNum % 38 - 1;
                 if (entryIndex == 0 && pageNum != 1) {
                     createTOC();
                 }
                 const tableEntry = document.createElement('div');
-                tableEntry.className = "table-entry";
+                    tableEntry.className = "table-entry";
 
-                const entryImage = document.createElement("img");
-                    entryImage.className = "entry-image";
-                    entryImage.src = imgSrc;
-                    tableEntry.appendChild(entryImage);
+                const entryNum = document.createElement('p');
+                    entryNum.innerHTML = `${pageNum}`;
+                    entryNum.className = "entry-num";
+                    tableEntry.appendChild(entryNum);
 
                 const entryTitle = document.createElement('p');
                     entryTitle.innerHTML = `${blog.title}`;
                     entryTitle.className = "entry-title";
                     tableEntry.appendChild(entryTitle);
-
-                const entryNum = document.createElement('p');
-                    entryNum.innerHTML = `Pg. ${pageNum}`;
-                    entryNum.className = "entry-num";
-                    tableEntry.appendChild(entryNum);
+                
                 
                 tocPage.appendChild(tableEntry);
             }

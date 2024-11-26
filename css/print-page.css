@@ -67,55 +67,55 @@
         .entry-container {
             display: flex;
             flex-wrap: wrap;
+            flex-direction: row;
             page-break-after: always;
             background: linear-gradient(135deg, #ccdffc, #e2faed);
-            gap: 40px 15px;
             padding: 15px;
             max-height: 10in;
             min-height: 10in;
-            justify-content: space-evenly;
+            max-width: inherit;
             align-content: start;
+            justify-items: center;
 
             .table-entry {
                 display: flex;
-                position: relative;
-                
-                max-width: 1.75in;
-                max-height: 1in;
-
+                min-width: 50%;
+                max-height: 0.5in;
                 border-radius: 15px;
-                justify-content: space-between;
+                justify-content: center;
                 align-content: center;
 
-                *:not(img) {
-                    margin: 0;
-                    border-style: solid;
-                    border-width: 0.5px;
-                    border-radius: 15px;
-                }
-
-                img {
+                * {
                     -webkit-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
                     -moz-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
                     box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.28);
+                    border-style: solid;
+                    border-width: 1px;
                 }
 
                 .entry-title {
-                    position: absolute;
                     background-color: white;
                     border-radius: 15px;
+                    max-height: inherit;
                     padding: 5px;
-                    top: -12px;
-                    left: 0px;
+                    min-width: 3.5in;
+                    max-width: 3.5in;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    
                 }
 
                 .entry-num {
-                    position: absolute;
+                    font-size: 0.9rem;
                     background-color: white;
-                    border-radius: 15px;
+                    border-radius: 10px;
                     padding: 5px;
-                    bottom: -15px;
-                    right: 0px;
+                    margin-right: 5px;
+                    max-width: 12%;
+                    min-width: 12%;
+                    max-height: 0.35in;
+                    min-height: 0.35in;
                 }
 
             }
