@@ -1,46 +1,89 @@
-.container.about-bar {
-    border-radius: 30px;
+.about-entry {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    padding: 15px;
+    margin: 2rem;
+    max-width: 100%;
     background: linear-gradient(90deg, #e2faed, #ccdffc);
-    padding: 20px;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    display: flex;
-}
-
-.container.about-content {
     border-radius: 30px;
-    background-color: white;
-    padding: 20px;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    display: flex;
+
+    h1,
+    h2,
+    h3 {
+        max-width: inherit;
+        margin: 0;
+        text-align: center;
+    }
+
+    > div {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        align-items: center;
+        position: relative;
+        padding: 15px;
+
+        .desc {
+            border-radius: 30px;
+            background-color: white;
+            padding: 25px;
+            min-height: 100%;
+        }
+        
+    }
+    
 }
 
-#left {
-    justify-content: left;
-    text-align: left;
+.right {
+    .img-wrap {
+        margin-left: 2rem;
+    }
 }
 
-#right {
-    justify-content: right;
-    text-align: right;
+.left {
+    > div > .img-wrap {
+        margin-right: 2rem;
+    }
 }
 
-.about-header {
-    max-width: fit-content;
-    max-height: fit-content;
-    margin: auto;
-}
-
-
-.image-container {
-    justify-content: left;
-    align-self: center;
-    max-height: 280px;
-    max-width: fit-content;
-}
-
-.img-fluid {
+img {
+    object-fit: cover;
+    max-width: 250px; 
     border-radius: 100%;
-    max-height: 250px;
+}
+
+@media (max-width: 1530px)  {
+    img {
+        max-width: 200px; 
+    }
+    
+}
+
+@media (max-width: 990px) {
+    img {
+        max-width: 125px; 
+    }
+
+    .img-wrap {
+        margin: 0 !important;
+        margin-bottom: 1rem !important;
+        position: relative;
+        top: 0;
+    }
+
+    .about-entry.left > div {
+        flex-direction: column;
+    }
+
+    .about-entry.right > div {
+        flex-direction: column-reverse;
+    }
+    
+}
+
+@media (max-width: 576px) {
+    p {
+        font-size: 0.8rem;
+    }
 }
