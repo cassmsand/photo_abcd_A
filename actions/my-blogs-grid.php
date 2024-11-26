@@ -509,6 +509,7 @@
         const modal = document.getElementById('editModal');
         if (event.target === modal) {
             closeModal(); // Close modal if user clicks outside of it
+            fetchBlogs('get-my-blogs');
         }
     };
 
