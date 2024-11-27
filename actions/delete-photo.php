@@ -7,12 +7,21 @@ $photoPath = $data['photoPath'];
 // Convert the relative path to an absolute path
 $photoPath = $_SERVER['DOCUMENT_ROOT'] . $photoPath;
 
+// Converts relative path to absolute path for default image
+$defaultImagePath = $_SERVER['DOCUMENT_ROOT'] . "/images/photoABCDLogo.png"; 
+
+// Check if the photoPath matches the default image
+if ($photoPathAbsolute === $defaultImagePath) {
+    echo json_encode(['success' => false, 'error' => 'Default image cannot be deleted']);
+    exit;
+}
+
 if (file_exists($photoPath)) {
     // Check if file is writable
     if (is_writable($photoPath)) {
         if (unlink($photoPath)) {
             // Get remaining photos from the directory
-            $photosDir = "images/$blogId/";
+            $photosDir = $_SERVER['DOCUMENT_ROOT'] . "/images/$blogId/";
             $remainingPhotos = array_values(array_diff(scandir($photosDir), array('.', '..')));
 
             echo json_encode(['success' => true, 'remainingPhotos' => $remainingPhotos]);

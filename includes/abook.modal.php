@@ -15,7 +15,7 @@
                 <!--Button to confirm-->
                 
                     <div class="col">
-                        <button type="button" class="btn btn-primary" id='confirm-selection-button' data-bs-dismiss="modal">Confirm</button>
+                        <button type="button" class="btn btn-primary disabled" id='confirm-selection-button' data-bs-dismiss="modal">Confirm</button>
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-danger" id='cancel-selection-button' data-bs-dismiss="modal">Return</button>

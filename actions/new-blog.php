@@ -55,13 +55,14 @@ if (isset($_POST['create-new-blog'])) {
                             // Resize non-GIF images
                             try {
                                 resizeImage($tmp_name, $finalPath, $maxWidth, $maxHeight);
-                                echo "Resized and uploaded: " . $originalName . "<br>";
                             } catch (Exception $e) {
                                 echo "Failed to resize image: " . $originalName . ". Error: " . $e->getMessage() . "<br>";
                             }
                         }
                     } else {
+                        header('Location: ../index.php');
                         echo "Error uploading file: " . $files['name'][$key] . "<br>";
+                        exit;
                     }
                 }
             }

@@ -6,7 +6,7 @@ include_once("../includes/db-conn.php");
 $title = isset($_GET['title']) ? $_GET['title'] : '';
 $startDate = isset($_GET['start_date']) ? $_GET['start_date'] : '';
 $endDate = isset($_GET['end_date']) ? $_GET['end_date'] : '';
-$sortOrder = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc'; // Default to 'asc'
+$sortOrder = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'date_asc'; // Default to 'asc'
 
 // Sanitize the sortOrder input to handle both title and event date sorting
 switch (strtolower($sortOrder)) {

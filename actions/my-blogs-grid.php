@@ -5,6 +5,10 @@
         <label for="P">
     </div>
 
+    <div id="printButtonContainer">
+        <button id="printBlogsButton">Print Blogs</button>
+    </div>
+
     <!-- Posts Container for Grid -->
     <div id="postsContainer" class="grid-container"></div>
 
@@ -45,12 +49,13 @@
             </div>
 
             <label for="photoUpload">Upload Photo:</label>
-            <input type="file" id="photoUpload" name="photoUpload"><br>
+            <input type="file" id="photoUpload" name="photos[]" accept=".jpg, .jpeg, .png, .gif" multiple><br>
 
             <button id="saveButton">Save</button>
         </div>
     </div>
-
+    <link rel="stylesheet" href="css/print-page.css">
+    <script src="js/print-blogs.js"></script>
     <script>
     const baseUrl = '<?php echo $base_url; ?>';
 
@@ -244,6 +249,47 @@
 
     fetchBlogs('get-my-blogs');
 
+    document.getElementById('printBlogsButton').addEventListener('click', async function() {
+        const blogData = await getBlogData('date_asc'); //ensure blogs are sorted by event_date asc.
+        if (blogData.length > 0) {
+            printBlogs(blogData); // Ensure this is defined
+        } else {
+            alert('No blogs available to print');
+        }
+    });
+
+    async function getBlogData(sortOrder) {
+        try {
+            const url = baseUrl + 'actions/get-my-blogs.php?sort_order' + sortOrder; 
+            
+            // Fetch blog data from the server
+            const response = await fetch(url);
+
+            // Check if the response was successful
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+
+            // Parse the JSON response
+            const blogData = await response.json();
+
+            // Check the content of the fetched data
+            console.log('Fetched blog data:', blogData);
+
+            // Return the blog data
+            return blogData;
+
+        } catch (error) {
+            // Log the error for debugging
+            console.error('Error fetching blog data:', error);
+            alert('Error fetching blog data: ' + error.message);
+            return [];  // Return an empty array if there was an error
+        }
+    }
+
+
+
+
     const printBlog = (post) => {
         // Set base URL for images
         var path = baseUrl + `images/${post.blog_id}/${post.images[0]}`;
@@ -364,6 +410,31 @@
         });
     });
 
+    const updatePhotoDisplay = (photos, currentPhotoIndex, blogId) => {
+        const photoDisplay = document.getElementById('photoDisplay');
+        const deletePhotoButton = document.getElementById('deletePhotoButton');
+        const defaultImagePath = baseUrl + 'images/photoABCDLogo.png';
+
+        if (photos.length > 0) {
+            photoDisplay.src = baseUrl + `images/${blogId}/${photos[currentPhotoIndex]}`;
+            // Check if the displayed photo is the default image
+            if (photoDisplay.src === defaultImagePath) {
+                deletePhotoButton.style.display = 'none';
+            } else {
+                deletePhotoButton.style.display = 'inline-block';
+            }
+        } else {
+            photoDisplay.src = defaultImagePath; // Default photo if no images
+            deletePhotoButton.style.display = 'none';
+        }
+
+        // Show or hide navigation buttons based on the current photo index
+        document.getElementById('prevPhoto').style.display = currentPhotoIndex > 0 ? 'inline-block' : 'none';
+        document.getElementById('nextPhoto').style.display = currentPhotoIndex < photos.length - 1 ? 'inline-block' : 'none';
+    };
+
+
+
     const openEditModal = (post) => {
         document.getElementById('editModal').style.display = 'block';
 
@@ -372,8 +443,7 @@
         // Populate the fields with the existing data from the post object
         document.getElementById('blogId').value = post.blog_id; // Should be defined
         document.getElementById("editTitle").value = post.title; // Auto-fill title with current title
-        document.getElementById("editDescription").value = post
-            .description; // Auto-fill description with current description
+        document.getElementById("editDescription").value = post.description; // Auto-fill description with current description
         document.getElementById('privacyFilter').value = post.privacy_filter; // Set privacy filter value
 
         document.getElementById('creatorEmail').value = post.creator_email; // Populate creator email
@@ -384,45 +454,31 @@
         const photos = post.images || []; // If no photos, use empty array
         let currentPhotoIndex = 0; // Default to the first photo
 
-        // Function to update the displayed photo
-        const updatePhotoDisplay = () => {
-            const photoDisplay = document.getElementById('photoDisplay');
-            if (photos.length > 0) {
-                photoDisplay.src = baseUrl + `images/${post.blog_id}/${photos[currentPhotoIndex]}`;
-            } else {
-                photoDisplay.src = baseUrl + 'images/photoABCDLogo.png'; // Default photo if no images
-            }
-            // Show or hide navigation buttons based on the current photo index
-            document.getElementById('prevPhoto').style.display = currentPhotoIndex > 0 ?
-                'inline-block' : 'none';
-            document.getElementById('nextPhoto').style.display = currentPhotoIndex < photos.length - 1 ?
-                'inline-block' : 'none';
-        };
-
-        updatePhotoDisplay();
+        // Call updatePhotoDisplay to initialize the photo display
+        updatePhotoDisplay(photos, currentPhotoIndex, post.blog_id);
 
         // Next and previous photo navigation
         document.getElementById('prevPhoto').onclick = () => {
             if (currentPhotoIndex > 0) {
                 currentPhotoIndex--;
-                updatePhotoDisplay();
+                updatePhotoDisplay(photos, currentPhotoIndex, post.blog_id);
             }
         };
 
         document.getElementById('nextPhoto').onclick = () => {
             if (currentPhotoIndex < photos.length - 1) {
                 currentPhotoIndex++;
-                updatePhotoDisplay();
+                updatePhotoDisplay(photos, currentPhotoIndex, post.blog_id);
             }
         };
     };
+
 
     document.getElementById('deletePhotoButton').onclick = () => {
         if (confirm('Are you sure you want to delete this photo?')) {
             const blogId = document.getElementById('blogId').value;
             const photoPath = document.getElementById('photoDisplay').src.replace(window.location.origin, '');
             console.log('Sending photo path:', photoPath);
-
 
             fetch(`actions/delete-photo.php`, {
                 method: 'POST',
@@ -436,20 +492,19 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Response from server:', data); 
+                    console.log('Response from server:', data);
                     if (data.success) {
                         alert('Photo deleted successfully!');
-                        // Update photo gallery
+                        // Fetch updated blog data and update the modal with the new photos
                         const photos = data.remainingPhotos || [];
-                        if (photos.length > 0) {
-                            currentPhotoIndex = 0; // Reset to first photo
-                            updatePhotoDisplay();
-                        } else {
-                            // Fallback if no photos remain
-                            document.getElementById('photoDisplay').src = baseUrl + 'images/photoABCDLogo.png';
+                        let currentPhotoIndex = 0; // Reset to first photo
+                        updatePhotoDisplay(photos, currentPhotoIndex, blogId);
+
+                        // If there are no photos left, hide the delete button and navigation
+                        if (photos.length === 0) {
+                            document.getElementById('deletePhotoButton').style.display = 'none';
                             document.getElementById('prevPhoto').style.display = 'none';
                             document.getElementById('nextPhoto').style.display = 'none';
-                            document.getElementById('deletePhotoButton').style.display = 'none';
                         }
                     } else {
                         alert('Failed to delete photo. Please try again.');
@@ -459,13 +514,54 @@
         }
     };
 
+    const closeModal = () => {
+        // Hide the modal
+        document.getElementById('editModal').style.display = 'none';
+        // Reset all modal fields
+        clearEditModal();
+    };
 
 
+    const clearEditModal = () => {
+        // Clear text fields
+        document.getElementById("editTitle").value = ''; 
+        document.getElementById("editDescription").value = ''; 
+        document.getElementById('eventDate').value = ''; 
+        document.getElementById('privacyFilter').value = 'public'; 
 
+        // Hidden fields
+        document.getElementById('creatorEmail').value = ''; 
+        document.getElementById('creationDate').value = ''; 
+
+        // Reset photo display
+        const photoDisplay = document.getElementById('photoDisplay');
+        const defaultImagePath = baseUrl + 'images/photoABCDLogo.png';
+        photoDisplay.src = defaultImagePath; 
+
+        // Hide navigation and delete buttons
+        document.getElementById('deletePhotoButton').style.display = 'none';
+        document.getElementById('prevPhoto').style.display = 'none';
+        document.getElementById('nextPhoto').style.display = 'none';
+
+        // Clear file input
+        const uploadPhotoInput = document.getElementById('photoUpload');
+        uploadPhotoInput.value = ''; 
+
+        
+        window.currentPhotoIndex = 0; 
+    };
+
+    window.onclick = (event) => {
+        const modal = document.getElementById('editModal');
+        if (event.target === modal) {
+            closeModal(); // Close modal if user clicks outside of it
+            fetchBlogs('get-my-blogs');
+        }
+    };
 
 
     document.getElementById('closeModal').onclick = () => {
-        document.getElementById('editModal').style.display = 'none';
+        closeModal();
     };
 
 
@@ -514,26 +610,31 @@
                         fetchBlogs('get-my-blogs'); // Reload blogs
 
                         // Photo upload handling
-                        const photoUpload = document.getElementById('photoUpload').files[0];
-                        if (photoUpload) {
+                        const photoUpload = document.getElementById('photoUpload').files;
+                        if (photoUpload.length > 0) {
                             const formData = new FormData();
-                            formData.append('photo', photoUpload);
+                            for (let i = 0; i < photoUpload.length; i++) {
+                                formData.append('photos[]', photoUpload[i]); // Using 'photos[]' to handle multiple files
+                            }
                             formData.append('blog_id', blogId);
 
-                            // Upload the photo
+                            // Upload the photos
                             fetch('actions/upload-photo.php', {
-                                    method: 'POST',
-                                    body: formData
-                                })
+                                method: 'POST',
+                                body: formData
+                            })
                                 .then(response => response.json())
                                 .then(photoData => {
                                     if (photoData.success) {
-                                        alert('Blog photo updated successfully!');
+                                        alert('Blog photos updated successfully!');
+                                        closeModal();
+                                        fetchBlogs('get-my-blogs');
                                     } else {
-                                        alert('Failed to upload photo: ' + photoData.message);
+                                        alert('Failed to upload photos: ' + photoData.message);
+                                        closeModal();
                                     }
                                 })
-                                .catch(error => console.error('Error uploading photo:', error));
+                                .catch(error => console.error('Error uploading photos:', error));
                         }
 
 

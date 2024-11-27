@@ -28,6 +28,7 @@ function printBlogs(blogArr)
     // Create and append container for print pages
     const printContainer = document.createElement("div");
     printContainer.classList.add("printable");
+    printContainer.id = "print-cont";
     document.body.appendChild(printContainer);
 
     // Page number tracker.
@@ -49,11 +50,6 @@ function printBlogs(blogArr)
 
     // Open print menu.
     window.print();
-
-    // Clear print elements from body after a short delay for cross-platform compatibility.
-    setTimeout(() => {
-        document.body.removeChild(printContainer);
-    }, 100); // 100 ms delay to allow print dialog to load fully
 
     /**
      * Creates and appends a page with a given blogs info.
@@ -147,27 +143,23 @@ function printBlogs(blogArr)
             
             function entry()
             {
-                var entryIndex = pageNum % 28 - 1;
+                var entryIndex = pageNum % 38 - 1;
                 if (entryIndex == 0 && pageNum != 1) {
                     createTOC();
                 }
                 const tableEntry = document.createElement('div');
-                tableEntry.className = "table-entry";
+                    tableEntry.className = "table-entry";
 
-                const entryImage = document.createElement("img");
-                    entryImage.className = "entry-image";
-                    entryImage.src = imgSrc;
-                    tableEntry.appendChild(entryImage);
+                const entryNum = document.createElement('p');
+                    entryNum.innerHTML = `${pageNum}`;
+                    entryNum.className = "entry-num";
+                    tableEntry.appendChild(entryNum);
 
                 const entryTitle = document.createElement('p');
                     entryTitle.innerHTML = `${blog.title}`;
                     entryTitle.className = "entry-title";
                     tableEntry.appendChild(entryTitle);
-
-                const entryNum = document.createElement('p');
-                    entryNum.innerHTML = `Pg. ${pageNum}`;
-                    entryNum.className = "entry-num";
-                    tableEntry.appendChild(entryNum);
+                
                 
                 tocPage.appendChild(tableEntry);
             }
@@ -196,3 +188,14 @@ function printBlogs(blogArr)
         // Elements to make title page.
     }
 };
+
+/**
+ * Event Listener. Deletes print elements from body after
+ * triggering the aftrprint event.
+ * 
+ * The afterprint event is executed either after printing
+ * or exiting the print menu.
+ */
+window.addEventListener("afterprint", (event) => {
+    document.getElementById("print-cont").remove();
+});

@@ -47,9 +47,9 @@ if (!isset($_SESSION['current_user_email'])) {
 
                 <div class="col-4 row" id="button-container">
                     <div class="col">
-                        <button type="button" class="btn btn-primary" id='update-button' onclick="updateBook()">Save
+                        <button type="button" class="btn btn-primary disabled" id='update-button'>Save
                             Book</button>
-                        <button type="button" class="btn btn-danger" id='delete-button' onclick="deleteBook()">Delete
+                        <button type="button" class="btn btn-danger" id='delete-button'>Delete
                             Book</button>
                     </div>
 
