@@ -43,7 +43,30 @@ if (isset($_POST['new-register'])) {
                 // If on a local server, use the relative path to the default blank icon
                 $_SESSION['user_img'] = "/photo_abcd_A/images/blankicon.jpg";
             } else {
-                $_SESSION['user_img'] = "/images/blankicon.jpg";
+
+                $currentUserEmail = $_SESSION['current_user_email'];
+
+                // Define the base directory relative to the root of server
+                $baseDir = $_SERVER['DOCUMENT_ROOT'] . '/images/users/';
+                $uploadDir = $baseDir . $currentUserEmail;
+
+                // Check if the directory exists, if not, create it
+                if (!file_exists($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                // Define the path for the default image (blankicon.jpg)
+                $defaultImagePath = $_SERVER['DOCUMENT_ROOT'] . '/images/blankicon.jpg';
+
+                // Define the path where the copy of blankicon.jpg will be placed
+                $newImagePath = $uploadDir . '/blankicon.jpg';
+
+                // Copy the blankicon.jpg file to the new directory
+                if (copy($defaultImagePath, $newImagePath)) {
+                    // Save the image path in the session for use in profile settings
+                    $_SESSION['user_img'] = '/images/users/' . $currentUserEmail . '/blankicon.jpg';
+                }
+
             }
 
             $conn->close();
