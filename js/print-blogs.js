@@ -1,67 +1,58 @@
-/**
- * Dynamically creates and appends page elements for printing blogs.
- * Print elements are removed after print menu is displayed.
- *
- * The layout of the printed pages requires the print-page.css file.
- *
- * Blogs require an array of names from the blog images. Refer to
- * the abook-get-user-blogs.php file for implementation details.
- *
- * ---
- * Usage:
- * - Include print-page.css in head.
- * - Get array of blog rows
- * - Pass blog rows to printBlogs
- * ---
- * Structure of elements:
- * - Page Container: Contains the pages. Is appeneded to the < body >.
- *   - Page: A single page formatted for printing.
- *     - Page Header: Contains the blog title and event date.
- *     - Page Body: Contains the blog images.
- *     - Page Footer: Contains the blog descriptions.
- *    - Other Pages...
- * ---
- * @param {*} blogArr Array of blog rows.
- */
-function printBlogs(blogArr)
-{
-    // Create and append container for print pages
+function printBlogs(blogArr) {
+    // Create and append container
     const printContainer = document.createElement("div");
     printContainer.classList.add("printable");
     printContainer.id = "print-cont";
     document.body.appendChild(printContainer);
 
-    // Page number tracker.
-    var pageNum = 1;
-
-    // Add Title Page
+    // Page number tracker
+    let pageNum = 1;
 
     // Add Table of Contents Page
-    var tocPage;
+    let tocPage;
     const tableOfContents = document.createElement('div');
-        tableOfContents.classList.add("table-of-contents");
+    tableOfContents.classList.add("table-of-contents");
     printContainer.appendChild(tableOfContents);
     createTOC();
 
-    // Create a page for every blog entry in blogArr parameter.
+    // Array to keep track of loaded images
+    const imagesLoaded = [];
+
+    // Create a page for every blog entry
     blogArr.forEach(blog => {
-        createPage(blog);
+        // Check if the blog has images
+        if (blog.images && blog.images.length > 0) {
+            blog.images.forEach(image => {
+                createPage(blog, image);
+            });
+        } else {
+             // No image, use default
+            createPage(blog);
+        }
     });
 
-    // Open print menu.
-    window.print();
+    // Open print menu after all pages are created
+    // Wait for all images to load before triggering the print dialog
+    Promise.all(imagesLoaded).then(() => {
+        window.print();
+    });
 
     /**
-     * Creates and appends a page with a given blogs info.
-     * Requires that blogs contain an array of images.
+     * Creates and appends a page with a given blog's info and image.
+     * Each image gets its own page, or the default image if no image is available.
      *
      * @param {*} blog Blog that is being printed.
-     * @param {*} image Blog image to display for multi-image blogs.
+     * @param {*} image The image to display for multi-image blogs.
      */
-    function createPage(blog, image = undefined)
-    {
-        var imgSrc;
-        const blogCount = blog.images.length;
+    function createPage(blog, image = undefined) {
+        let imgSrc;
+        if (image) {
+            imgSrc = `images/${blog.blog_id}/${image}`;
+        } else {
+            // Default image when no image is provided
+            imgSrc = "images/photoABCDLogo.png";
+        }
+
         const printElement = document.createElement('div');
         const printHeader = document.createElement('div');
         const blogTitle = document.createElement("h1");
@@ -78,123 +69,93 @@ function printBlogs(blogArr)
         });
         const blogDesc = document.createElement("div");
 
-        if (image == undefined) {
-            switch (blogCount)
-            {
-                case 0:
-                    imgSrc = "images/photoABCDLogo.png";
-                    createElements();
-                    pageNum++;
-                    break;
+        // Set the page content
+        createElements();
 
-                case 1:
-                    imgSrc = `images/${blog.blog_id}/${blog.images[0]}`
-                    createElements();
-                    pageNum++;
-                    break;
+        // Increment page number for each page created
+        pageNum++;
 
-                default:
-                    blog.images.forEach(blogImage => {
-                        createPage(blog, blogImage);
-                    });
-                    break;
-            }
-        } else {
-            imgSrc = `images/${blog.blog_id}/${image}`;
-            createElements();
-            pageNum++;
-        }
-
-        function createElements()
-        {
-            // Page Element: Consists of 3 parts: Header, Body, and Footer.
+        function createElements() {
             printElement.classList.add("printelement");
 
-            // Page Header Container.
             printHeader.className = "print-header";
-                blogTitle.innerHTML = blog.title;
+            blogTitle.innerHTML = blog.title;
             printHeader.appendChild(blogTitle);
 
-            // Page Body Container
             printBody.className = "print-body";
-                blogImage.src = imgSrc;
+            blogImage.src = imgSrc;
             printBody.appendChild(blogImage);
 
-
-            // Page Footer Container
             printFooter.className = "print-footer";
-                numBadge.className = "page-num"
-                numBadge.innerHTML = `Pg. ${pageNum}`;
-                blogEventDate.className = "event-date-badge";
-                blogEventDate.innerHTML = dateStr;
-                blogDesc.className = "desc";
-                blogDesc.innerHTML = blog.description;
+            numBadge.className = "page-num";
+            numBadge.innerHTML = `Pg. ${pageNum}`;
+            blogEventDate.className = "event-date-badge";
+            blogEventDate.innerHTML = dateStr;
+            blogDesc.className = "desc";
+            blogDesc.innerHTML = blog.description;
             printFooter.appendChild(numBadge);
             printFooter.appendChild(blogEventDate);
             printFooter.appendChild(blogDesc);
 
-            // Appending of page element parts.
             printElement.appendChild(printHeader);
             printElement.appendChild(printBody);
             printElement.appendChild(printFooter);
             printContainer.appendChild(printElement);
 
+            // Add entry to the Table of Contents
             entry();
             
-            function entry()
-            {
-                var entryIndex = pageNum % 38 - 1;
-                if (entryIndex == 0 && pageNum != 1) {
-                    createTOC();
-                }
-                const tableEntry = document.createElement('div');
-                    tableEntry.className = "table-entry";
+            // Add to imagesLoaded array, and make sure page isn't printed until the image is loaded
+            const imgLoadPromise = new Promise((resolve, reject) => {
+                blogImage.onload = () => resolve();
+                blogImage.onerror = () => reject(`Image failed to load: ${imgSrc}`);
+            });
 
-                const entryNum = document.createElement('p');
-                    entryNum.innerHTML = `${pageNum}`;
-                    entryNum.className = "entry-num";
-                    tableEntry.appendChild(entryNum);
+            imagesLoaded.push(imgLoadPromise);
+        }
 
-                const entryTitle = document.createElement('p');
-                    entryTitle.innerHTML = `${blog.title}`;
-                    entryTitle.className = "entry-title";
-                    tableEntry.appendChild(entryTitle);
-                
-                
-                tocPage.appendChild(tableEntry);
-            }
+        // Add entry to Table of Contents (TOC)
+        function entry() {
+            const tableEntry = document.createElement('div');
+            tableEntry.className = "table-entry";
+
+            const entryNum = document.createElement('p');
+            entryNum.innerHTML = `${pageNum}`;
+            entryNum.className = "entry-num";
+            tableEntry.appendChild(entryNum);
+
+            const entryTitle = document.createElement('p');
+            entryTitle.innerHTML = `${blog.title}`;
+            entryTitle.className = "entry-title";
+            tableEntry.appendChild(entryTitle);
+
+            tocPage.appendChild(tableEntry);
         }
     }
 
-    function createTOC() 
-    {
+    /**
+     * Create Table of Contents
+     */
+    function createTOC() {
         const titleWrap = document.createElement('div');
-            titleWrap.classList.add("table-title");
+        titleWrap.classList.add("table-title");
 
-            const title = document.createElement('h1');
-                title.innerHTML = "Table of Contents";
-                titleWrap.appendChild(title);
+        const title = document.createElement('h1');
+        title.innerHTML = "Table of Contents";
+        titleWrap.appendChild(title);
 
         const entryContainer = document.createElement('div');
-            entryContainer.classList.add("entry-container");
-        
+        entryContainer.classList.add("entry-container");
+
         tocPage = entryContainer;
         tableOfContents.appendChild(titleWrap);
         tableOfContents.appendChild(entryContainer);
     }
-
-    function createTitlePage()
-    {
-        // Elements to make title page.
-    }
-};
+}
 
 /**
  * Event Listener. Deletes print elements from body after
- * triggering the aftrprint event.
- * 
- * The afterprint event is executed either after printing
- * or exiting the print menu.
+ * triggering the afterprint event.
  */
 window.addEventListener("afterprint", (event) => {
     document.getElementById("print-cont").remove();
