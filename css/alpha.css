@@ -240,3 +240,11 @@ img {
     border-radius: 20px;
     background: linear-gradient(90deg, #e2faed, #ccdffc);
 }
+
+.invalid {
+    border-color: red !important;
+}
+
+.error {
+    color: red;
+}
