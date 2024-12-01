@@ -28,7 +28,7 @@ if (!isset($_SESSION['current_user_email'])) {
         </div>
 
         <div class="container" id='book-content'>
-            <div class="row" id="util-bar">
+            <div id="util-bar">
                 <div class="col-8" id="progress-container">
                     <div class="row">
                         <div class="col">
@@ -45,17 +45,11 @@ if (!isset($_SESSION['current_user_email'])) {
 
                 </div>
 
-                <div class="col-4 row" id="button-container">
-                    <div class="col">
-                        <button type="button" class="btn btn-primary disabled" id='update-button'>Save Book</button>
-                        <button type="button" class="btn btn-danger" id='delete-button'>Delete Book</button>
-                    </div>
-
-                    <div class="col">
-                        <button type="button" class="btn btn-primary" id='edit-button' data-bs-target="#book-edit-modal" data-bs-toggle="modal">Edit Book</button>
-                        <button type="button" class="btn btn-primary" id='print-button' onclick="">Print Book</button>
-                    </div>
-
+                <div id="button-container">
+                    <button type="button" class="btn btn-primary disabled" id='update-button'>Save Book</button>
+                    <button type="button" class="btn btn-danger" id='delete-button'>Delete Book</button>
+                    <button type="button" class="btn btn-primary" id='edit-button' data-bs-target="#book-edit-modal" data-bs-toggle="modal">Edit Book</button>
+                    <button type="button" class="btn btn-primary" id='print-button' onclick="">Print Book</button>
                 </div>
 
 
@@ -63,7 +57,7 @@ if (!isset($_SESSION['current_user_email'])) {
 
             <!-- Styling to grid for height -->
             <div class='container' id='alpha-grid'>
-                <div class="row justify-content-center" id="alpha-grid-row"></div>
+                <div id="alpha-grid-row"></div>
             </div>
 
         </div>
