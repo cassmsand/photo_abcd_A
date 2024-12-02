@@ -109,7 +109,7 @@ and site title & logo.
         flex-wrap: nowrap;
         flex-direction: row;
         max-width: 300px;
-        max-height: inherit;
+        max-height: 120px;
         background-color: white;
         border-radius: 20px;
         justify-content: space-between;
@@ -123,19 +123,38 @@ and site title & logo.
             max-width: fit-content;
             min-width: 60%;
             align-content: start;
-            * {
-                margin: 0;
-                display: flex;
-                flex-wrap: nowrap;
-                flex-direction: row;
-                min-width: 100%;
-                text-align: center;
-                justify-content: center;
-            }
-
+            
             h4 {
                 border-bottom: 1px solid grey;
                 min-width: 100%;
+                text-align: center;
+            }
+
+            .btn-container {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+                min-width: 100%;
+                align-content: center;
+                justify-content: center;
+                gap: 5px;
+
+                .btn {
+                    display: flex;
+                    justify-content: center;
+                    min-width: 80%;
+                    min-height: 30%;
+                    font-size: 0.9rem;
+
+                    svg {
+                        display: flex;
+                        align-items: center;
+                        margin-left: 0px;
+                        margin-right: 5px;
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
             }
         }
 
@@ -244,14 +263,25 @@ Some properties may require a !important tag to make changes.
 
 @media (max-width: 1630px)  {
 
+    .main-header {
+        padding-left: 40px !important;
+        padding-right: 40px !important;
+    }
+
     .user-widget {
-        max-width: 200px !important;
+        max-width: 250px !important;
         max-height: 100px !important;
+
     }
 
     .user-links {
-        * {
-            font-size: 1rem !important;
+
+        .btn-container {
+            gap: 2px !important;
+    
+            .btn {
+                font-size: 0.8rem;
+            }
         }
 
         h4 {
@@ -273,13 +303,7 @@ Some properties may require a !important tag to make changes.
     
 }
 
-@media (max-width: 1330px) {
-
-    .main-header {
-        padding-left: 40px !important;
-        padding-right: 40px !important;
-    }
-
+@media (max-width: 1430px) {
     .user-links {
         * {
             font-size: 0.8rem !important;
@@ -305,7 +329,7 @@ Some properties may require a !important tag to make changes.
     
 }
 
-@media (max-width: 1135px) {
+@media (max-width: 1240px) {
 
     .main-header {
         padding-left: 20px !important;
@@ -316,10 +340,27 @@ Some properties may require a !important tag to make changes.
     }
 
     .user-widget {
-        max-width: 165px !important;
         position: absolute;
         right: 15px;
-        bottom: 10px;
+        bottom: 5px;
+    }
+
+    .profile-image {
+        display: none !important;
+    }
+
+    .btn-container {
+        flex-direction: row !important;
+        margin-bottom: 5px;
+
+        .btn {
+            font-size: 0rem !important;
+            min-width: 40% !important;
+            min-height: 30% !important;
+            svg {
+                margin-right: 0px !important;
+            }
+        }
     }
 
     .nav-bar > .nav.nav-pills {
@@ -342,7 +383,7 @@ Some properties may require a !important tag to make changes.
         top: 40%;
         left: 50%;
         margin-top: -50px;
-        margin-left: -50px;
+        margin-left: -100px;
     }
 }
 
@@ -359,27 +400,13 @@ Some properties may require a !important tag to make changes.
         padding: 5px !important;
     }
 
-    .logo {
-        margin-top: 0 !important;
-        margin-left: 0 !important;
-        left: 15px !important;
-        top: 10px !important;
-    }
-
-    .user-widget {
-        max-width: 125px !important;
-        right: 15px !important;
-        top: 10px !important;
-        bottom: unset;
-    }
-
     .profile-image {
         display: none !important;
     }
 
 }
 
-@media (max-width: 514px) {
+@media (max-width: 634px) {
     svg {
         margin-right: 0 !important;
     }

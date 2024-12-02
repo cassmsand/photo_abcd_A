@@ -5,10 +5,6 @@
         <label for="P">
     </div>
 
-    <div id="printButtonContainer">
-        <button id="printBlogsButton">Print Blogs</button>
-    </div>
-
     <!-- Posts Container for Grid -->
     <div id="postsContainer" class="grid-container"></div>
 

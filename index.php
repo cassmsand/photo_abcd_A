@@ -31,7 +31,7 @@ $CURRENT_PAGE = "Index";
         ?>
     };
     const actionType = 'get-blogs';
-    document.getElementById("newBlogButton").remove();
+    document.getElementById("blogFunctionsContainer").remove();
 </script>
 </body>
 </html>

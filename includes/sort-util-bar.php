@@ -1,7 +1,8 @@
 <div class="sorting-components">
         <!-- Search Form -->
-        <div class="wrapper" id="searchContainer">
 
+        <div class="wrapper" id="searchContainer">
+    
             <div class="labeled-input">
                 <label for="startDate">Title:</label>
                 <input type="text" id="searchInput" placeholder="Search by title...">
@@ -22,14 +23,23 @@
             </div>
 
             <div class="labeled-input">
-                <button class="sort-util-button" id="clearButton">Clear</button>
+                <button class="sort-util-button" id="clearButton" onclick="resetSearch()">Clear</button>
             </div>
 
+        </div>
+
+
+        <div class="wrapper" id="blogFunctionsContainer">
             <div class="labeled-input">
+                <label for="newBlogButton">Blogs:</label>
                 <button class="sort-util-button" id="newBlogButton" 
                     data-bs-toggle="modal" data-bs-target="#newBlogModal">
                     New Blog
                 </button>
+            </div>
+
+            <div class="labeled-input">
+                <button class="sort-util-button" id="printBlogsButton">Print Blogs</button>
             </div>
 
         </div>
@@ -58,3 +68,12 @@
 
         </div>
     </div>
+
+    <script>
+        function resetSearch() 
+        {
+            document.getElementById("searchInput").value = "";
+            document.getElementById("startDate").value = null;
+            document.getElementById("endDate").value = null;
+        }
+    </script>
