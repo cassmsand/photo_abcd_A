@@ -50,6 +50,18 @@
             <button id="saveButton">Save</button>
         </div>
     </div>
+
+    <!-- Privacy Modal -->
+    <div id="privacyModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="closePrivacyModal" style="cursor: pointer;">&times;</span>
+            <h2>Set Privacy for All Blogs</h2>
+            <p>Choose the visibility for all your blogs:</p>
+            <button id="makeAllPublic" class="privacy-action-button">Make All Public</button>
+            <button id="makeAllPrivate" class="privacy-action-button">Make All Private</button>
+        </div>
+    </div>    
+
     <link rel="stylesheet" href="css/print-page.css">
     <script src="js/print-blogs.js"></script>
     <script>
@@ -243,6 +255,64 @@
 
 
     fetchBlogs('get-my-blogs');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const privacyButton = document.getElementById('privacyButton');
+        const privacyModal = document.getElementById('privacyModal');
+        const closeModal = document.getElementById('closePrivacyModal');
+        const makeAllPublic = document.getElementById('makeAllPublic');
+        const makeAllPrivate = document.getElementById('makeAllPrivate');
+
+        // Open Privacy Modal
+        privacyButton.addEventListener('click', () => {
+            privacyModal.style.display = 'flex';
+        });
+
+        // Close Privacy Modal
+        closeModal.addEventListener('click', () => {
+            privacyModal.style.display = 'none';
+        });
+
+        // Handle "Make All Public" action
+        makeAllPublic.addEventListener('click', () => {
+            // Ask for confirmation before proceeding
+            const confirmAction = confirm('Are you sure you want to make ALL your blogs public? This action cannot be undone.');
+            if (confirmAction) {
+                updatePrivacyForAll('public');
+            }
+        });
+
+        // Handle "Make All Private" action
+        makeAllPrivate.addEventListener('click', () => {
+            // Ask for confirmation before proceeding
+            const confirmAction = confirm('Are you sure you want to make ALL your blogs private? This action cannot be undone.');
+            if (confirmAction) {
+                updatePrivacyForAll('private');
+            }
+        });
+
+        // Function to update privacy for all blogs
+        function updatePrivacyForAll(privacyStatus) {
+            const url = baseUrl + 'actions/update-privacy.php';
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ privacy: privacyStatus }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`All blogs have been made ${privacyStatus}.`);
+                        privacyModal.style.display = 'none';
+                        fetchBlogs('get-my-blogs');
+                    } else {
+                        alert('Failed to update privacy settings.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+
 
     document.getElementById('printBlogsButton').addEventListener('click', async function() {
         const blogData = await getBlogData('date_asc'); //ensure blogs are sorted by event_date asc.
