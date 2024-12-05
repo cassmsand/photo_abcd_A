@@ -107,7 +107,6 @@
                     fetch(getImageUrl)
                         .then(response => response.json())
                         .then(data => {
-                            console.log('Fetched image URL:', data.image);
                             const userImagePath = data.image;
 
                             if (userImagePath) {
@@ -268,9 +267,6 @@
 
             // Parse the JSON response
             const blogData = await response.json();
-
-            // Check the content of the fetched data
-            console.log('Fetched blog data:', blogData);
 
             // Return the blog data
             return blogData;
@@ -434,8 +430,6 @@
     const openEditModal = (post) => {
         document.getElementById('editModal').style.display = 'block';
 
-        console.log("Opening modal for post:", post); // Debug log
-
         // Populate the fields with the existing data from the post object
         document.getElementById('blogId').value = post.blog_id; // Should be defined
         document.getElementById("editTitle").value = post.title; // Auto-fill title with current title
@@ -474,7 +468,6 @@
         if (confirm('Are you sure you want to delete this photo?')) {
             const blogId = document.getElementById('blogId').value;
             const photoPath = document.getElementById('photoDisplay').src.replace(window.location.origin, '');
-            console.log('Sending photo path:', photoPath);
 
             fetch(`actions/delete-photo.php`, {
                 method: 'POST',
@@ -488,7 +481,6 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Response from server:', data);
                     if (data.success) {
                         alert('Photo deleted successfully!');
                         // Fetch updated blog data and update the modal with the new photos
@@ -572,10 +564,7 @@
         const eventDate = document.getElementById('eventDate').value;
         const creationDate = document.getElementById('creationDate').value;
 
-        // ensure new title doesnt start with symbol
-        // to validate the title of blog
-        console.log(description);
-        console.log(title);
+        //validation of title/descrption/date
         if (isFieldEmpty()) {
             alert('Title and Description cannot be empty!');
         } else if (!checkTitle()) {
@@ -600,7 +589,6 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Response from server:", data); // Debug log
                     if (data.success) {
                         alert('Blog post info updated successfully!');
                         fetchBlogs('get-my-blogs'); // Reload blogs
@@ -694,7 +682,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log("Response from server:", data); // Debug log
+                //("Response from server:", data); // Debug log
                 if (data.success) {
                     alert('Blog post deleted successfully!');
                     // Reload the posts to reflect changes
