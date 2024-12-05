@@ -142,8 +142,8 @@ and site title & logo.
                 .btn {
                     display: flex;
                     justify-content: center;
-                    min-width: 80%;
-                    min-height: 30%;
+                    min-width: 145px;
+                    min-height: 35px;
                     font-size: 0.9rem;
 
                     svg {
@@ -232,11 +232,12 @@ and site title & logo.
 }
 
 /*
-Main Body Content. It's here, but it doesn't do very much
+Main Body/Content. It's here, but it doesn't do very much
 so its pretty much just decoration here.
 */
+#main-content,
 #main-body {
-    min-height: 100%;
+    max-width: 1430px;
 }
 
 /* 
