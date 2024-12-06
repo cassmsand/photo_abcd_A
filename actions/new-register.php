@@ -2,80 +2,91 @@
 session_start();
 include_once "../includes/db-conn.php";
 
-/*
-Path:
-[login-register_modal] -> [new-register.php] -> [defined header location]
-
-Process:
-- Receive POST data
-- Create MySQL statement
-- Do insert new user
-- Go to page defined by header
-
-Needs:
-- Safety Testing?
-    - Might have been addressed with the header redirect and exit() method.
-- Invalid Input Testing
-*/
-
 if (isset($_POST['new-register'])) {
+    // Collect POST data
     $email = $_POST['email'];
     $password = $_POST['password'];
     $retypePassword = $_POST['retype-password'];
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
+
+    // Check if email already exists in the database
+    $sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("s", $email);
+        
+        $stmt->execute();
+        $stmt->bind_result($emailCount);
+        $stmt->fetch();
+
+        // If email already exists, set session error and redirect
+        if ($emailCount > 0) {
+            $_SESSION['error'] = 'This email is already in use. Please choose a different one.';
+            header("Location: ../index.php");
+            exit();
+        }
+        
+        $stmt->close();
+    } else {
+        $_SESSION['error'] = 'Database error. Please try again later.';
+        header("Location: ../index.php");
+        exit();
+    }
+
+    // Hash the password
     $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
 
+    // Create SQL query to insert the new user
     $sql = "INSERT INTO users (email, password, first_name, last_name) VALUES (?,?,?,?)";
-
+    
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("ssss", $email, $hashed_pw, $fname, $lname);
+
+        // If successful, set session variables
         if ($stmt->execute()) {
             $_SESSION['current_user_email'] = $email;
             $_SESSION['current_user_first_name'] = $fname;
             $_SESSION['current_user_last_name'] = $lname;
             $_SESSION['current_user_role'] = "blogger";
 
-            // Check if the server is local
+            // Default image setup
             $isLocalServer = ($_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == '127.0.0.1');
-
             if ($isLocalServer) {
-                // If on a local server, use the relative path to the default blank icon
                 $_SESSION['user_img'] = "/photo_abcd_A/images/blankicon.jpg";
             } else {
-
                 $currentUserEmail = $_SESSION['current_user_email'];
-
-                // Define the base directory relative to the root of server
                 $baseDir = $_SERVER['DOCUMENT_ROOT'] . '/images/users/';
                 $uploadDir = $baseDir . $currentUserEmail;
 
-                // Check if the directory exists, if not, create it
                 if (!file_exists($uploadDir)) {
                     mkdir($uploadDir, 0755, true);
                 }
 
-                // Define the path for the default image (blankicon.jpg)
                 $defaultImagePath = $_SERVER['DOCUMENT_ROOT'] . '/images/blankicon.jpg';
-
-                // Define the path where the copy of blankicon.jpg will be placed
                 $newImagePath = $uploadDir . '/blankicon.jpg';
 
-                // Copy the blankicon.jpg file to the new directory
                 if (copy($defaultImagePath, $newImagePath)) {
-                    // Save the image path in the session for use in profile settings
                     $_SESSION['user_img'] = '/images/users/' . $currentUserEmail . '/blankicon.jpg';
                 }
-
             }
 
             $conn->close();
             header("Location: ../index.php");
             exit();
+            
         } else {
-            echo "Error: " . $stmt->error;
+            // If execution fails, redirect with an error
+            $_SESSION['error'] = 'Registration failed. Please try again later.';
+            header("Location: ../index.php");
+            exit();
         }
+
         $stmt->close();
+    } else {
+        // Prepare failed, redirect with error
+        $_SESSION['error'] = 'Database error. Please try again later.';
+        header("Location: ../index.php");
+        exit();
     }
 }
 ?>
