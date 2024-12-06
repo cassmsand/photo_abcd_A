@@ -3,18 +3,23 @@ session_start();
 include_once "../includes/db-conn.php";
 
 if (isset($_POST['new-register'])) {
-    // Collect POST data
     $email = $_POST['email'];
     $password = $_POST['password'];
     $retypePassword = $_POST['retype-password'];
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
 
+    // Check if the passwords match
+    if ($password !== $retypePassword) {
+        $_SESSION['error'] = 'Passwords do not match.';
+        header("Location: ../index.php");
+        exit();
+    }
+
     // Check if email already exists in the database
     $sql = "SELECT COUNT(*) FROM users WHERE email = ?";
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("s", $email);
-        
         $stmt->execute();
         $stmt->bind_result($emailCount);
         $stmt->fetch();
@@ -25,7 +30,7 @@ if (isset($_POST['new-register'])) {
             header("Location: ../index.php");
             exit();
         }
-        
+
         $stmt->close();
     } else {
         $_SESSION['error'] = 'Database error. Please try again later.';
@@ -42,7 +47,6 @@ if (isset($_POST['new-register'])) {
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("ssss", $email, $hashed_pw, $fname, $lname);
 
-        // If successful, set session variables
         if ($stmt->execute()) {
             $_SESSION['current_user_email'] = $email;
             $_SESSION['current_user_first_name'] = $fname;
@@ -54,26 +58,34 @@ if (isset($_POST['new-register'])) {
             if ($isLocalServer) {
                 $_SESSION['user_img'] = "/photo_abcd_A/images/blankicon.jpg";
             } else {
+                // For remote server, handle user-specific folder creation
                 $currentUserEmail = $_SESSION['current_user_email'];
                 $baseDir = $_SERVER['DOCUMENT_ROOT'] . '/images/users/';
                 $uploadDir = $baseDir . $currentUserEmail;
 
+                // Ensure the user-specific directory exists
                 if (!file_exists($uploadDir)) {
                     mkdir($uploadDir, 0755, true);
                 }
 
-                $defaultImagePath = $_SERVER['DOCUMENT_ROOT'] . '/images/blankicon.jpg';
+                // Path for default image
                 $newImagePath = $uploadDir . '/blankicon.jpg';
 
-                if (copy($defaultImagePath, $newImagePath)) {
-                    $_SESSION['user_img'] = '/images/users/' . $currentUserEmail . '/blankicon.jpg';
+                if (!file_exists($newImagePath)) {
+                    $defaultImagePath = $_SERVER['DOCUMENT_ROOT'] . '/images/blankicon.jpg';
+                    if (file_exists($defaultImagePath)) {
+                        copy($defaultImagePath, $newImagePath);
+                    }
                 }
+
+                // Set the path to the user's profile image
+                $_SESSION['user_img'] = '/images/users/' . $currentUserEmail . '/blankicon.jpg';
             }
 
+            // Close connection and redirect after successful registration
             $conn->close();
             header("Location: ../index.php");
             exit();
-            
         } else {
             // If execution fails, redirect with an error
             $_SESSION['error'] = 'Registration failed. Please try again later.';
