@@ -26,7 +26,7 @@ function printBlogs(blogArr) {
                 createPage(blog, image);
             });
         } else {
-             // No image, use default
+            // No image, use default
             createPage(blog);
         }
     });
@@ -104,7 +104,7 @@ function printBlogs(blogArr) {
 
             // Add entry to the Table of Contents
             entry();
-            
+
             // Add to imagesLoaded array, and make sure page isn't printed until the image is loaded
             const imgLoadPromise = new Promise((resolve, reject) => {
                 blogImage.onload = () => resolve();
@@ -158,5 +158,8 @@ function printBlogs(blogArr) {
  * triggering the afterprint event.
  */
 window.addEventListener("afterprint", (event) => {
-    document.getElementById("print-cont").remove();
+    const printCont = document.getElementById("print-cont");
+    if (printCont) {
+        printCont.remove();
+    }
 });
