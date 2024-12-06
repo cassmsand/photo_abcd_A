@@ -35,7 +35,7 @@ CREATE TABLE `blogs` (
   `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `privacy_filter` enum('private','public') DEFAULT 'private',
-  `youtube_link` text
+  `youtube_link` varchar(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
