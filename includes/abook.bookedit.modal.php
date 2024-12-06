@@ -10,7 +10,8 @@
 
                     <div class="form-group">
                         <label>Book Title</label>
-                        <input type="text" name="title" class="form-control" id="bookedit-title" required="">
+                        <input type="text" name="title" class="form-control" id="bookedit-title" required minlength="1" maxlength="16" pattern="[a-zA-Z0-9\s]{1,16}">
+                        <span class="error" aria-live="polite" id="book-edit-error"></span>
                     </div>
 
                 </div>
@@ -20,13 +21,11 @@
                     <div class="row" id="button-container">
 
                         <div class="col">
-                            <button type="button" class="btn btn-primary" id='bookedit-confirm-button'
-                                data-bs-dismiss="modal">Confirm</button>
+                            <button type="button" class="btn btn-primary" id='bookedit-confirm-button'>Confirm</button>
                         </div>
 
                         <div class="col">
-                            <button type="button" class="btn btn-danger" id='bookedit-cancel-button'
-                                data-bs-dismiss="modal">Return</button>
+                            <button type="button" class="btn btn-danger" id='bookedit-cancel-button' data-bs-dismiss="modal">Return</button>
                         </div>
 
                     </div>

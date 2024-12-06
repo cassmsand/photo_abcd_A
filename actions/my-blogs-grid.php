@@ -5,10 +5,6 @@
         <label for="P">
     </div>
 
-    <div id="printButtonContainer">
-        <button id="printBlogsButton">Print Blogs</button>
-    </div>
-
     <!-- Posts Container for Grid -->
     <div id="postsContainer" class="grid-container"></div>
 
@@ -54,6 +50,18 @@
             <button id="saveButton">Save</button>
         </div>
     </div>
+
+    <!-- Privacy Modal -->
+    <div id="privacyModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="closePrivacyModal" style="cursor: pointer;">&times;</span>
+            <h2>Set Privacy for All Blogs</h2>
+            <p>Choose the visibility for all your blogs:</p>
+            <button id="makeAllPublic" class="privacy-action-button">Make All Public</button>
+            <button id="makeAllPrivate" class="privacy-action-button">Make All Private</button>
+        </div>
+    </div>    
+
     <link rel="stylesheet" href="css/print-page.css">
     <script src="js/print-blogs.js"></script>
     <script>
@@ -111,7 +119,6 @@
                     fetch(getImageUrl)
                         .then(response => response.json())
                         .then(data => {
-                            console.log('Fetched image URL:', data.image);
                             const userImagePath = data.image;
 
                             if (userImagePath) {
@@ -249,6 +256,64 @@
 
     fetchBlogs('get-my-blogs');
 
+    document.addEventListener('DOMContentLoaded', () => {
+        const privacyButton = document.getElementById('privacyButton');
+        const privacyModal = document.getElementById('privacyModal');
+        const closeModal = document.getElementById('closePrivacyModal');
+        const makeAllPublic = document.getElementById('makeAllPublic');
+        const makeAllPrivate = document.getElementById('makeAllPrivate');
+
+        // Open Privacy Modal
+        privacyButton.addEventListener('click', () => {
+            privacyModal.style.display = 'flex';
+        });
+
+        // Close Privacy Modal
+        closeModal.addEventListener('click', () => {
+            privacyModal.style.display = 'none';
+        });
+
+        // Handle "Make All Public" action
+        makeAllPublic.addEventListener('click', () => {
+            // Ask for confirmation before proceeding
+            const confirmAction = confirm('Are you sure you want to make ALL your blogs public? This action cannot be undone.');
+            if (confirmAction) {
+                updatePrivacyForAll('public');
+            }
+        });
+
+        // Handle "Make All Private" action
+        makeAllPrivate.addEventListener('click', () => {
+            // Ask for confirmation before proceeding
+            const confirmAction = confirm('Are you sure you want to make ALL your blogs private? This action cannot be undone.');
+            if (confirmAction) {
+                updatePrivacyForAll('private');
+            }
+        });
+
+        // Function to update privacy for all blogs
+        function updatePrivacyForAll(privacyStatus) {
+            const url = baseUrl + 'actions/update-privacy.php';
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ privacy: privacyStatus }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`All blogs have been made ${privacyStatus}.`);
+                        privacyModal.style.display = 'none';
+                        fetchBlogs('get-my-blogs');
+                    } else {
+                        alert('Failed to update privacy settings.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+
+
     document.getElementById('printBlogsButton').addEventListener('click', async function() {
         const blogData = await getBlogData('date_asc'); //ensure blogs are sorted by event_date asc.
         if (blogData.length > 0) {
@@ -272,9 +337,6 @@
 
             // Parse the JSON response
             const blogData = await response.json();
-
-            // Check the content of the fetched data
-            console.log('Fetched blog data:', blogData);
 
             // Return the blog data
             return blogData;
@@ -438,8 +500,6 @@
     const openEditModal = (post) => {
         document.getElementById('editModal').style.display = 'block';
 
-        console.log("Opening modal for post:", post); // Debug log
-
         // Populate the fields with the existing data from the post object
         document.getElementById('blogId').value = post.blog_id; // Should be defined
         document.getElementById("editTitle").value = post.title; // Auto-fill title with current title
@@ -478,7 +538,6 @@
         if (confirm('Are you sure you want to delete this photo?')) {
             const blogId = document.getElementById('blogId').value;
             const photoPath = document.getElementById('photoDisplay').src.replace(window.location.origin, '');
-            console.log('Sending photo path:', photoPath);
 
             fetch(`actions/delete-photo.php`, {
                 method: 'POST',
@@ -492,7 +551,6 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Response from server:', data);
                     if (data.success) {
                         alert('Photo deleted successfully!');
                         // Fetch updated blog data and update the modal with the new photos
@@ -576,10 +634,7 @@
         const eventDate = document.getElementById('eventDate').value;
         const creationDate = document.getElementById('creationDate').value;
 
-        // ensure new title doesnt start with symbol
-        // to validate the title of blog
-        console.log(description);
-        console.log(title);
+        //validation of title/descrption/date
         if (isFieldEmpty()) {
             alert('Title and Description cannot be empty!');
         } else if (!checkTitle()) {
@@ -604,7 +659,6 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Response from server:", data); // Debug log
                     if (data.success) {
                         alert('Blog post info updated successfully!');
                         fetchBlogs('get-my-blogs'); // Reload blogs
@@ -698,7 +752,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log("Response from server:", data); // Debug log
+                //("Response from server:", data); // Debug log
                 if (data.success) {
                     alert('Blog post deleted successfully!');
                     // Reload the posts to reflect changes

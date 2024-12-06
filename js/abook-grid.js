@@ -10,6 +10,12 @@ const utilBar = document.getElementById('util-bar');
 const bookeditTitle = document.getElementById("bookedit-title");
 const bookPrintBtn = document.getElementById("print-button");
 
+const bookEditElement = document.getElementById("book-edit-modal");
+const newbookElement = document.getElementById("new-book-modal");
+
+const newbookTitle = document.getElementById("newbook-title");
+
+
 // Array of book and blog objects.
 let user_books = [];
 let user_blogs = [];
@@ -40,7 +46,6 @@ let selected_letter;
 var selected_blogs = [];
 var initialBlogs = [];
 var changed_entries = [];
-var hasChanges = false;
 
 
 /**
@@ -103,10 +108,11 @@ function init()
                     }
                 });
             }
-
+            /*
             console.log(user_books);
             console.log(user_blogs);
             console.log(possible_entries);
+            */
             
             displayBar();
         });
@@ -174,7 +180,7 @@ async function updateBook()
 
     newBookStr = newBookStr.substring(0, newBookStr.length - 1);
     newBookStr = `${oldBookTitle}|${newBookStr}`
-    console.log(newBookStr);
+    //console.log(newBookStr);
     
     await fetch(`actions/abook-update-book.php`, 
     {
@@ -377,7 +383,17 @@ function displayGrid(book)
                 var blog = getBlogById(blogidArr[0]);
                 if (blog != null) 
                 {
-                    createBlogCard(blog, 'grid');
+                    if (blog.title[0].toUpperCase() === letter.toUpperCase()) {
+                        createBlogCard(blog, 'grid');
+                    } else {
+                        current_book[letter] = [""];
+                        pending_book[letter] = [""];
+                        bookSaveBtn.classList.remove("disabled");
+                        bookSaveBtn.classList.add("selected");
+                        //console.log(current_book);
+                        createBlogCard(letter, 'blank');
+                    }
+                    
                 } 
                 else 
                 {
@@ -387,8 +403,19 @@ function displayGrid(book)
 
             default:
                 var multiBlog = [];
+                var validBlogs = [];
                 blogidArr.forEach(blogid => {
-                    multiBlog.push(getBlogById(blogid));
+                    var blog = getBlogById(blogid);
+
+                    if (blog.title[0].toUpperCase() === letter.toUpperCase()) {
+                        multiBlog.push(blog);
+                    } else {
+                        var invalidIndex = blogidArr.indexOf(blogid);
+                        current_book[letter].splice(invalidIndex, 1);
+                        pending_book[letter].splice(invalidIndex, 1);
+                        bookSaveBtn.classList.remove("disabled");
+                        bookSaveBtn.classList.add("selected");
+                    }
                 });
                 createBlogCard(multiBlog, 'multi');
                 break;
@@ -419,7 +446,7 @@ function clearContainer(container)
 function displayAvailableBlogs(letter, hasPending = false)
 {
     selected_letter = letter.toUpperCase();
-    console.log(letter);
+    //console.log(letter);
     var blogCardType;
 
     switch (hasPending)
@@ -692,8 +719,8 @@ function createBlogCard(blogOrChar, type = 'grid')
                 card.classList.add('selected');
                 selected_blogs.push(id);
 
-                console.log("Selected: \n", selected_blogs);
-                console.log("Initial: \n", initialBlogs);
+                //console.log("Selected: \n", selected_blogs);
+                //console.log("Initial: \n", initialBlogs);
             } 
             else 
             {
@@ -701,11 +728,11 @@ function createBlogCard(blogOrChar, type = 'grid')
                 var index = selected_blogs.indexOf(id);
                 selected_blogs.splice(index,1);
 
-                console.log("Selected: \n", selected_blogs);
-                console.log("Initial: \n", initialBlogs);
+                //console.log("Selected: \n", selected_blogs);
+                //console.log("Initial: \n", initialBlogs);
             }
             if (JSON.stringify(initialBlogs) != JSON.stringify(selected_blogs)) {
-                console.log("Savable");
+                //console.log("Savable");
                 gridConfirmBtn.classList.remove("disabled");
             } else {
                 gridConfirmBtn.classList.add("disabled");
@@ -984,7 +1011,7 @@ gridConfirmBtn.addEventListener("click", function (e) {
     updatePending();
     if (!changed_entries.includes(selected_letter)) {
         changed_entries.push(selected_letter);
-        console.log(changed_entries);
+        //console.log(changed_entries);
     }
     bookSaveBtn.classList.add("selected");
     bookSaveBtn.classList.remove("disabled");
@@ -1018,15 +1045,70 @@ bookSaveBtn.addEventListener("click", function (e) {
 
 // Book Delete
 const bookDeleteBtn = document.getElementById("delete-button");
+var confirmation = false;
 bookDeleteBtn.addEventListener("click", function (e) {
-    deleteBook();
+    if (confirmation == false) {
+        bookDeleteBtn.innerHTML = "Confirm";
+        confirmation = true;
+        bookDeleteBtn.classList.add("selected");
+
+        setTimeout(() => {
+            confirmation = false;
+            bookDeleteBtn.innerHTML = "Delete Book";
+            bookDeleteBtn.classList.remove("selected");
+        }, 3000);
+
+    } else if (confirmation == true) {
+        deleteBook();
+        bookDeleteBtn.innerHTML = "Delete Book";
+        confirmation = false;
+        bookDeleteBtn.classList.remove("selected");
+    }
 })
 
 // New Book Modal Confirm
 const newBookConfirmBtn = document.getElementById("newbook-confirm-button");
 newBookConfirmBtn.addEventListener("click", function (e) {
-    var newbookTitle = document.getElementById("newbook-title").value;
-    newBook(newbookTitle);
+    const newbookModal = bootstrap.Modal.getInstance(newbookElement);
+    const error = document.getElementById("newbook-error");
+    var noDuplicates = true;
+    var errorMsg = "";
+
+    user_books.forEach(book => {
+        if (newbookTitle.value == book.title[0]) {
+            noDuplicates = false;
+        }
+    });
+
+    if (newbookTitle.validity.valid && noDuplicates)
+    {
+        newbookTitle.classList.remove("invalid");
+        error.textContent = "";
+        newBook(newbookTitle.value);
+        newbookModal.hide();
+        newbookTitle.value = "";
+    } else {
+        newbookTitle.classList.add("invalid");
+
+        if (!noDuplicates) {
+            errorMsg = "Duplicate Book Title.";
+        } else if (newbookTitle.value.length < 1) {
+            errorMsg = "Title cannot be empty.";
+        } else if (newbookTitle.value.length > 16) {
+            errorMsg = "Title must be 16 characters or less.";
+        } else {
+            errorMsg = "Title may only contain letters and numbers.";
+        }
+
+        error.textContent = errorMsg;
+    }
+})
+
+const newBookCancelBtn = document.getElementById("newbook-cancel-button");
+newBookCancelBtn.addEventListener("click", function(e) {
+    const error = document.getElementById("newbook-error");
+    newbookTitle.classList.remove("invalid");
+    error.textContent = "";
 })
 
 // Edit Book Modal Toggle
@@ -1036,16 +1118,56 @@ bookEditModalBtn.addEventListener("click", function (e) {
     bookeditTitle.value = title;
 })
 
-// Book Edit Modal Confirm & Cancel
+// Book Edit Modal Confirm
 const bookConfirmBtn = document.getElementById("bookedit-confirm-button");
 bookConfirmBtn.addEventListener("click", function (e) {
-    const obj = {};
-    obj['title'] = [bookeditTitle.value];
-    Object.assign(pending_book, obj);
-    bookeditTitle.value = "";
+    const bookEditModal = bootstrap.Modal.getInstance(bookEditElement);
+    const editField = document.getElementById("bookedit-title");
+    const error = document.getElementById("book-edit-error");
+    var noDuplicates = true;
+    var errorMsg = "";
+
+    user_books.forEach(book => {
+        if (editField.value == book.title[0]) {
+            noDuplicates = false;
+        }
+        
+    });
+
+    if (editField.validity.valid && noDuplicates)
+    {
+        bookSaveBtn.classList.add("selected");
+        bookSaveBtn.classList.remove("disabled");
+        editField.classList.remove("invalid");
+        const obj = {};
+        obj['title'] = [bookeditTitle.value];
+        Object.assign(pending_book, obj);
+        bookEditModal.hide();
+        bookeditTitle.value = "";
+        error.textContent = "";
+    } else {
+        editField.classList.add("invalid");
+
+        if (!noDuplicates) {
+            errorMsg = "Duplicate Book Title";
+        } else if (bookeditTitle.value.length < 1) {
+            errorMsg = "Title cannot be empty";
+        } else if (bookeditTitle.value.length > 16) {
+            errorMsg = "Title must be 16 characters or less.";
+        } else {
+            errorMsg = "Title may only contain letters and numbers.";
+        }
+
+        error.textContent = errorMsg;
+    }
 })
 
+// Book Edit Modal Cancel
 const bookCancelBtn = document.getElementById("bookedit-cancel-button");
 bookCancelBtn.addEventListener("click", function (e) {
+    const editField = document.getElementById("bookedit-title");
+    const error = document.getElementById("book-edit-error");
+    editField.classList.remove("invalid");
     bookeditTitle.value = "";
+    error.textContent = "";
 })

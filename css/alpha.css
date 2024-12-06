@@ -20,6 +20,8 @@
 
 /* Card Styles */
 .card {
+    display: flex;
+    flex: 1;
     box-shadow: 15px 15px 12px rgba(0, 0, 0, 0.1);
     transition: transform 150ms ease-in-out;
 }
@@ -28,10 +30,12 @@
     transform: scale(110%);
 }
 
-.card.bar-card {
+.card.bar-card:not(#new-book) {
     padding: 0px;
     max-width: 180px;
+    min-width: 180px;
     max-height: 180px;
+    min-height: 180px;
 }
 
 .card.bar-card#new-book {
@@ -39,6 +43,7 @@
     min-height: 120px;
     max-width: 70px;
     max-height: 120px;
+    min-width: 70px;
     border-radius: 12%;
 }
 
@@ -102,7 +107,8 @@ img {
 
 /* Button Styles */
 .btn {
-    min-width: 100%;
+    font-size: 0.9rem;
+    min-width: 110px;
     max-width: 150px;
     max-height: 50px;
 }
@@ -125,22 +131,26 @@ img {
 }
 
 /* Alpha Grid Styles */
-#alpha-grid {
+#alpha-grid,
+#alpha-grid-row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    gap: 30px;
     margin-top: 20px;
-    height: fit-content;
+    min-width: 100%;
+    min-height: fit-content;
     padding: 10px;
     padding-top: 20px;
     border-radius: 20px;
     background-color: white;
-    display: grid;
 }
 
 #abook-modal-row,
 .row#alpha-grid-row {
-    display: flex;
     margin-top: 30px;
     margin-bottom: 30px;
-    gap: 30px;
 }
 
 .row#alpha-grid-row {
@@ -158,16 +168,23 @@ img {
 /* Utility Bar Styles */
 #util-bar {
     max-width: 80%;
+    row-gap: 15px;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
     margin-left: auto;
     margin-right: auto;
 }
 
 #button-container {
-    max-width: 400px;
+    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 250px;
+    max-height: inherit;
     align-content: center;
     justify-content: center;
-    margin: auto;
+    margin: 5px;
     display: flex;
 }
 
@@ -239,4 +256,47 @@ img {
     padding: 20px;
     border-radius: 20px;
     background: linear-gradient(90deg, #e2faed, #ccdffc);
+}
+
+.invalid {
+    border-color: red !important;
+}
+
+.error {
+    color: red;
+}
+
+@media (max-width: 1200px) {
+    .card:not(#new-book) {
+        scale: 90%;
+    }
+    
+    #alpha-grid-row {
+        gap: 5px !important;
+    }
+
+    #prog-header {
+        font-size: 1.8rem !important;
+    }
+
+}
+
+@media (max-width: 776px) {
+    .card:not(#new-book) {
+        scale: 80%;
+    }
+    
+    #alpha-grid-row {
+        gap: 0px !important;
+    }
+
+    #prog-header {
+        font-size: 1.6rem !important;
+    }
+
+}
+
+@media (max-width: 514px) {
+
+
 }
