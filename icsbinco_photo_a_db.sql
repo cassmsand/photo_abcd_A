@@ -73,7 +73,8 @@ INSERT INTO `blogs` (`blog_id`, `creator_email`, `title`, `description`, `event_
 CREATE TABLE `preferences` (
   `name` varchar(100) NOT NULL,
   `value` varchar(255) NOT NULL,
-  `notes` text
+  `notes` text,
+  `blog_mode` varchar(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
