@@ -34,14 +34,15 @@ CREATE TABLE `blogs` (
   `event_date` date NOT NULL,
   `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `privacy_filter` enum('private','public') DEFAULT 'private'
+  `privacy_filter` enum('private','public') DEFAULT 'private',
+  `youtube_link` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `blogs`
 --
 
-INSERT INTO `blogs` (`blog_id`, `creator_email`, `title`, `description`, `event_date`, `creation_date`, `modification_date`, `privacy_filter`) VALUES
+INSERT INTO `blogs` (`blog_id`, `creator_email`, `title`, `description`, `event_date`, `creation_date`, `modification_date`, `privacy_filter`, `youtube_link`) VALUES
 (1, 'alice@example.com', 'A for Art', 'A blog about the beauty of abstract art.', '2024-05-10', '2024-09-27 03:25:44', '2024-09-27 03:25:44', 'public'),
 (2, 'alice@example.com', 'B for Books', 'My personal review of my favorite books.', '2024-06-01', '2024-09-27 03:25:44', '2024-09-27 03:25:44', 'private'),
 (3, 'alice@example.com', 'C for Cooking', 'Sharing some healthy and delicious recipes.', '2024-07-05', '2024-09-27 03:25:44', '2024-09-27 03:25:44', 'public'),
