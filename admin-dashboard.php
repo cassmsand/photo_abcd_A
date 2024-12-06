@@ -232,6 +232,45 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 					</div>
 				</section>
 				</br>
+				<section>
+				<?php
+					// Query to fetch the blog mode from the preferences table for the 'BLOG_MODE' setting
+					$sql1 = "SELECT value FROM preferences WHERE name = 'BLOG_MODE'"; 
+					$result = $conn->query($sql1);
+
+					// Fetch the result and get the blog_mode value
+					if ($result->num_rows > 0) {
+						// Assuming 'value' is the column storing the blog mode value
+						$row = $result->fetch_assoc();
+						$blogMode = $row['value']; 
+					} else {
+						$blogMode = "No mode set"; // Default if no data found
+					}
+				?>
+                    <div class="tableContainer">
+                        <h3>Site Blog Modes</h3>
+						<p1>Current Site Blog Mode: <?php echo htmlspecialchars($blogMode); ?> </p1>
+                        <table id="siteBlogModeTable" class="styledTable">
+                            <thead>
+                                <tr class="header">
+                                    <th>Site Blog Mode Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Photos</td>
+                                </tr>
+                                <tr>
+                                    <td>Mixed</td>
+                                </tr>
+                                <tr>
+                                    <td>Videos</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button id="updateSiteBlogModeButton">Update Site Blog Mode</button>
+                    </div>
+                </section>
 			</div>
 
 			<?php include("includes/footer.php");?>
@@ -422,11 +461,13 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 				$('#blogsTable').DataTable();
 				$('#adminAlphabetBookCountsTable').DataTable();
 				$('#siteTotalsTable').DataTable();
+				$('#siteBlogModeTable').DataTable();
 
 				const usersTable = new DataTable('#usersTable');
 				const blogsTable = new DataTable('#blogsTable');
 				const adminAlphabetBookCountsTable = new DataTable('#adminAlphabetBookCountsTable');
 				const siteTotalsTable = new DataTable('#siteTotalsTable');
+				const siteBlogModeTable = new DataTable('#siteBlogModeTable');
 
 				usersTable.on('click', 'tbody tr', function (e) {
 					if ($(this).hasClass('selected')) {
@@ -582,7 +623,72 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 						$(this).addClass('selected');
 					}
 				});
+
+				siteBlogModeTable.on('click', 'tbody tr', function (e) {
+					if ($(this).hasClass('selected')) {
+						$(this).removeClass('selected');
+					} else {
+						$('#siteBlogModeTable tbody tr').removeClass('selected');
+						$(this).addClass('selected');
+					}
+				});
+
 			});
+
+			function updateSiteBlogMode(siteBlogModeOption) {
+				const formData = {
+					siteBlogMode: siteBlogModeOption
+				};
+
+				// AJAX request
+				fetch('actions/update-site-blog-mode.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(formData),
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						alert(`SUCCESS: The Site Blog Mode has been updated to ${siteBlogModeOption}.`);
+						location.reload(); // Reload the page after update
+					} else {
+						alert(`Error updating Site Blog Mode: ${data.message || 'Unknown error'}`);
+					}
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+					alert('Error connecting to the server.');
+				});
+			}
+
+			// Click listener for the Update Blog Mode button
+			$('#updateSiteBlogModeButton').on('click', function() {
+				const selectedRow = $('#siteBlogModeTable tbody tr.selected');
+
+				if (selectedRow.length === 0) {
+					alert('Please select a site blog mode.');
+					return;
+				}
+
+				const siteBlogMode = selectedRow.find('td:eq(0)').text(); // Selected Site Blog Mode
+
+				// Ensure the value is valid
+				if (!siteBlogMode) {
+					alert('Invalid blog mode selected.');
+					return;
+				}
+
+				// Show the confirmation pop-up
+				const isConfirmed = window.confirm(`Are you sure you want to update the Site Blog Mode to ${siteBlogMode}?`);
+
+				if (isConfirmed) {
+					updateSiteBlogMode(siteBlogMode);
+				}
+			});
+
+
 		</script>
 
 	</body>
