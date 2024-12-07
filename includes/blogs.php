@@ -495,8 +495,11 @@ include ('view-profile-modal.php');
             blogContainer.appendChild(imageContainer);
             blogContainer.appendChild(blogDescription);
 
-            postsContainer.appendChild(blogContainer);
-            postsContainer.appendChild(blogSeparator);
+            if (table.youtube_link !== null) 
+            {
+                postsContainer.appendChild(blogContainer);
+                postsContainer.appendChild(blogSeparator);
+            }
         });
     }
 
