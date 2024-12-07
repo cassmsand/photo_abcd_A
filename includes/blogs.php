@@ -464,6 +464,25 @@ include ('view-profile-modal.php');
                 return `${hours}:${minutes} ${ampm}`;
             }
 
+            function validateVidUrl() {
+                var vidUrl = table.youtube_link;
+                if (vidUrl === null) {
+                    return null;
+
+                } else if (vidUrl.includes("youtube.com/watch")) {
+                    var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
+                    vidUrl = newUrl[0] + "embed/" + newUrl[1];
+                    console.log(newUrl[1]);
+                    return vidUrl;
+
+                } else if (vidUrl.includes("youtube.com/embed")) {
+                    return vidUrl;
+
+                } else {
+                    return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                }
+            }
+
             const creationDate = document.createElement('p');
             creationDate.className = 'blog-creation-date';
             creationDate.textContent = '   ' + formatCreationDate(table.creation_date) + ' ◦ ' +
@@ -477,7 +496,7 @@ include ('view-profile-modal.php');
             imageContainer.className = 'image-container';
 
             const blogVideo = document.createElement('iframe');
-                blogVideo.src = table.youtube_link;
+                blogVideo.src = validateVidUrl()
                 imageContainer.appendChild(blogVideo);
 
             const blogDescription = document.createElement('p');
@@ -663,8 +682,6 @@ include ('view-profile-modal.php');
                 .then(response => response.json())
                 .then(data => {
                     const fileCount = data.fileCount;
-                    console.log(table.youtube_link);
-                    console.log(fileCount);
                     if (fileCount > 1 || (fileCount >= 1 && table.youtube_link !== null)) {
                         leftArrow.style.display = 'inline';
                         rightArrow.style.display = 'inline';
