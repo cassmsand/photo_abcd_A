@@ -32,7 +32,7 @@ include_once("includes/db-conn.php");
  * Get Other Users Public Blogs
  * Get Admin View?
  */
-$attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter';
+$attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter, youtube_link';
 $where = "WHERE privacy_filter = 'public'";
 // Retrieve and sanitize filter inputs
 $title = isset($_GET['title']) ? $conn->real_escape_string($_GET['title']) : '';

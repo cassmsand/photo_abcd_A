@@ -1,7 +1,7 @@
 <?php
 $CURRENT_PAGE = "About";
-include_once("includes/db-conn.php");
 session_start();
+include_once("includes/db-conn.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
