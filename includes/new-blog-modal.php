@@ -21,6 +21,10 @@
                         <input type="file" class="form-control" id="new-blog-images" name="new-blog-images[]" accept=".jpg, .jpeg, .png, .gif" multiple>
                     </div>
                     <div class="mb-3">
+                        <label for="new-blog-images" class="form-label">Upload Youtube Link</label>
+                        <input type="text" class="form-control" id="youtube_link" name="youtube_link">
+                    </div>
+                    <div class="mb-3">
                         <label for="event-date" class="form-label">Event Date</label>
                         <input type="datetime-local" class="form-control" id="event-date" name="event-date" required>
                     </div>

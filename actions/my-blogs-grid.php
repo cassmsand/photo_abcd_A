@@ -66,6 +66,8 @@
     <script src="js/print-blogs.js"></script>
     <script>
     const baseUrl = '<?php echo $base_url; ?>';
+    const blogMode = "<?= $_SESSION['BLOG_MODE']?>";
+    console.log(blogMode);
 
     const fetchBlogs = (actionType, title = '', startDate = '', endDate = '', sortOrder = 'asc') => {
         fetch(
@@ -171,16 +173,6 @@
                         img.src = baseUrl + `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
                     };
 
-                    leftArrow.onclick = () => {
-                        currentPhotoIndex = (currentPhotoIndex - 1 + post.images.length) % post.images.length;
-                        updatePhoto();
-                    };
-
-                    rightArrow.onclick = () => {
-                        currentPhotoIndex = (currentPhotoIndex + 1) % post.images.length;
-                        updatePhoto();
-                    };
-
                     const blogDescription = document.createElement('p');
                     blogDescription.className = 'blog-description';
                     blogDescription.textContent = post.description;
@@ -223,10 +215,6 @@
                                 .description);
                         }
                     };
-
-                    photoContainer.appendChild(leftArrow);
-                    photoContainer.appendChild(img);
-                    photoContainer.appendChild(rightArrow);
                     
                     dropdownContent.appendChild(printLink);
                     dropdownContent.appendChild(editLink);
@@ -244,8 +232,167 @@
                     blogContainer.appendChild(blogDescription);
                     // blogContainer.appendChild(eventDate); // Removed event date
                     blogContainer.appendChild(optionsDropdown); // Add dropdown to blogContainer
+
                     
-                    postsContainer.appendChild(blogContainer);
+                    /**
+                     * Checks if blog video URL is a valid youtube URL.
+                     * 
+                     * If the URL is null, the entry is ignored and not displayed.
+                     * 
+                     * If the URL is a valid youtube WATCH link, then its converted into
+                     * a proper youtube EMBED link.
+                     * 
+                     * If the URL is proper, it's returned as is.
+                     * 
+                     * If the URL doesn't meet any of these conditions and is not null,
+                     * a default URL is used instead.
+                     */
+                    function validateVidUrl() {
+                        var vidUrl = post.youtube_link;
+                        if (vidUrl === null) {
+                            return null;
+
+                        } else if (vidUrl.includes("youtube.com/watch")) {
+                            var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
+                            vidUrl = newUrl[0] + "embed/" + newUrl[1];
+                            console.log(vidUrl);
+                            return vidUrl;
+
+                        } else if (vidUrl.includes("youtube.com/embed")) {
+                            return vidUrl;
+
+                        } else {
+                            return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                        }
+                    }
+
+                    switch (blogMode)
+                    {
+                        case "Videos":
+                            if (post.youtube_link !== null)
+                            {
+                                const blogVideo = document.createElement('iframe');
+                                var vidUrl = validateVidUrl();
+                                blogVideo.src = vidUrl;
+                                
+                                if (vidUrl !== null)
+                                {
+                                    photoContainer.appendChild(blogVideo);
+                                    postsContainer.appendChild(blogContainer);
+                                }
+                                
+                            }
+                            break;
+                        
+                        case "Mixed":
+                            photoContainer.appendChild(leftArrow);
+                            const blogVideo = document.createElement('iframe');
+                            const postLength = post.images.length;
+                            var vidUrl = validateVidUrl();
+                            blogVideo.src = vidUrl;
+
+                            if (post.images.length > 1 || (post.images.length >= 1 && post.youtube_link !== null)) 
+                            {
+                                leftArrow.style.display = "inline";
+                                rightArrow.style.display = "inline";
+                            }
+
+                            if (post.images.length === 0 && post.youtube_link === null) {
+                                img.src = 'images/photoABCDLogo.png';
+
+                            } else if (post.youtube_link !== null) {
+                                photoContainer.append(blogVideo);
+
+                            } else {
+                                img.src = `images/${post.blog_id}/${post.images[0]}`;
+                                photoContainer.append(img)
+                            }
+
+                            if (post.youtube_link !== null) {
+                                currentPhotoIndex = -1;
+
+
+                                leftArrow.onclick = () => {
+                                    currentPhotoIndex--;
+                                    if (currentPhotoIndex < -1)
+                                    {
+                                        currentPhotoIndex = postLength - 1;
+                                        photoContainer.removeChild(blogVideo);
+                                        img.src = `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
+                                        photoContainer.appendChild(img);
+
+                                    } else if (currentPhotoIndex == -1) {
+                                        photoContainer.removeChild(img);
+                                        photoContainer.appendChild(blogVideo);
+
+                                    } else {
+                                        img.src = `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
+                                    }
+
+                                    photoContainer.removeChild(rightArrow);
+                                    photoContainer.append(rightArrow);
+
+                                };
+
+                                rightArrow.onclick = () => {
+                                    currentPhotoIndex++;
+                                    if (currentPhotoIndex == postLength)
+                                    {
+                                        currentPhotoIndex = -1;
+                                        photoContainer.removeChild(img);
+                                        photoContainer.appendChild(blogVideo);
+
+                                    } else if (currentPhotoIndex == 0) {
+                                        photoContainer.removeChild(blogVideo);
+                                        img.src = `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
+                                        photoContainer.appendChild(img);
+
+                                    } else {
+                                        img.src = `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
+                                    }
+
+                                    photoContainer.removeChild(rightArrow);
+                                    photoContainer.append(rightArrow);
+                                    
+                                };
+
+                            } else {
+
+                                leftArrow.onclick = () => {
+                                    currentPhotoIndex = (currentPhotoIndex - 1 + post.images.length) % post.images.length;
+                                    updatePhoto();
+                                };
+
+                                rightArrow.onclick = () => {
+                                    currentPhotoIndex = (currentPhotoIndex + 1) % post.images.length;
+                                    updatePhoto();
+                                };
+                            }
+
+                            
+                            photoContainer.appendChild(rightArrow);
+                            postsContainer.appendChild(blogContainer);
+
+                            
+                            break;
+                        
+                        case "Photos":
+                            leftArrow.onclick = () => {
+                                currentPhotoIndex = (currentPhotoIndex - 1 + post.images.length) % post.images.length;
+                                updatePhoto();
+                            };
+
+                            rightArrow.onclick = () => {
+                                currentPhotoIndex = (currentPhotoIndex + 1) % post.images.length;
+                                updatePhoto();
+                            };
+
+                            photoContainer.appendChild(leftArrow);
+                            photoContainer.appendChild(img);
+                            photoContainer.appendChild(rightArrow);
+                            postsContainer.appendChild(blogContainer);
+                            break;
+                    }
 
 
                 });

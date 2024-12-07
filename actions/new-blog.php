@@ -8,6 +8,7 @@ if (isset($_POST['create-new-blog'])) {
     $desc = $_POST['desc'];
     $eventDate = $_POST['event-date'];
     $visibility = getVisibility();
+    $youtube_link = $_POST['youtube_link'];
 
     // Validate the title of the blog
     if (!preg_match('/^[a-zA-Z0-9].*/', $title)) {
@@ -19,10 +20,10 @@ if (isset($_POST['create-new-blog'])) {
     }
 
     // Insert blog details into the database
-    $sql = 'INSERT INTO blogs (creator_email, title, description, event_date, privacy_filter) VALUE (?,?,?,?,?)';
+    $sql = 'INSERT INTO blogs (creator_email, title, description, event_date, privacy_filter, youtube_link) VALUE (?,?,?,?,?,?)';
 
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param('sssss', $email, $title, $desc, $eventDate, $visibility);
+        $stmt->bind_param('ssssss', $email, $title, $desc, $eventDate, $visibility, $youtube_link);
 
         if ($stmt->execute()) {
             // Blog created successfully

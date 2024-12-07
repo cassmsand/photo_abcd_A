@@ -31,7 +31,18 @@ $CURRENT_PAGE = "Index";
         ?>
     };
     const actionType = 'get-blogs';
+
+    // Videos, Mixed, Photos
+    const blogMode = "<?= $_SESSION['BLOG_MODE']?>";
+    console.log(blogMode);
+
+    // Sort Bar Delete Logic
     document.getElementById("blogFunctionsContainer").remove();
+
+    if (blogMode == "Videos" || blogMode == "Mixed") {
+        document.getElementById("viewOptionContainer").style.display = "none";
+    }
+
 </script>
 </body>
 </html>

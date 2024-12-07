@@ -1,6 +1,6 @@
 <?php
-include_once("includes/db-conn.php");
 session_start();
+include_once("includes/db-conn.php");
 
 $CURRENT_PAGE = "Alphabet Book";
 if (!isset($_SESSION['current_user_email'])) {

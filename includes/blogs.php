@@ -47,6 +47,7 @@ include ('view-profile-modal.php');
     // Assign PHP variables to JavaScript variables
     const blogModular = <?php echo $_GET['blog_pairs']; ?>;
     const blogRow = document.getElementById('blog-row');
+
     var baseUrl = '<?php echo $base_url; ?>';
     var blankIcon = '<?php echo $blankIcon; ?>';
     let actionType1 = 'get-blogs'; // Declare actionType once
@@ -98,9 +99,15 @@ include ('view-profile-modal.php');
         fetchProfileBlogs(profileTitle, profileStartDate, profileEndDate, profileSortOrder, creatorId);
     }
 
+    /**
+     * constant: 1-3 options: Video, Mixed, Photo
+     * 
+     * Switch Statement: constant
+     *      constant viewOptions
+     */
+
     // Function to fetch blog posts with sorting and view options
-    const fetchBlogs = (title = '', startDate = '', endDate = '', sortOrder = 'asc', viewOptions =
-        'traditional') => {
+    const fetchBlogs = (title = '', startDate = '', endDate = '', sortOrder = 'asc', viewOptions = 'traditional') => {
         fetch(
                 `actions/${actionType1}.php?title=${encodeURIComponent(title)}&start_date=${startDate}&end_date=${endDate}&sort_order=${sortOrder}&view_options=${viewOptions}`
             )
@@ -118,9 +125,16 @@ include ('view-profile-modal.php');
                     return;
                 }
                 if (viewOptions === 'photoOnly') {
-                    displaySortedBlogs(sortOrder, blogModular, blogPosts)
-                } else {
-                    displayTraditionalView(blogModular, postsContainer, sortOrder, blogPosts)
+                    displaySortedBlogs(sortOrder, blogModular, blogPosts);
+
+                } else if (viewOptions === "traditional" && (blogMode !== "Videos" && blogMode !== "Mixed")) {
+                    displayTraditionalView(blogModular, postsContainer, sortOrder, blogPosts);
+
+                } else if (viewOptions === "traditional" && blogMode === "Videos") {
+                    displayVideoView(blogModular, postsContainer, sortOrder, blogPosts, blogMode);
+
+                } else if (viewOptions === "traditional" && blogMode === "Mixed") {
+                    displayMixedView(blogModular, postsContainer, sortOrder, blogPosts, blogMode);
                 }
 
             })
@@ -359,6 +373,422 @@ include ('view-profile-modal.php');
             postsContainer.appendChild(blogSeparator);
         });
     }
+
+    // Function to display traditional view for single video
+    function displayVideoView(blogModular, postsContainer, sortOrder, blogPosts) {
+        blogRow.innerHTML = ''; // Clear the container
+        let combinedGet = [];
+
+        // Sort blogs based on title in ascending or descending order
+        for (let j = 0; j < blogPosts.length; j++) {
+            for (let i = 0; i < blogModular.length; i++) {
+                if (blogPosts[j].blog_id === blogModular[i].table.blog_id) {
+                    combinedGet.push(blogModular[i])
+                    break;
+                }
+            }
+        }
+        combinedGet.sort((a, b) => {
+            const titleA = a.table.title.toLowerCase();
+            const titleB = b.table.title.toLowerCase();
+            const dateA = a.table.event_date;
+            const dateB = b.table.event_date;
+            if (sortOrder === 'asc') {
+                return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
+            } else if (sortOrder === 'desc') {
+                return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
+            } else if (sortOrder === 'date_asc') {
+                return dateA < dateB ? -1 : (dateA > dateB ? 1 : 0);
+            } else {
+                return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
+            }
+        });
+        combinedGet.forEach(post => {
+            const table = post.table;
+            const blogContainer = document.createElement('div');
+            blogContainer.className = 'blog-container';
+
+            const blogUserContainer = document.createElement('div');
+            blogUserContainer.className = 'blog-user-container';
+
+            const email = table.creator_email;
+            function sanitizeEmailForFilename(email) {
+                return email.toLowerCase().replace(/[^a-z0-9]/g, '_');
+            }
+
+            // Construct the URL to get the latest image from the server-side script
+            const getImageUrl = `actions/get-latest-image.php?email=${encodeURIComponent(email)}`;
+
+            // Create user image element and default to blank icon initially
+            const userImage = document.createElement('img');
+            userImage.alt = 'User Image';
+            userImage.className = 'blog-user-image';
+
+            const username = document.createElement('p');
+            username.className = 'blog-username';
+            username.textContent = table.creator_email;
+
+            // Add hover effect to create green glow around the username
+            username.addEventListener('mouseover', () => {
+                username.style.boxShadow = '0 0 8px 8px rgba(228, 253, 236, 1)';
+            });
+            username.addEventListener('mouseout', () => {
+                username.style.boxShadow = '';
+            });
+
+            // Click listener for each username
+            username.addEventListener('click', () => {
+                // Open the modal
+                $('#viewProfileModal').modal('show');
+                loadProfileView(table.creator_email);
+            });
+
+            function formatCreationDate(dateString) {
+                const date = new Date(dateString);
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${month}/${day}/${year}`;
+            }
+
+            function formatCreationTime(dateString) {
+                const date = new Date(dateString);
+                let hours = date.getHours();
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+
+                // Convert to 12-hour format
+                hours = hours % 12;
+                hours = hours ? String(hours).padStart(2, '0') : '12';
+
+                return `${hours}:${minutes} ${ampm}`;
+            }
+
+            function validateVidUrl() {
+                var vidUrl = table.youtube_link;
+                if (vidUrl === null) {
+                    return null;
+
+                } else if (vidUrl.includes("youtube.com/watch")) {
+                    var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
+                    vidUrl = newUrl[0] + "embed/" + newUrl[1];
+                    console.log(newUrl[1]);
+                    return vidUrl;
+
+                } else if (vidUrl.includes("youtube.com/embed")) {
+                    return vidUrl;
+
+                } else {
+                    return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                }
+            }
+
+            const creationDate = document.createElement('p');
+            creationDate.className = 'blog-creation-date';
+            creationDate.textContent = '   ' + formatCreationDate(table.creation_date) + ' ◦ ' +
+                formatCreationTime(table.creation_date);
+
+            const blogTitle = document.createElement('h2');
+            blogTitle.className = 'blog-title';
+            blogTitle.textContent = table.title;
+
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'image-container';
+
+            const blogVideo = document.createElement('iframe');
+                blogVideo.src = validateVidUrl()
+                imageContainer.appendChild(blogVideo);
+
+            const blogDescription = document.createElement('p');
+            blogDescription.className = 'blog-description';
+            blogDescription.textContent = table.description;
+
+            const blogSeparator = document.createElement('hr');
+            blogSeparator.className = 'blog-separator';
+
+            blogUserContainer.appendChild(userImage);
+            blogUserContainer.appendChild(username);
+            blogUserContainer.appendChild(creationDate);
+            blogContainer.appendChild(blogUserContainer);
+            blogContainer.appendChild(blogTitle);
+            blogContainer.appendChild(imageContainer);
+            blogContainer.appendChild(blogDescription);
+
+            if (table.youtube_link !== null) {
+                postsContainer.appendChild(blogContainer);
+                postsContainer.appendChild(blogSeparator);
+            }
+        });
+    }
+
+
+    function displayMixedView(blogModular, postsContainer, sortOrder, blogPosts) {
+        blogRow.innerHTML = ''; // Clear the container
+        let combinedGet = [];
+
+        // Sort blogs based on title in ascending or descending order
+        for (let j = 0; j < blogPosts.length; j++) {
+            for (let i = 0; i < blogModular.length; i++) {
+                if (blogPosts[j].blog_id === blogModular[i].table.blog_id) {
+                    combinedGet.push(blogModular[i])
+                    break;
+                }
+            }
+        }
+        combinedGet.sort((a, b) => {
+            const titleA = a.table.title.toLowerCase();
+            const titleB = b.table.title.toLowerCase();
+            const dateA = a.table.event_date;
+            const dateB = b.table.event_date;
+            if (sortOrder === 'asc') {
+                return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
+            } else if (sortOrder === 'desc') {
+                return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
+            } else if (sortOrder === 'date_asc') {
+                return dateA < dateB ? -1 : (dateA > dateB ? 1 : 0);
+            } else {
+                return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
+            }
+        });
+        combinedGet.forEach(post => {
+            const table = post.table;
+            const blogContainer = document.createElement('div');
+            blogContainer.className = 'blog-container';
+
+            const blogUserContainer = document.createElement('div');
+            blogUserContainer.className = 'blog-user-container';
+
+            const email = table.creator_email;
+            function sanitizeEmailForFilename(email) {
+                return email.toLowerCase().replace(/[^a-z0-9]/g, '_');
+            }
+
+            // Construct the URL to get the latest image from the server-side script
+            const getImageUrl = `actions/get-latest-image.php?email=${encodeURIComponent(email)}`;
+
+            // Create user image element and default to blank icon initially
+            const userImage = document.createElement('img');
+            userImage.alt = 'User Image';
+            userImage.className = 'blog-user-image';
+
+            const username = document.createElement('p');
+            username.className = 'blog-username';
+            username.textContent = table.creator_email;
+
+            fetch(getImageUrl)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched image URL:', data.image);
+                    const userImagePath = data.image;
+
+                    if (userImagePath) {
+                        userImage.src = userImagePath;
+                    } else {
+                        userImage.src = 'images/blankicon.jpg'; // Fallback image
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user image:', error);
+                    userImage.src = 'images/blankicon.jpg'; // Fallback on error
+                });
+
+
+            function formatCreationDate(dateString) {
+                const date = new Date(dateString);
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${month}/${day}/${year}`;
+            }
+
+            function formatCreationTime(dateString) {
+                const date = new Date(dateString);
+                let hours = date.getHours();
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+
+                // Convert to 12-hour format
+                hours = hours % 12;
+                hours = hours ? String(hours).padStart(2, '0') : '12';
+
+                return `${hours}:${minutes} ${ampm}`;
+            }
+
+            function validateVidUrl() {
+                var vidUrl = table.youtube_link;
+                if (vidUrl === null) {
+                    return null;
+
+                } else if (vidUrl.includes("youtube.com/watch")) {
+                    var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
+                    vidUrl = newUrl[0] + "embed/" + newUrl[1];
+                    console.log(newUrl[1]);
+                    return vidUrl;
+
+                } else if (vidUrl.includes("youtube.com/embed")) {
+                    return vidUrl;
+
+                } else {
+                    return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                }
+            }
+
+
+            const creationDate = document.createElement('p');
+            creationDate.className = 'blog-creation-date';
+            creationDate.textContent = '   ' + formatCreationDate(table.creation_date) + ' ◦ ' +
+                formatCreationTime(table.creation_date);
+
+            const blogTitle = document.createElement('h2');
+            blogTitle.className = 'blog-title';
+            blogTitle.textContent = table.title;
+
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'image-container';
+
+            const leftArrow = document.createElement('span');
+            leftArrow.className = 'left-arrow';
+            leftArrow.innerHTML = '&#9664;';
+            leftArrow.style.display = 'none';
+
+            const rightArrow = document.createElement('span');
+            rightArrow.className = 'right-arrow';
+            rightArrow.innerHTML = '&#9654;';
+            rightArrow.style.display = 'none';
+            imageContainer.appendChild(leftArrow);
+            const img = document.createElement('img');
+            const images = post.images;
+            var img_src;
+            const blogVideo = document.createElement('iframe');
+
+            blogVideo.src = validateVidUrl();
+
+            if (images.img_names.length === 0 && table.youtube_link === null) {
+                img_src = 'images/photoABCDLogo.png';
+            } else if (table.youtube_link !== null) {
+                imageContainer.append(blogVideo);
+            } else {
+                img_src = `${images.dir}${images.img_names[0]}`;
+                imageContainer.append(img)
+            }
+            img.src = img_src;
+            img.alt = 'Blog Image';
+            img.className = 'blog-photo';
+
+
+            imageContainer.appendChild(rightArrow);
+
+            fetch(`actions/count-files.php?blog_id=${table.blog_id}`)
+                .then(response => response.json())
+                .then(data => {
+                    const fileCount = data.fileCount;
+                    if (fileCount > 1 || (fileCount >= 1 && table.youtube_link !== null)) {
+                        leftArrow.style.display = 'inline';
+                        rightArrow.style.display = 'inline';
+                    }
+
+                    if (table.youtube_link !== null) {
+                        let currentImageIndex = -1;
+                        // Left arrow click event
+                        leftArrow.addEventListener('click', () => {
+                            currentImageIndex--;
+                            if (currentImageIndex < -1) {
+                                currentImageIndex = fileCount - 1;
+                                imageContainer.removeChild(blogVideo)
+                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                                imageContainer.append(img)
+                            } else if (currentImageIndex == -1) {
+                                imageContainer.removeChild(img)
+                                imageContainer.append(blogVideo)
+                            } else {
+                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                            }
+                            imageContainer.removeChild(rightArrow)
+                            imageContainer.append(rightArrow)
+                        });
+
+                        // Right arrow click event
+                        rightArrow.addEventListener('click', () => {
+                            currentImageIndex++;
+                            if (currentImageIndex == fileCount) {
+                                currentImageIndex = -1; // Reset to zero if it reaches fileCount
+                                imageContainer.removeChild(img)
+                                imageContainer.appendChild(blogVideo)
+                            } else if (currentImageIndex == 0) {
+                                imageContainer.removeChild(blogVideo)
+                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                                imageContainer.append(img)
+                            } else {
+                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                            }
+                            imageContainer.removeChild(rightArrow)
+                            imageContainer.append(rightArrow)
+                        });
+                    } else {
+                        let currentImageIndex = 0;
+
+                        // Left arrow click event
+                        leftArrow.addEventListener('click', () => {
+                            currentImageIndex--;
+                            if (currentImageIndex < 0) {
+                                currentImageIndex = fileCount - 1;
+                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                            } else if (currentImageIndex == 0) {
+                                img.src = `${images.dir}${images.img_names[0]}`;
+                            } else {
+                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                            }
+                        });
+
+                        // Right arrow click event
+                        rightArrow.addEventListener('click', () => {
+                            currentImageIndex++;
+                            if (currentImageIndex == fileCount) {
+                                currentImageIndex = 0; // Reset to zero if it reaches fileCount
+                                img.src = `${images.dir}${images.img_names[0]}`;
+                            } else {
+                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                            }
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching file count:', error));
+
+
+            const blogDescription = document.createElement('p');
+            blogDescription.className = 'blog-description';
+            blogDescription.textContent = table.description;
+
+            const blogSeparator = document.createElement('hr');
+            blogSeparator.className = 'blog-separator';
+
+            blogUserContainer.appendChild(userImage);
+            blogUserContainer.appendChild(username);
+            blogUserContainer.appendChild(creationDate);
+
+            //imageContainer.appendChild(img);
+            //imageContainer.appendChild(rightArrow);
+            blogContainer.appendChild(blogUserContainer);
+            blogContainer.appendChild(blogTitle);
+            blogContainer.appendChild(imageContainer);
+            blogContainer.appendChild(blogDescription);
+
+            postsContainer.appendChild(blogContainer);
+            postsContainer.appendChild(blogSeparator);
+
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     // Function to display photo-only view
     function displaySortedBlogs(sortOrder = 'asc', blogModular, blogPosts) {

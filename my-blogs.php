@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once("includes/db-conn.php");
 $CURRENT_PAGE = "My Blogs";
 
 if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_role'])) {
