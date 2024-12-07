@@ -233,6 +233,7 @@
                     // blogContainer.appendChild(eventDate); // Removed event date
                     blogContainer.appendChild(optionsDropdown); // Add dropdown to blogContainer
 
+                    
                     /**
                      * Checks if blog video URL is a valid youtube URL.
                      * 
@@ -252,7 +253,7 @@
                             return null;
 
                         } else if (vidUrl.includes("youtube.com/watch")) {
-                            var newUrl = vidUrl.split("watch?v=");
+                            var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
                             vidUrl = newUrl[0] + "embed/" + newUrl[1];
                             console.log(vidUrl);
                             return vidUrl;
@@ -284,32 +285,95 @@
                             break;
                         
                         case "Mixed":
-                            const blogVideo = document.createElement('iframe');
-                            var vidUrl = validateVidUrl();
-                            var elementArr = post.images;
-                            elementArr.unshift("Vid");
-                            console.log("Blog Arr:\n",elementArr);
-                            
-                            blogVideo.src = vidUrl;
                             photoContainer.appendChild(leftArrow);
-                            if (vidUrl !== null)
+                            const blogVideo = document.createElement('iframe');
+                            const postLength = post.images.length;
+                            var vidUrl = validateVidUrl();
+                            blogVideo.src = vidUrl;
+
+                            if (post.images.length > 1 || (post.images.length >= 1 && post.youtube_link !== null)) 
                             {
-                                photoContainer.appendChild(blogVideo);
-                                postsContainer.appendChild(blogContainer);
+                                leftArrow.style.display = "inline";
+                                rightArrow.style.display = "inline";
                             }
+
+                            if (post.images.length === 0 && post.youtube_link === null) {
+                                img.src = 'images/photoABCDLogo.png';
+
+                            } else if (post.youtube_link !== null) {
+                                photoContainer.append(blogVideo);
+
+                            } else {
+                                img.src = `images/${post.blog_id}/${post.images[0]}`;
+                                photoContainer.append(img)
+                            }
+
+                            if (post.youtube_link !== null) {
+                                currentPhotoIndex = -1;
+
+
+                                leftArrow.onclick = () => {
+                                    currentPhotoIndex--;
+                                    if (currentPhotoIndex < -1)
+                                    {
+                                        currentPhotoIndex = postLength - 1;
+                                        photoContainer.removeChild(blogVideo);
+                                        img.src = `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
+                                        photoContainer.appendChild(img);
+
+                                    } else if (currentPhotoIndex == -1) {
+                                        photoContainer.removeChild(img);
+                                        photoContainer.appendChild(blogVideo);
+
+                                    } else {
+                                        img.src = `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
+                                    }
+
+                                    photoContainer.removeChild(rightArrow);
+                                    photoContainer.append(rightArrow);
+
+                                };
+
+                                rightArrow.onclick = () => {
+                                    currentPhotoIndex++;
+                                    if (currentPhotoIndex == postLength)
+                                    {
+                                        currentPhotoIndex = -1;
+                                        photoContainer.removeChild(img);
+                                        photoContainer.appendChild(blogVideo);
+
+                                    } else if (currentPhotoIndex == 0) {
+                                        photoContainer.removeChild(blogVideo);
+                                        img.src = `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
+                                        photoContainer.appendChild(img);
+
+                                    } else {
+                                        img.src = `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
+                                    }
+
+                                    photoContainer.removeChild(rightArrow);
+                                    photoContainer.append(rightArrow);
+                                    
+                                };
+
+                            } else {
+
+                                leftArrow.onclick = () => {
+                                    currentPhotoIndex = (currentPhotoIndex - 1 + post.images.length) % post.images.length;
+                                    updatePhoto();
+                                };
+
+                                rightArrow.onclick = () => {
+                                    currentPhotoIndex = (currentPhotoIndex + 1) % post.images.length;
+                                    updatePhoto();
+                                };
+                            }
+
                             
-                            photoContainer.appendChild(img);
                             photoContainer.appendChild(rightArrow);
                             postsContainer.appendChild(blogContainer);
 
-                            leftArrow.onclick = () => {
-                                
-                            };
-
-                            rightArrow.onclick = () => {
-                                
-                            };
-
+                            
                             break;
                         
                         case "Photos":
