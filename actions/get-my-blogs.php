@@ -23,7 +23,7 @@ switch (strtolower($sortOrder)) {
         $orderBy = 'title ASC'; // Default to alphabetical sorting by title in ascending order
 }
 
-$attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter';
+$attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter, youtube_link';
 
 // Dynamically get the logged-in user's email
 $where = "WHERE creator_email = '{$_SESSION['current_user_email']}'";

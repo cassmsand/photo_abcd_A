@@ -417,3 +417,8 @@ h2 {
         transform: scale(1);
     }
 }
+
+iframe {
+    object-fit: cover;
+    max-width: 100%;
+}

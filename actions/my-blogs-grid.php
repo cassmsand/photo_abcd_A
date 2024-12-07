@@ -66,6 +66,8 @@
     <script src="js/print-blogs.js"></script>
     <script>
     const baseUrl = '<?php echo $base_url; ?>';
+    const blogMode = "<?= $_SESSION['BLOG_MODE']?>";
+    console.log(blogMode);
 
     const fetchBlogs = (actionType, title = '', startDate = '', endDate = '', sortOrder = 'asc') => {
         fetch(
@@ -171,16 +173,6 @@
                         img.src = baseUrl + `images/${post.blog_id}/${post.images[currentPhotoIndex]}`;
                     };
 
-                    leftArrow.onclick = () => {
-                        currentPhotoIndex = (currentPhotoIndex - 1 + post.images.length) % post.images.length;
-                        updatePhoto();
-                    };
-
-                    rightArrow.onclick = () => {
-                        currentPhotoIndex = (currentPhotoIndex + 1) % post.images.length;
-                        updatePhoto();
-                    };
-
                     const blogDescription = document.createElement('p');
                     blogDescription.className = 'blog-description';
                     blogDescription.textContent = post.description;
@@ -223,10 +215,6 @@
                                 .description);
                         }
                     };
-
-                    photoContainer.appendChild(leftArrow);
-                    photoContainer.appendChild(img);
-                    photoContainer.appendChild(rightArrow);
                     
                     dropdownContent.appendChild(printLink);
                     dropdownContent.appendChild(editLink);
@@ -244,8 +232,103 @@
                     blogContainer.appendChild(blogDescription);
                     // blogContainer.appendChild(eventDate); // Removed event date
                     blogContainer.appendChild(optionsDropdown); // Add dropdown to blogContainer
-                    
-                    postsContainer.appendChild(blogContainer);
+
+                    /**
+                     * Checks if blog video URL is a valid youtube URL.
+                     * 
+                     * If the URL is null, the entry is ignored and not displayed.
+                     * 
+                     * If the URL is a valid youtube WATCH link, then its converted into
+                     * a proper youtube EMBED link.
+                     * 
+                     * If the URL is proper, it's returned as is.
+                     * 
+                     * If the URL doesn't meet any of these conditions and is not null,
+                     * a default URL is used instead.
+                     */
+                    function validateVidUrl() {
+                        var vidUrl = post.youtube_link;
+                        if (vidUrl === null) {
+                            return null;
+
+                        } else if (vidUrl.includes("youtube.com/watch")) {
+                            var newUrl = vidUrl.split("watch?v=");
+                            vidUrl = newUrl[0] + "embed/" + newUrl[1];
+                            console.log(vidUrl);
+                            return vidUrl;
+
+                        } else if (vidUrl.includes("youtube.com/embed")) {
+                            return vidUrl;
+
+                        } else {
+                            return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                        }
+                    }
+
+                    switch (blogMode)
+                    {
+                        case "Videos":
+                            if (post.youtube_link !== null)
+                            {
+                                const blogVideo = document.createElement('iframe');
+                                var vidUrl = validateVidUrl();
+                                blogVideo.src = vidUrl;
+                                
+                                if (vidUrl !== null)
+                                {
+                                    photoContainer.appendChild(blogVideo);
+                                    postsContainer.appendChild(blogContainer);
+                                }
+                                
+                            }
+                            break;
+                        
+                        case "Mixed":
+                            const blogVideo = document.createElement('iframe');
+                            var vidUrl = validateVidUrl();
+                            var elementArr = post.images;
+                            elementArr.unshift("Vid");
+                            console.log("Blog Arr:\n",elementArr);
+                            
+                            blogVideo.src = vidUrl;
+                            photoContainer.appendChild(leftArrow);
+                            if (vidUrl !== null)
+                            {
+                                photoContainer.appendChild(blogVideo);
+                                postsContainer.appendChild(blogContainer);
+                            }
+                            
+                            photoContainer.appendChild(img);
+                            photoContainer.appendChild(rightArrow);
+                            postsContainer.appendChild(blogContainer);
+
+                            leftArrow.onclick = () => {
+                                
+                            };
+
+                            rightArrow.onclick = () => {
+                                
+                            };
+
+                            break;
+                        
+                        case "Photos":
+                            leftArrow.onclick = () => {
+                                currentPhotoIndex = (currentPhotoIndex - 1 + post.images.length) % post.images.length;
+                                updatePhoto();
+                            };
+
+                            rightArrow.onclick = () => {
+                                currentPhotoIndex = (currentPhotoIndex + 1) % post.images.length;
+                                updatePhoto();
+                            };
+
+                            photoContainer.appendChild(leftArrow);
+                            photoContainer.appendChild(img);
+                            photoContainer.appendChild(rightArrow);
+                            postsContainer.appendChild(blogContainer);
+                            break;
+                    }
 
 
                 });
