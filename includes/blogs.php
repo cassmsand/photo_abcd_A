@@ -498,7 +498,7 @@ include ('view-profile-modal.php');
                     return vidUrl;
 
                 } else {
-                    return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                    return null;
                 }
             }
 
@@ -533,14 +533,14 @@ include ('view-profile-modal.php');
             blogContainer.appendChild(imageContainer);
             blogContainer.appendChild(blogDescription);
 
-            if (table.youtube_link !== null) {
+            if (table.youtube_link && table.youtube_link.trim() !== "") {
                 postsContainer.appendChild(blogContainer);
                 postsContainer.appendChild(blogSeparator);
-            }
+            }       
         });
     }
 
-
+    // Display Mixed View
     function displayMixedView(blogModular, postsContainer, sortOrder, blogPosts) {
         blogRow.innerHTML = ''; // Clear the container
         let combinedGet = [];
@@ -648,7 +648,7 @@ include ('view-profile-modal.php');
                     return vidUrl;
 
                 } else {
-                    return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                    return null;
                 }
             }
 

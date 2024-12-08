@@ -262,7 +262,7 @@
                             return vidUrl;
 
                         } else {
-                            return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                            return null;
                         }
                     }
 
