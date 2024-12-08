@@ -374,7 +374,7 @@ include ('view-profile-modal.php');
         });
     }
 
-    // Function to display traditional view for single video
+    // Display video mode
     function displayVideoView(blogModular, postsContainer, sortOrder, blogPosts) {
         blogRow.innerHTML = ''; // Clear the container
         let combinedGet = [];
@@ -388,6 +388,7 @@ include ('view-profile-modal.php');
                 }
             }
         }
+
         combinedGet.sort((a, b) => {
             const titleA = a.table.title.toLowerCase();
             const titleB = b.table.title.toLowerCase();
@@ -403,6 +404,7 @@ include ('view-profile-modal.php');
                 return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
             }
         });
+
         combinedGet.forEach(post => {
             const table = post.table;
             const blogContainer = document.createElement('div');
@@ -441,7 +443,6 @@ include ('view-profile-modal.php');
                     console.error('Error fetching user image:', error);
                     userImage.src = 'images/blankicon.jpg'; // Fallback on error
                 });
-
 
             const username = document.createElement('p');
             username.className = 'blog-username';
@@ -540,7 +541,7 @@ include ('view-profile-modal.php');
         });
     }
 
-    // Display Mixed View
+    // Display Mixed mode
     function displayMixedView(blogModular, postsContainer, sortOrder, blogPosts) {
         blogRow.innerHTML = ''; // Clear the container
         let combinedGet = [];
@@ -554,6 +555,7 @@ include ('view-profile-modal.php');
                 }
             }
         }
+
         combinedGet.sort((a, b) => {
             const titleA = a.table.title.toLowerCase();
             const titleB = b.table.title.toLowerCase();
@@ -569,6 +571,7 @@ include ('view-profile-modal.php');
                 return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
             }
         });
+
         combinedGet.forEach(post => {
             const table = post.table;
             const blogContainer = document.createElement('div');
@@ -611,7 +614,6 @@ include ('view-profile-modal.php');
                     userImage.src = 'images/blankicon.jpg'; // Fallback on error
                 });
 
-
             function formatCreationDate(dateString) {
                 const date = new Date(dateString);
                 const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -651,7 +653,6 @@ include ('view-profile-modal.php');
                     return null;
                 }
             }
-
 
             const creationDate = document.createElement('p');
             creationDate.className = 'blog-creation-date';
@@ -693,7 +694,6 @@ include ('view-profile-modal.php');
             img.src = img_src;
             img.alt = 'Blog Image';
             img.className = 'blog-photo';
-
 
             imageContainer.appendChild(rightArrow);
 
@@ -797,17 +797,6 @@ include ('view-profile-modal.php');
 
         });
     }
-
-
-
-
-
-
-
-
-
-
-
 
     // Function to display photo-only view
     function displaySortedBlogs(sortOrder = 'asc', blogModular, blogPosts) {
@@ -984,8 +973,6 @@ include ('view-profile-modal.php');
         container.style.alignItems = 'center'; // Centers cards vertically
     }
 
-
-
     function fillModalPV(pair) {
         const table = pair.table;
         const blog_id = table.blog_id;
@@ -1014,9 +1001,6 @@ include ('view-profile-modal.php');
         document.getElementById('card-modal-img').setAttribute('src', img_src);
         document.getElementById('card-modal-desc').innerHTML = description;
         document.getElementById('card-modal-email').innerHTML = email;
-
-
-
 
         // Find a way to work an index with this.
         // Assuming "Previous" and "Next" are part of the pagination component
