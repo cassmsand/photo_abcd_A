@@ -745,7 +745,7 @@ include ('view-profile-modal.php');
             const videoContainer = document.createElement('div');
             videoContainer.classList.add('video-container');
 
-            // If there is a videdo, add it in
+            // If there is a video, add it in
             const videoUrl = validateVidUrl();
             if (videoUrl !== null) {
                 const blogVideo = document.createElement('iframe');
