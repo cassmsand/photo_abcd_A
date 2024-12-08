@@ -424,6 +424,25 @@ include ('view-profile-modal.php');
             userImage.alt = 'User Image';
             userImage.className = 'blog-user-image';
 
+            // Fetch the latest image from the server
+            fetch(getImageUrl)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched image URL:', data.image);
+                    const userImagePath = data.image;
+
+                    if (userImagePath) {
+                        userImage.src = userImagePath;
+                    } else {
+                        userImage.src = 'images/blankicon.jpg'; // Fallback image
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user image:', error);
+                    userImage.src = 'images/blankicon.jpg'; // Fallback on error
+                });
+
+
             const username = document.createElement('p');
             username.className = 'blog-username';
             username.textContent = table.creator_email;
