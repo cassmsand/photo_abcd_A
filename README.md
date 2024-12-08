@@ -56,6 +56,8 @@ Blog posts require a title to start with either a letter or number (no character
 
 You will be able to upload an image or gif of your choice but it is not required. If an image is not uploaded, a default image will be put in its place instead.
 
+You will also be able to add a link to a YouTube video. This can be added on it's own, or can be added in addition to images or gifs.
+
 You will then need to select the Event date with the calendar icon or you can enter the date manually. 
 
 You are then able to toggle if you want the blog to appear publicly to everyone or if you want it to be private. 
