@@ -757,8 +757,6 @@ include ('view-profile-modal.php');
             blogContainer.appendChild(blogUserContainer);
             blogContainer.appendChild(blogTitle);
 
-            blogContainer.appendChild(videoContainer);
-
             if (img_src !== 'images/photoABCDLogo.png') {
                 blogContainer.appendChild(imageContainer);
             }
