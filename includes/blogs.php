@@ -635,25 +635,6 @@ include ('view-profile-modal.php');
                 return `${hours}:${minutes} ${ampm}`;
             }
 
-            function validateVidUrl() {
-                var vidUrl = table.youtube_link;
-                if (vidUrl === null) {
-                    return null;
-
-                } else if (vidUrl.includes("youtube.com/watch")) {
-                    var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
-                    vidUrl = newUrl[0] + "embed/" + newUrl[1];
-                    console.log(newUrl[1]);
-                    return vidUrl;
-
-                } else if (vidUrl.includes("youtube.com/embed")) {
-                    return vidUrl;
-
-                } else {
-                    return null;
-                }
-            }
-
             const creationDate = document.createElement('p');
             creationDate.className = 'blog-creation-date';
             creationDate.textContent = '   ' + formatCreationDate(table.creation_date) + ' ◦ ' +
@@ -663,8 +644,26 @@ include ('view-profile-modal.php');
             blogTitle.className = 'blog-title';
             blogTitle.textContent = table.title;
 
-            const imageContainer = document.createElement('div');
+           const imageContainer = document.createElement('div');
             imageContainer.className = 'image-container';
+
+            function validateVidUrl() {
+                var vidUrl = table.youtube_link;
+                if (vidUrl === null) {
+                    return null;
+                }
+
+                if (vidUrl.includes("youtube.com/watch")) {
+                    var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
+                    return newUrl[0] + "embed/" + newUrl[1]; // Return embed URL
+                }
+
+                if (vidUrl.includes("youtube.com/embed")) {
+                    return vidUrl; // Return the existing embed URL
+                }
+
+                return null; // Return null for non-YouTube links
+            }
 
             const leftArrow = document.createElement('span');
             leftArrow.className = 'left-arrow';
@@ -675,104 +674,58 @@ include ('view-profile-modal.php');
             rightArrow.className = 'right-arrow';
             rightArrow.innerHTML = '&#9654;';
             rightArrow.style.display = 'none';
-            imageContainer.appendChild(leftArrow);
+
             const img = document.createElement('img');
             const images = post.images;
             var img_src;
-            const blogVideo = document.createElement('iframe');
 
-            blogVideo.src = validateVidUrl();
-
-            if (images.img_names.length === 0 && table.youtube_link === null) {
+            // define path for default image if none is uploaded
+            if (images.img_names.length === 0) {
                 img_src = 'images/photoABCDLogo.png';
-            } else if (table.youtube_link !== null) {
-                imageContainer.append(blogVideo);
             } else {
                 img_src = `${images.dir}${images.img_names[0]}`;
-                imageContainer.append(img)
             }
             img.src = img_src;
+
             img.alt = 'Blog Image';
             img.className = 'blog-photo';
-
-            imageContainer.appendChild(rightArrow);
-
+            
             fetch(`actions/count-files.php?blog_id=${table.blog_id}`)
                 .then(response => response.json())
                 .then(data => {
                     const fileCount = data.fileCount;
-                    if (fileCount > 1 || (fileCount >= 1 && table.youtube_link !== null)) {
+                    if (fileCount > 1) {
                         leftArrow.style.display = 'inline';
                         rightArrow.style.display = 'inline';
                     }
 
-                    if (table.youtube_link !== null) {
-                        let currentImageIndex = -1;
-                        // Left arrow click event
-                        leftArrow.addEventListener('click', () => {
-                            currentImageIndex--;
-                            if (currentImageIndex < -1) {
-                                currentImageIndex = fileCount - 1;
-                                imageContainer.removeChild(blogVideo)
-                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
-                                imageContainer.append(img)
-                            } else if (currentImageIndex == -1) {
-                                imageContainer.removeChild(img)
-                                imageContainer.append(blogVideo)
-                            } else {
-                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
-                            }
-                            imageContainer.removeChild(rightArrow)
-                            imageContainer.append(rightArrow)
-                        });
+                    let currentImageIndex = 0;
 
-                        // Right arrow click event
-                        rightArrow.addEventListener('click', () => {
-                            currentImageIndex++;
-                            if (currentImageIndex == fileCount) {
-                                currentImageIndex = -1; // Reset to zero if it reaches fileCount
-                                imageContainer.removeChild(img)
-                                imageContainer.appendChild(blogVideo)
-                            } else if (currentImageIndex == 0) {
-                                imageContainer.removeChild(blogVideo)
-                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
-                                imageContainer.append(img)
-                            } else {
-                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
-                            }
-                            imageContainer.removeChild(rightArrow)
-                            imageContainer.append(rightArrow)
-                        });
-                    } else {
-                        let currentImageIndex = 0;
+                    // Left arrow click event
+                    leftArrow.addEventListener('click', () => {
+                        currentImageIndex--;
+                        if (currentImageIndex < 0) {
+                            currentImageIndex = fileCount - 1;
+                            img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                        } else if (currentImageIndex == 0) {
+                            img.src = `${images.dir}${images.img_names[0]}`;
+                        } else {
+                            img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                        }
+                    });
 
-                        // Left arrow click event
-                        leftArrow.addEventListener('click', () => {
-                            currentImageIndex--;
-                            if (currentImageIndex < 0) {
-                                currentImageIndex = fileCount - 1;
-                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
-                            } else if (currentImageIndex == 0) {
-                                img.src = `${images.dir}${images.img_names[0]}`;
-                            } else {
-                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
-                            }
-                        });
-
-                        // Right arrow click event
-                        rightArrow.addEventListener('click', () => {
-                            currentImageIndex++;
-                            if (currentImageIndex == fileCount) {
-                                currentImageIndex = 0; // Reset to zero if it reaches fileCount
-                                img.src = `${images.dir}${images.img_names[0]}`;
-                            } else {
-                                img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
-                            }
-                        });
-                    }
+                    // Right arrow click event
+                    rightArrow.addEventListener('click', () => {
+                        currentImageIndex++;
+                        if (currentImageIndex == fileCount) {
+                            currentImageIndex = 0; // Reset to zero if it reaches fileCount
+                            img.src = `${images.dir}${images.img_names[0]}`;
+                        } else {
+                            img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+                        }
+                    });
                 })
                 .catch(error => console.error('Error fetching file count:', error));
-
 
             const blogDescription = document.createElement('p');
             blogDescription.className = 'blog-description';
@@ -785,16 +738,40 @@ include ('view-profile-modal.php');
             blogUserContainer.appendChild(username);
             blogUserContainer.appendChild(creationDate);
 
-            //imageContainer.appendChild(img);
-            //imageContainer.appendChild(rightArrow);
+            imageContainer.appendChild(leftArrow);
+            imageContainer.appendChild(img);
+            imageContainer.appendChild(rightArrow);
+
+            const videoContainer = document.createElement('div');
+            videoContainer.classList.add('video-container');
+
+            // If there is a videdo, add it in
+            const videoUrl = validateVidUrl();
+            if (videoUrl !== null) {
+                const blogVideo = document.createElement('iframe');
+                blogVideo.src = videoUrl;
+                blogVideo.classList.add('video');
+                videoContainer.appendChild(blogVideo);
+            }
+
             blogContainer.appendChild(blogUserContainer);
             blogContainer.appendChild(blogTitle);
-            blogContainer.appendChild(imageContainer);
-            blogContainer.appendChild(blogDescription);
 
+            blogContainer.appendChild(videoContainer);
+
+            if (img_src !== 'images/photoABCDLogo.png') {
+                blogContainer.appendChild(imageContainer);
+            }
+
+            if (videoUrl === null) {
+                blogContainer.appendChild(imageContainer);
+            }
+            
+            blogContainer.appendChild(videoContainer);
+
+            blogContainer.appendChild(blogDescription);
             postsContainer.appendChild(blogContainer);
             postsContainer.appendChild(blogSeparator);
-
         });
     }
 
