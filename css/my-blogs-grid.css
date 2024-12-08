@@ -101,6 +101,14 @@ h2 {
     margin: 0 auto;
 }
 
+.video-container iframe {
+    width: 100%;
+    height: auto;
+    display: block; 
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
 
 .blog-description {
     text-align: center;
