@@ -47,6 +47,9 @@
             <label for="photoUpload">Upload Photo:</label>
             <input type="file" id="photoUpload" name="photos[]" accept=".jpg, .jpeg, .png, .gif" multiple><br>
 
+            <label for="youtubeLink">Youtube Link:</label>
+            <input type="text" id="editYoutubeLink" required placeholder="Enter Youtube link...">
+
             <button id="saveButton">Save</button>
         </div>
     </div>
@@ -596,6 +599,8 @@
         document.getElementById('eventDate').value = post.event_date; // Populate event date
         document.getElementById('creationDate').value = post.creation_date; // Populate creation date
 
+        document.getElementById('editYoutubeLink').value = post.youtube_link;
+
         // Set up photo gallery
         const photos = post.images || []; // If no photos, use empty array
         let currentPhotoIndex = 0; // Default to the first photo
@@ -672,6 +677,7 @@
         document.getElementById("editDescription").value = ''; 
         document.getElementById('eventDate').value = ''; 
         document.getElementById('privacyFilter').value = 'public'; 
+        document.getElementById('editYoutubeLink').value = ''; 
 
         // Hidden fields
         document.getElementById('creatorEmail').value = ''; 
@@ -719,6 +725,7 @@
         const creatorEmail = document.getElementById('creatorEmail').value;
         const eventDate = document.getElementById('eventDate').value;
         const creationDate = document.getElementById('creationDate').value;
+        const youtubeLink = document.getElementById('editYoutubeLink').value;
 
         //validation of title/descrption/date
         if (isFieldEmpty()) {
@@ -740,7 +747,8 @@
                         privacyFilter,
                         creatorEmail,
                         eventDate,
-                        creationDate
+                        creationDate,
+                        youtubeLink
                     }),
                 })
                 .then(response => response.json())

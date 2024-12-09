@@ -14,11 +14,12 @@ $eventDate = $data['eventDate'];
 $creationDate = $data['creationDate'];
 $modificationDate = $data['modificationDate'];
 $privacyFilter = $data['privacyFilter'];
+$youtubeLink = $data['youtubeLink'];
 
 // Update the blog in the database
-$sql = "UPDATE blogs SET creator_email=?, title=?, description=?, event_date=?, creation_date=?, modification_date=?, privacy_filter=? WHERE blog_id=?";
+$sql = "UPDATE blogs SET creator_email=?, title=?, description=?, event_date=?, creation_date=?, modification_date=?, privacy_filter=?, youtube_link=? WHERE blog_id=?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sssssssi", $creatorEmail, $title, $description, $eventDate, $creationDate, $modificationDate, $privacyFilter, $blogId);
+$stmt->bind_param("ssssssssi", $creatorEmail, $title, $description, $eventDate, $creationDate, $modificationDate, $privacyFilter, $youtubeLink, $blogId);
 
 $response = [];
 if ($stmt->execute()) {
