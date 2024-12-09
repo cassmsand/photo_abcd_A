@@ -488,16 +488,13 @@ include ('view-profile-modal.php');
                 var vidUrl = table.youtube_link;
                 if (vidUrl === null) {
                     return null;
-
                 } else if (vidUrl.includes("youtube.com/watch")) {
                     var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
                     vidUrl = newUrl[0] + "embed/" + newUrl[1];
                     console.log(newUrl[1]);
                     return vidUrl;
-
                 } else if (vidUrl.includes("youtube.com/embed")) {
                     return vidUrl;
-
                 } else {
                     return null;
                 }
@@ -515,9 +512,20 @@ include ('view-profile-modal.php');
             const imageContainer = document.createElement('div');
             imageContainer.className = 'image-container';
 
-            const blogVideo = document.createElement('iframe');
-                blogVideo.src = validateVidUrl()
+            const videoUrl = validateVidUrl(); // Get the validated video URL
+            if (videoUrl) {
+                // If there is a valid video URL, create and append the iframe
+                const blogVideo = document.createElement('iframe');
+                blogVideo.src = videoUrl;
                 imageContainer.appendChild(blogVideo);
+            } else {
+                // If no valid video URL, display the default image
+                const img = document.createElement('img');
+                img.src = 'images/photoABCDLogo.png';
+                img.alt = 'Blog Image';
+                img.className = 'blog-photo';
+                imageContainer.appendChild(img);
+            }
 
             const blogDescription = document.createElement('p');
             blogDescription.className = 'blog-description';
@@ -533,13 +541,11 @@ include ('view-profile-modal.php');
             blogContainer.appendChild(blogTitle);
             blogContainer.appendChild(imageContainer);
             blogContainer.appendChild(blogDescription);
-
-            if (table.youtube_link && table.youtube_link.trim() !== "") {
-                postsContainer.appendChild(blogContainer);
-                postsContainer.appendChild(blogSeparator);
-            }       
+            postsContainer.appendChild(blogContainer);
+            postsContainer.appendChild(blogSeparator);
         });
     }
+
 
     // Display Mixed mode
     function displayMixedView(blogModular, postsContainer, sortOrder, blogPosts) {
