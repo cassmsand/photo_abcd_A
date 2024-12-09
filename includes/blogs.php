@@ -518,14 +518,16 @@ include ('view-profile-modal.php');
                 const blogVideo = document.createElement('iframe');
                 blogVideo.src = videoUrl;
                 imageContainer.appendChild(blogVideo);
-            } else {
-                // If no valid video URL, display the default image
-                const img = document.createElement('img');
-                img.src = 'images/photoABCDLogo.png';
-                img.alt = 'Blog Image';
-                img.className = 'blog-photo';
-                imageContainer.appendChild(img);
-            }
+            } 
+            
+            // else {
+            //     // If no valid video URL, display the default image
+            //     const img = document.createElement('img');
+            //     img.src = 'images/photoABCDLogo.png';
+            //     img.alt = 'Blog Image';
+            //     img.className = 'blog-photo';
+            //     imageContainer.appendChild(img);
+            // }
 
             const blogDescription = document.createElement('p');
             blogDescription.className = 'blog-description';
@@ -541,9 +543,14 @@ include ('view-profile-modal.php');
             blogContainer.appendChild(blogTitle);
             blogContainer.appendChild(imageContainer);
             blogContainer.appendChild(blogDescription);
-            postsContainer.appendChild(blogContainer);
-            postsContainer.appendChild(blogSeparator);
+
+            if (videoUrl) {
+                postsContainer.appendChild(blogContainer);
+                postsContainer.appendChild(blogSeparator);
+            }
+        
         });
+
     }
 
 
