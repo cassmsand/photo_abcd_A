@@ -278,11 +278,14 @@
                                 var vidUrl = validateVidUrl();
                                 blogVideo.src = vidUrl;
                                 
-                                if (vidUrl !== null)
-                                {
+                                if (vidUrl !== null) {
                                     photoContainer.appendChild(blogVideo);
-                                    postsContainer.appendChild(blogContainer);
+                                } else {
+                                    img.src = baseUrl + `images/photoABCDLogo.png`;
+                                    photoContainer.appendChild(img);
                                 }
+
+                                postsContainer.appendChild(blogContainer);
                                 
                             }
                             break;
