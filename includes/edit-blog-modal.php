@@ -28,6 +28,10 @@
                         <input type="text" name="description" id="editDescription" class="form-control" required>
                     </div>
                     <div class="form-group">
+                        <label style="font-weight: bold;">Youtube Link</label>
+                        <input type="text" name="youtubeLink" id="editYoutubeLink" class="form-control" required>
+                    </div>
+                    <div class="form-group">
                         <label style="font-weight: bold;">Event Date</label>
                         <input type="datetime-local" name="eventDate" id="editEventDate" class="form-control" required>
                     </div>

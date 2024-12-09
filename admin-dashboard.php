@@ -112,6 +112,7 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 									<th>Creator Email</th>
 									<th>Title</th>
 									<th>Description</th>
+									<th>Youtube Link</th>
 									<th>Event Date</th>
 									<th>Creation Date</th>
 									<th>Modification Date</th>
@@ -127,6 +128,7 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 											<td><?php echo $row['creator_email']; ?></td>
 											<td><?php echo $row['title']; ?></td>
 											<td><?php echo $row['description']; ?></td>
+											<td><?php echo $row['youtube_link']; ?></td>
 											<td><?php echo formatDateTime($row['event_date']); ?></td>
 											<td><?php echo formatDateTime($row['creation_date']); ?></td>
 											<td><?php echo formatDateTime($row['modification_date']); ?></td>
@@ -316,6 +318,7 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 					creatorEmail: document.getElementById('editCreatorEmail').innerText,
 					title: document.getElementById('editTitle').value,
 					description: document.getElementById('editDescription').value,
+					youtubeLink: document.getElementById('editYoutubeLink').value,
 					eventDate: document.getElementById('editEventDate').value,
 					creationDate: document.getElementById('editCreationDate').value,
 					modificationDate: document.getElementById('editModificationDate').value,
@@ -565,16 +568,18 @@ if (!isset($_SESSION['current_user_email']) || !isset($_SESSION['current_user_ro
 					const creatorEmail = selectedRow.find('td:eq(1)').text(); // Creator Email
 					const title = selectedRow.find('td:eq(2)').text(); // Title
 					const description = selectedRow.find('td:eq(3)').text(); // Description
-					const eventDate = selectedRow.find('td:eq(4)').text(); // Event Date
-					const creationDate = selectedRow.find('td:eq(5)').text(); // Creation Date
-					const modificationDate = selectedRow.find('td:eq(6)').text(); // Modification Date
-					const privacyFilter = selectedRow.find('td:eq(7)').text(); // Privacy Filter
+					const youtubeLink = selectedRow.find('td:eq(4)').text(); // Youtube Link
+					const eventDate = selectedRow.find('td:eq(5)').text(); // Event Date
+					const creationDate = selectedRow.find('td:eq(6)').text(); // Creation Date
+					const modificationDate = selectedRow.find('td:eq(7)').text(); // Modification Date
+					const privacyFilter = selectedRow.find('td:eq(8)').text(); // Privacy Filter
 
 					// Fill in form fields in the modal
 					$('#editBlogId').text(blogId);
 					$('#editCreatorEmail').text(creatorEmail);
 					$('#editTitle').val(title);
 					$('#editDescription').val(description);
+					$('#editYoutubeLink').val(youtubeLink);
 					$('#editEventDate').val(eventDate);
 					$('#editCreationDate').val(creationDate);
 					$('#editModificationDate').val(modificationDate);
