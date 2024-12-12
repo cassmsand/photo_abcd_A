@@ -182,6 +182,7 @@ include ('view-profile-modal.php');
                 }
             }
         }
+
         combinedGet.sort((a, b) => {
             const titleA = a.table.title.toLowerCase();
             const titleB = b.table.title.toLowerCase();
@@ -197,6 +198,7 @@ include ('view-profile-modal.php');
                 return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
             }
         });
+
         combinedGet.forEach(post => {
             const table = post.table;
             const blogContainer = document.createElement('div');
@@ -254,7 +256,6 @@ include ('view-profile-modal.php');
                 $('#viewProfileModal').modal('show');
                 loadProfileView(table.creator_email);
             });
-
 
             function formatCreationDate(dateString) {
                 const date = new Date(dateString);
@@ -609,6 +610,21 @@ include ('view-profile-modal.php');
             const username = document.createElement('p');
             username.className = 'blog-username';
             username.textContent = table.creator_email;
+
+            // Add hover effect to create green glow around the username
+            username.addEventListener('mouseover', () => {
+                username.style.boxShadow = '0 0 8px 8px rgba(228, 253, 236, 1)';
+            });
+            username.addEventListener('mouseout', () => {
+                username.style.boxShadow = '';
+            });
+
+            // Click listener for each username
+            username.addEventListener('click', () => {
+                // Open the modal
+                $('#viewProfileModal').modal('show');
+                loadProfileView(table.creator_email);
+            });
 
             fetch(getImageUrl)
                 .then(response => response.json())
