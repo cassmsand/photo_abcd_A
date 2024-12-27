@@ -31,7 +31,7 @@ if (isset($_GET['email']) && isset($_GET['password'])) {
 
             if ($isLocalServer) {
                 // If on a local server, use the relative path to the default blank icon
-                $_SESSION['user_img'] = "/photo_abcd_A/images/blankicon.jpg";
+                $_SESSION['user_img'] = "/images/blankicon.jpg";
             }
             
             else {
