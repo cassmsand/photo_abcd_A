@@ -8,9 +8,9 @@
         $dbname = "photos_abcd";
     } else {
         $servername = "localhost";
-        $username = "icsbinco_photo_a_db_user";
-        $password = "ZIE9aD9ZSZ";
-        $dbname = "icsbinco_photo_a_db";
+        $username = "casswcbc_casswcbc";
+        $password = "WVPwEuCaW2ABGce";
+        $dbname = "casswcbc_photo_a_db";
     }
 
     // Create database connection

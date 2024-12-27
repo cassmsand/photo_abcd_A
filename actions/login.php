@@ -30,9 +30,11 @@ if (isset($_GET['email']) && isset($_GET['password'])) {
             if ($isLocalServer) {
                 // If on a local server, use the relative path to the default blank icon
                 $_SESSION['user_img'] = "/photo_abcd_A/images/blankicon.jpg";
-            } else {
+            }
+            
+            else {
                 // Set the most recent profile photo as the user's profile image
-                $userDir = $_SERVER['DOCUMENT_ROOT'] . "/images/users/" . $email;
+                $userDir = $_SERVER['DOCUMENT_ROOT'] . "/photo_abcd_A/images/users/" . $email;
                 if (is_dir($userDir)) {
                     $files = array_diff(scandir($userDir), array('.', '..'));
                     
@@ -55,11 +57,11 @@ if (isset($_GET['email']) && isset($_GET['password'])) {
 
                         // If a file was found, set the session to point to it
                         if ($mostRecentFile) {
-                            $_SESSION['user_img'] = "/images/users/" . $email . "/" . $mostRecentFile;
+                            $_SESSION['user_img'] = "/photo_abcd_A/images/users/" . $email . "/" . $mostRecentFile;
                         }
                     }
                 }
-            }
+           }
 
             // Redirect to the my-blogs page
             header("Location: ../my-blogs.php");

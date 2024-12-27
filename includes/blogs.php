@@ -1,12 +1,11 @@
 <?php
-/*
 $host = $_SERVER['HTTP_HOST'];
 $is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
 
 // If the server is localhost, include 'photo_abcd_A' in the base URL
-$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A' : '');
+$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . '/photo_abcd_A' ;
 $base_url = rtrim($base_url, '/') . '/'; // Ensure single trailing slash
-*/
+
 $blankIcon = $base_url . 'images/blankicon.jpg';
 if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');}
 include ('view-profile-modal.php');

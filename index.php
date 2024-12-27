@@ -1,5 +1,7 @@
 <?php
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include_once("includes/db-conn.php");
 
 // This file is the default page of the website. It serves as a home page and displays the public blogs.

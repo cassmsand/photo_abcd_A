@@ -3,7 +3,7 @@ $host = $_SERVER['HTTP_HOST'];
 $is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
 
 // If the server is localhost, include 'photo_abcd_A' in the base URL
-$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . ($is_localhost ? '/photo_abcd_A/' : '/');
+$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . '/photo_abcd_A/';
 $isLogged = 0;
 if (isset($_SESSION['current_user_email'])) {
     $isLogged = 1;
