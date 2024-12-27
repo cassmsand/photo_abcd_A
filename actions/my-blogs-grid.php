@@ -129,12 +129,12 @@
                             if (userImagePath) {
                                 userImage.src = userImagePath;
                             } else {
-                                userImage.src = 'images/blankicon.jpg'; // Fallback image
+                                userImage.src = 'photo_abcd_A/images/blankicon.jpg'; // Fallback image
                             }
                         })
                         .catch(error => {
                             console.error('Error fetching user image:', error);
-                            userImage.src = 'images/blankicon.jpg'; // Fallback on error
+                            userImage.src = 'photo_abcd_A/images/blankicon.jpg'; // Fallback on error
                         });
 
                     const username = document.createElement('p');
@@ -570,7 +570,7 @@
         const defaultImagePath = baseUrl + 'images/photoABCDLogo.png';
 
         if (photos.length > 0) {
-            photoDisplay.src = baseUrl + `images/${blogId}/${photos[currentPhotoIndex]}`;
+            photoDisplay.src = baseUrl + `photo_abcd_A/images/${blogId}/${photos[currentPhotoIndex]}`;
             // Check if the displayed photo is the default image
             if (photoDisplay.src === defaultImagePath) {
                 deletePhotoButton.style.display = 'none';
