@@ -1,5 +1,3 @@
-// Small change
-
 <?php
 session_start();
 require_once('../includes/db-conn.php');

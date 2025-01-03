@@ -24,14 +24,6 @@
 @session_start();
 include_once("includes/db-conn.php");
 
-/**
- * Use Cases:
- *
- * Get All Public Blogs
- * Get Logged User Blogs
- * Get Other Users Public Blogs
- * Get Admin View?
- */
 $attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter, youtube_link';
 $where = "WHERE privacy_filter = 'public'";
 // Retrieve and sanitize filter inputs

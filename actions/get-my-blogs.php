@@ -24,8 +24,6 @@ switch (strtolower($sortOrder)) {
 }
 
 $attributes = 'blog_id, creator_email, title, description, event_date, creation_date, modification_date, privacy_filter, youtube_link';
-
-// Dynamically get the logged-in user's email
 $where = "WHERE creator_email = '{$_SESSION['current_user_email']}'";
 
 // Apply search filters based on the user's input

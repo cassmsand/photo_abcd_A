@@ -1,5 +1,5 @@
 <div id="viewProfileModal" class="modal fade" role="dialog" aria-labelledby="viewUserProfileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg"" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modal-title">View User's Blogs</h3>

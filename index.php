@@ -1,7 +1,5 @@
 <?php
 session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 include_once("includes/db-conn.php");
 
 // This file is the default page of the website. It serves as a home page and displays the public blogs.
@@ -35,7 +33,7 @@ $CURRENT_PAGE = "Index";
     const actionType = 'get-blogs';
 
     // Videos, Mixed, Photos
-    const blogMode = "<?= $_SESSION['BLOG_MODE']?>";
+    const blogMode = <?php echo json_encode($_SESSION['BLOG_MODE'] ?? ''); ?>;
     console.log(blogMode);
 
     // Sort Bar Delete Logic
@@ -44,7 +42,6 @@ $CURRENT_PAGE = "Index";
     if (blogMode == "Videos" || blogMode == "Mixed") {
         document.getElementById("viewOptionContainer").style.display = "none";
     }
-
 </script>
 </body>
 </html>

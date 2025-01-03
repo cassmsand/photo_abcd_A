@@ -1,13 +1,22 @@
 <?php
+
 $host = $_SERVER['HTTP_HOST'];
+
 $is_localhost = ($host == 'localhost' || $host == '127.0.0.1');
+$folder_name = '/photo_abcd_A';
 
 // If the server is localhost, include 'photo_abcd_A' in the base URL
-$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . '/photo_abcd_A' ;
+$base_url = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $host . $folder_name;
 $base_url = rtrim($base_url, '/') . '/'; // Ensure single trailing slash
 
+
 $blankIcon = $base_url . 'images/blankicon.jpg';
-if (!isset($_GET['blog_pairs'])) {include_once('actions/get-blogs-modular.php');}
+$logo = $base_url . 'images/photoABCDLogo.png';
+
+if (!isset($_GET['blog_pairs'])) {
+    include_once('actions/get-blogs-modular.php');
+}
+
 include ('view-profile-modal.php');
 ?>
 
@@ -49,6 +58,9 @@ include ('view-profile-modal.php');
 
     var baseUrl = '<?php echo $base_url; ?>';
     var blankIcon = '<?php echo $blankIcon; ?>';
+    var logo = '<?php echo $logo; ?>';
+
+
     let actionType1 = 'get-blogs'; // Declare actionType once
     let actionType2 = 'get-blogs-modular';
     let creatorId = '';
@@ -229,12 +241,12 @@ include ('view-profile-modal.php');
                     if (userImagePath) {
                         userImage.src = userImagePath;
                     } else {
-                        userImage.src = 'images/blankicon.jpg'; // Fallback image
+                        userImage.src = blankIcon; // Fallback image
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching user image:', error);
-                    userImage.src = 'images/blankicon.jpg'; // Fallback on error
+                    userImage.src = blankIcon; // Fallback on error
                 });
 
             const username = document.createElement('p');
@@ -305,7 +317,7 @@ include ('view-profile-modal.php');
 
             // define path for default image if none is uploaded
             if (images.img_names.length === 0) {
-                img_src = 'images/photoABCDLogo.png';
+                img_src = logo;
             } else {
                 img_src = `${images.dir}${images.img_names[0]}`;
             }
@@ -374,432 +386,432 @@ include ('view-profile-modal.php');
         });
     }
 
-    // Display video mode
-    function displayVideoView(blogModular, postsContainer, sortOrder, blogPosts) {
-        blogRow.innerHTML = ''; // Clear the container
-        let combinedGet = [];
+    // // Display video mode
+    // function displayVideoView(blogModular, postsContainer, sortOrder, blogPosts) {
+    //     blogRow.innerHTML = ''; // Clear the container
+    //     let combinedGet = [];
 
-        // Sort blogs based on title in ascending or descending order
-        for (let j = 0; j < blogPosts.length; j++) {
-            for (let i = 0; i < blogModular.length; i++) {
-                if (blogPosts[j].blog_id === blogModular[i].table.blog_id) {
-                    combinedGet.push(blogModular[i])
-                    break;
-                }
-            }
-        }
+    //     // Sort blogs based on title in ascending or descending order
+    //     for (let j = 0; j < blogPosts.length; j++) {
+    //         for (let i = 0; i < blogModular.length; i++) {
+    //             if (blogPosts[j].blog_id === blogModular[i].table.blog_id) {
+    //                 combinedGet.push(blogModular[i])
+    //                 break;
+    //             }
+    //         }
+    //     }
 
-        combinedGet.sort((a, b) => {
-            const titleA = a.table.title.toLowerCase();
-            const titleB = b.table.title.toLowerCase();
-            const dateA = a.table.event_date;
-            const dateB = b.table.event_date;
-            if (sortOrder === 'asc') {
-                return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
-            } else if (sortOrder === 'desc') {
-                return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
-            } else if (sortOrder === 'date_asc') {
-                return dateA < dateB ? -1 : (dateA > dateB ? 1 : 0);
-            } else {
-                return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
-            }
-        });
+    //     combinedGet.sort((a, b) => {
+    //         const titleA = a.table.title.toLowerCase();
+    //         const titleB = b.table.title.toLowerCase();
+    //         const dateA = a.table.event_date;
+    //         const dateB = b.table.event_date;
+    //         if (sortOrder === 'asc') {
+    //             return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
+    //         } else if (sortOrder === 'desc') {
+    //             return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
+    //         } else if (sortOrder === 'date_asc') {
+    //             return dateA < dateB ? -1 : (dateA > dateB ? 1 : 0);
+    //         } else {
+    //             return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
+    //         }
+    //     });
 
-        combinedGet.forEach(post => {
-            const table = post.table;
-            const blogContainer = document.createElement('div');
-            blogContainer.className = 'blog-container';
+    //     combinedGet.forEach(post => {
+    //         const table = post.table;
+    //         const blogContainer = document.createElement('div');
+    //         blogContainer.className = 'blog-container';
 
-            const blogUserContainer = document.createElement('div');
-            blogUserContainer.className = 'blog-user-container';
+    //         const blogUserContainer = document.createElement('div');
+    //         blogUserContainer.className = 'blog-user-container';
 
-            const email = table.creator_email;
-            function sanitizeEmailForFilename(email) {
-                return email.toLowerCase().replace(/[^a-z0-9]/g, '_');
-            }
+    //         const email = table.creator_email;
+    //         function sanitizeEmailForFilename(email) {
+    //             return email.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    //         }
 
-            // Construct the URL to get the latest image from the server-side script
-            const getImageUrl = `actions/get-latest-image.php?email=${encodeURIComponent(email)}`;
+    //         // Construct the URL to get the latest image from the server-side script
+    //         const getImageUrl = `actions/get-latest-image.php?email=${encodeURIComponent(email)}`;
 
-            // Create user image element and default to blank icon initially
-            const userImage = document.createElement('img');
-            userImage.alt = 'User Image';
-            userImage.className = 'blog-user-image';
+    //         // Create user image element and default to blank icon initially
+    //         const userImage = document.createElement('img');
+    //         userImage.alt = 'User Image';
+    //         userImage.className = 'blog-user-image';
 
-            // Fetch the latest image from the server
-            fetch(getImageUrl)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Fetched image URL:', data.image);
-                    const userImagePath = data.image;
+    //         // Fetch the latest image from the server
+    //         fetch(getImageUrl)
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 console.log('Fetched image URL:', data.image);
+    //                 const userImagePath = data.image;
 
-                    if (userImagePath) {
-                        userImage.src = userImagePath;
-                    } else {
-                        userImage.src = 'images/blankicon.jpg'; // Fallback image
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching user image:', error);
-                    userImage.src = 'images/blankicon.jpg'; // Fallback on error
-                });
+    //                 if (userImagePath) {
+    //                     userImage.src = userImagePath;
+    //                 } else {
+    //                     userImage.src = blankIcon; // Fallback image
+    //                 }
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error fetching user image:', error);
+    //                 userImage.src = blankIcon; // Fallback on error
+    //             });
 
-            const username = document.createElement('p');
-            username.className = 'blog-username';
-            username.textContent = table.creator_email;
+    //         const username = document.createElement('p');
+    //         username.className = 'blog-username';
+    //         username.textContent = table.creator_email;
 
-            // Add hover effect to create green glow around the username
-            username.addEventListener('mouseover', () => {
-                username.style.boxShadow = '0 0 8px 8px rgba(228, 253, 236, 1)';
-            });
-            username.addEventListener('mouseout', () => {
-                username.style.boxShadow = '';
-            });
+    //         // Add hover effect to create green glow around the username
+    //         username.addEventListener('mouseover', () => {
+    //             username.style.boxShadow = '0 0 8px 8px rgba(228, 253, 236, 1)';
+    //         });
+    //         username.addEventListener('mouseout', () => {
+    //             username.style.boxShadow = '';
+    //         });
 
-            // Click listener for each username
-            username.addEventListener('click', () => {
-                // Open the modal
-                $('#viewProfileModal').modal('show');
-                loadProfileView(table.creator_email);
-            });
+    //         // Click listener for each username
+    //         username.addEventListener('click', () => {
+    //             // Open the modal
+    //             $('#viewProfileModal').modal('show');
+    //             loadProfileView(table.creator_email);
+    //         });
 
-            function formatCreationDate(dateString) {
-                const date = new Date(dateString);
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                const year = date.getFullYear();
-                return `${month}/${day}/${year}`;
-            }
+    //         function formatCreationDate(dateString) {
+    //             const date = new Date(dateString);
+    //             const month = String(date.getMonth() + 1).padStart(2, '0');
+    //             const day = String(date.getDate()).padStart(2, '0');
+    //             const year = date.getFullYear();
+    //             return `${month}/${day}/${year}`;
+    //         }
 
-            function formatCreationTime(dateString) {
-                const date = new Date(dateString);
-                let hours = date.getHours();
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                const ampm = hours >= 12 ? 'PM' : 'AM';
+    //         function formatCreationTime(dateString) {
+    //             const date = new Date(dateString);
+    //             let hours = date.getHours();
+    //             const minutes = String(date.getMinutes()).padStart(2, '0');
+    //             const ampm = hours >= 12 ? 'PM' : 'AM';
 
-                // Convert to 12-hour format
-                hours = hours % 12;
-                hours = hours ? String(hours).padStart(2, '0') : '12';
+    //             // Convert to 12-hour format
+    //             hours = hours % 12;
+    //             hours = hours ? String(hours).padStart(2, '0') : '12';
 
-                return `${hours}:${minutes} ${ampm}`;
-            }
+    //             return `${hours}:${minutes} ${ampm}`;
+    //         }
 
-            function validateVidUrl() {
-                var vidUrl = table.youtube_link;
-                if (vidUrl === null) {
-                    return null;
-                } else if (vidUrl.includes("youtube.com/watch")) {
-                    var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
-                    vidUrl = newUrl[0] + "embed/" + newUrl[1];
-                    console.log(newUrl[1]);
-                    return vidUrl;
-                } else if (vidUrl.includes("youtube.com/embed")) {
-                    return vidUrl;
-                } else {
-                    return null;
-                }
-            }
+    //         function validateVidUrl() {
+    //             var vidUrl = table.youtube_link;
+    //             if (vidUrl === null) {
+    //                 return null;
+    //             } else if (vidUrl.includes("youtube.com/watch")) {
+    //                 var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
+    //                 vidUrl = newUrl[0] + "embed/" + newUrl[1];
+    //                 console.log(newUrl[1]);
+    //                 return vidUrl;
+    //             } else if (vidUrl.includes("youtube.com/embed")) {
+    //                 return vidUrl;
+    //             } else {
+    //                 return null;
+    //             }
+    //         }
 
-            const creationDate = document.createElement('p');
-            creationDate.className = 'blog-creation-date';
-            creationDate.textContent = '   ' + formatCreationDate(table.creation_date) + ' ◦ ' +
-                formatCreationTime(table.creation_date);
+    //         const creationDate = document.createElement('p');
+    //         creationDate.className = 'blog-creation-date';
+    //         creationDate.textContent = '   ' + formatCreationDate(table.creation_date) + ' ◦ ' +
+    //             formatCreationTime(table.creation_date);
 
-            const blogTitle = document.createElement('h2');
-            blogTitle.className = 'blog-title';
-            blogTitle.textContent = table.title;
+    //         const blogTitle = document.createElement('h2');
+    //         blogTitle.className = 'blog-title';
+    //         blogTitle.textContent = table.title;
 
-            const imageContainer = document.createElement('div');
-            imageContainer.className = 'image-container';
+    //         const imageContainer = document.createElement('div');
+    //         imageContainer.className = 'image-container';
 
-            const videoUrl = validateVidUrl(); // Get the validated video URL
-            if (videoUrl) {
-                // If there is a valid video URL, create and append the iframe
-                const blogVideo = document.createElement('iframe');
-                blogVideo.src = videoUrl;
-                imageContainer.appendChild(blogVideo);
-            } 
+    //         const videoUrl = validateVidUrl(); // Get the validated video URL
+    //         if (videoUrl) {
+    //             // If there is a valid video URL, create and append the iframe
+    //             const blogVideo = document.createElement('iframe');
+    //             blogVideo.src = videoUrl;
+    //             imageContainer.appendChild(blogVideo);
+    //         } 
             
-            // else {
-            //     // If no valid video URL, display the default image
-            //     const img = document.createElement('img');
-            //     img.src = 'images/photoABCDLogo.png';
-            //     img.alt = 'Blog Image';
-            //     img.className = 'blog-photo';
-            //     imageContainer.appendChild(img);
-            // }
+    //         // else {
+    //         //     // If no valid video URL, display the default image
+    //         //     const img = document.createElement('img');
+    //         //     img.src = 'images/photoABCDLogo.png';
+    //         //     img.alt = 'Blog Image';
+    //         //     img.className = 'blog-photo';
+    //         //     imageContainer.appendChild(img);
+    //         // }
 
-            const blogDescription = document.createElement('p');
-            blogDescription.className = 'blog-description';
-            blogDescription.textContent = table.description;
+    //         const blogDescription = document.createElement('p');
+    //         blogDescription.className = 'blog-description';
+    //         blogDescription.textContent = table.description;
 
-            const blogSeparator = document.createElement('hr');
-            blogSeparator.className = 'blog-separator';
+    //         const blogSeparator = document.createElement('hr');
+    //         blogSeparator.className = 'blog-separator';
 
-            blogUserContainer.appendChild(userImage);
-            blogUserContainer.appendChild(username);
-            blogUserContainer.appendChild(creationDate);
-            blogContainer.appendChild(blogUserContainer);
-            blogContainer.appendChild(blogTitle);
-            blogContainer.appendChild(imageContainer);
-            blogContainer.appendChild(blogDescription);
+    //         blogUserContainer.appendChild(userImage);
+    //         blogUserContainer.appendChild(username);
+    //         blogUserContainer.appendChild(creationDate);
+    //         blogContainer.appendChild(blogUserContainer);
+    //         blogContainer.appendChild(blogTitle);
+    //         blogContainer.appendChild(imageContainer);
+    //         blogContainer.appendChild(blogDescription);
 
-            if (videoUrl) {
-                postsContainer.appendChild(blogContainer);
-                postsContainer.appendChild(blogSeparator);
-            }
+    //         if (videoUrl) {
+    //             postsContainer.appendChild(blogContainer);
+    //             postsContainer.appendChild(blogSeparator);
+    //         }
         
-        });
+    //     });
 
-    }
+    // }
 
 
-    // Display Mixed mode
-    function displayMixedView(blogModular, postsContainer, sortOrder, blogPosts) {
-        blogRow.innerHTML = ''; // Clear the container
-        let combinedGet = [];
+    // // Display Mixed mode
+    // function displayMixedView(blogModular, postsContainer, sortOrder, blogPosts) {
+    //     blogRow.innerHTML = ''; // Clear the container
+    //     let combinedGet = [];
 
-        // Sort blogs based on title in ascending or descending order
-        for (let j = 0; j < blogPosts.length; j++) {
-            for (let i = 0; i < blogModular.length; i++) {
-                if (blogPosts[j].blog_id === blogModular[i].table.blog_id) {
-                    combinedGet.push(blogModular[i])
-                    break;
-                }
-            }
-        }
+    //     // Sort blogs based on title in ascending or descending order
+    //     for (let j = 0; j < blogPosts.length; j++) {
+    //         for (let i = 0; i < blogModular.length; i++) {
+    //             if (blogPosts[j].blog_id === blogModular[i].table.blog_id) {
+    //                 combinedGet.push(blogModular[i])
+    //                 break;
+    //             }
+    //         }
+    //     }
 
-        combinedGet.sort((a, b) => {
-            const titleA = a.table.title.toLowerCase();
-            const titleB = b.table.title.toLowerCase();
-            const dateA = a.table.event_date;
-            const dateB = b.table.event_date;
-            if (sortOrder === 'asc') {
-                return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
-            } else if (sortOrder === 'desc') {
-                return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
-            } else if (sortOrder === 'date_asc') {
-                return dateA < dateB ? -1 : (dateA > dateB ? 1 : 0);
-            } else {
-                return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
-            }
-        });
+    //     combinedGet.sort((a, b) => {
+    //         const titleA = a.table.title.toLowerCase();
+    //         const titleB = b.table.title.toLowerCase();
+    //         const dateA = a.table.event_date;
+    //         const dateB = b.table.event_date;
+    //         if (sortOrder === 'asc') {
+    //             return titleA < titleB ? -1 : (titleA > titleB ? 1 : 0);
+    //         } else if (sortOrder === 'desc') {
+    //             return titleA > titleB ? -1 : (titleA < titleB ? 1 : 0);
+    //         } else if (sortOrder === 'date_asc') {
+    //             return dateA < dateB ? -1 : (dateA > dateB ? 1 : 0);
+    //         } else {
+    //             return dateA > dateB ? -1 : (dateA < dateB ? 1 : 0);
+    //         }
+    //     });
 
-        combinedGet.forEach(post => {
-            const table = post.table;
-            const blogContainer = document.createElement('div');
-            blogContainer.className = 'blog-container';
+    //     combinedGet.forEach(post => {
+    //         const table = post.table;
+    //         const blogContainer = document.createElement('div');
+    //         blogContainer.className = 'blog-container';
 
-            const blogUserContainer = document.createElement('div');
-            blogUserContainer.className = 'blog-user-container';
+    //         const blogUserContainer = document.createElement('div');
+    //         blogUserContainer.className = 'blog-user-container';
 
-            const email = table.creator_email;
-            function sanitizeEmailForFilename(email) {
-                return email.toLowerCase().replace(/[^a-z0-9]/g, '_');
-            }
+    //         const email = table.creator_email;
+    //         function sanitizeEmailForFilename(email) {
+    //             return email.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    //         }
 
-            // Construct the URL to get the latest image from the server-side script
-            const getImageUrl = `actions/get-latest-image.php?email=${encodeURIComponent(email)}`;
+    //         // Construct the URL to get the latest image from the server-side script
+    //         const getImageUrl = `actions/get-latest-image.php?email=${encodeURIComponent(email)}`;
 
-            // Create user image element and default to blank icon initially
-            const userImage = document.createElement('img');
-            userImage.alt = 'User Image';
-            userImage.className = 'blog-user-image';
+    //         // Create user image element and default to blank icon initially
+    //         const userImage = document.createElement('img');
+    //         userImage.alt = 'User Image';
+    //         userImage.className = 'blog-user-image';
 
-            const username = document.createElement('p');
-            username.className = 'blog-username';
-            username.textContent = table.creator_email;
+    //         const username = document.createElement('p');
+    //         username.className = 'blog-username';
+    //         username.textContent = table.creator_email;
 
-            // Add hover effect to create green glow around the username
-            username.addEventListener('mouseover', () => {
-                username.style.boxShadow = '0 0 8px 8px rgba(228, 253, 236, 1)';
-            });
-            username.addEventListener('mouseout', () => {
-                username.style.boxShadow = '';
-            });
+    //         // Add hover effect to create green glow around the username
+    //         username.addEventListener('mouseover', () => {
+    //             username.style.boxShadow = '0 0 8px 8px rgba(228, 253, 236, 1)';
+    //         });
+    //         username.addEventListener('mouseout', () => {
+    //             username.style.boxShadow = '';
+    //         });
 
-            // Click listener for each username
-            username.addEventListener('click', () => {
-                // Open the modal
-                $('#viewProfileModal').modal('show');
-                loadProfileView(table.creator_email);
-            });
+    //         // Click listener for each username
+    //         username.addEventListener('click', () => {
+    //             // Open the modal
+    //             $('#viewProfileModal').modal('show');
+    //             loadProfileView(table.creator_email);
+    //         });
 
-            fetch(getImageUrl)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Fetched image URL:', data.image);
-                    const userImagePath = data.image;
+    //         fetch(getImageUrl)
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 console.log('Fetched image URL:', data.image);
+    //                 const userImagePath = data.image;
 
-                    if (userImagePath) {
-                        userImage.src = userImagePath;
-                    } else {
-                        userImage.src = 'images/blankicon.jpg'; // Fallback image
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching user image:', error);
-                    userImage.src = 'images/blankicon.jpg'; // Fallback on error
-                });
+    //                 if (userImagePath) {
+    //                     userImage.src = userImagePath;
+    //                 } else {
+    //                     userImage.src = blankIcon; // Fallback image
+    //                 }
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error fetching user image:', error);
+    //                 userImage.src = blankIcon; // Fallback on error
+    //             });
 
-            function formatCreationDate(dateString) {
-                const date = new Date(dateString);
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                const year = date.getFullYear();
-                return `${month}/${day}/${year}`;
-            }
+    //         function formatCreationDate(dateString) {
+    //             const date = new Date(dateString);
+    //             const month = String(date.getMonth() + 1).padStart(2, '0');
+    //             const day = String(date.getDate()).padStart(2, '0');
+    //             const year = date.getFullYear();
+    //             return `${month}/${day}/${year}`;
+    //         }
 
-            function formatCreationTime(dateString) {
-                const date = new Date(dateString);
-                let hours = date.getHours();
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                const ampm = hours >= 12 ? 'PM' : 'AM';
+    //         function formatCreationTime(dateString) {
+    //             const date = new Date(dateString);
+    //             let hours = date.getHours();
+    //             const minutes = String(date.getMinutes()).padStart(2, '0');
+    //             const ampm = hours >= 12 ? 'PM' : 'AM';
 
-                // Convert to 12-hour format
-                hours = hours % 12;
-                hours = hours ? String(hours).padStart(2, '0') : '12';
+    //             // Convert to 12-hour format
+    //             hours = hours % 12;
+    //             hours = hours ? String(hours).padStart(2, '0') : '12';
 
-                return `${hours}:${minutes} ${ampm}`;
-            }
+    //             return `${hours}:${minutes} ${ampm}`;
+    //         }
 
-            const creationDate = document.createElement('p');
-            creationDate.className = 'blog-creation-date';
-            creationDate.textContent = '   ' + formatCreationDate(table.creation_date) + ' ◦ ' +
-                formatCreationTime(table.creation_date);
+    //         const creationDate = document.createElement('p');
+    //         creationDate.className = 'blog-creation-date';
+    //         creationDate.textContent = '   ' + formatCreationDate(table.creation_date) + ' ◦ ' +
+    //             formatCreationTime(table.creation_date);
 
-            const blogTitle = document.createElement('h2');
-            blogTitle.className = 'blog-title';
-            blogTitle.textContent = table.title;
+    //         const blogTitle = document.createElement('h2');
+    //         blogTitle.className = 'blog-title';
+    //         blogTitle.textContent = table.title;
 
-           const imageContainer = document.createElement('div');
-            imageContainer.className = 'image-container';
+    //        const imageContainer = document.createElement('div');
+    //         imageContainer.className = 'image-container';
 
-            function validateVidUrl() {
-                var vidUrl = table.youtube_link;
-                if (vidUrl === null) {
-                    return null;
-                }
+    //         function validateVidUrl() {
+    //             var vidUrl = table.youtube_link;
+    //             if (vidUrl === null) {
+    //                 return null;
+    //             }
 
-                if (vidUrl.includes("youtube.com/watch")) {
-                    var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
-                    return newUrl[0] + "embed/" + newUrl[1]; // Return embed URL
-                }
+    //             if (vidUrl.includes("youtube.com/watch")) {
+    //                 var newUrl = vidUrl.split("&ab_channel")[0].split("watch?v=");
+    //                 return newUrl[0] + "embed/" + newUrl[1]; // Return embed URL
+    //             }
 
-                if (vidUrl.includes("youtube.com/embed")) {
-                    return vidUrl; // Return the existing embed URL
-                }
+    //             if (vidUrl.includes("youtube.com/embed")) {
+    //                 return vidUrl; // Return the existing embed URL
+    //             }
 
-                return null; // Return null for non-YouTube links
-            }
+    //             return null; // Return null for non-YouTube links
+    //         }
 
-            const leftArrow = document.createElement('span');
-            leftArrow.className = 'left-arrow';
-            leftArrow.innerHTML = '&#9664;';
-            leftArrow.style.display = 'none';
+    //         const leftArrow = document.createElement('span');
+    //         leftArrow.className = 'left-arrow';
+    //         leftArrow.innerHTML = '&#9664;';
+    //         leftArrow.style.display = 'none';
 
-            const rightArrow = document.createElement('span');
-            rightArrow.className = 'right-arrow';
-            rightArrow.innerHTML = '&#9654;';
-            rightArrow.style.display = 'none';
+    //         const rightArrow = document.createElement('span');
+    //         rightArrow.className = 'right-arrow';
+    //         rightArrow.innerHTML = '&#9654;';
+    //         rightArrow.style.display = 'none';
 
-            const img = document.createElement('img');
-            const images = post.images;
-            var img_src;
+    //         const img = document.createElement('img');
+    //         const images = post.images;
+    //         var img_src;
 
-            // define path for default image if none is uploaded
-            if (images.img_names.length === 0) {
-                img_src = 'images/photoABCDLogo.png';
-            } else {
-                img_src = `${images.dir}${images.img_names[0]}`;
-            }
-            img.src = img_src;
+    //         // define path for default image if none is uploaded
+    //         if (images.img_names.length === 0) {
+    //             img_src = logo;
+    //         } else {
+    //             img_src = `${images.dir}${images.img_names[0]}`;
+    //         }
+    //         img.src = img_src;
 
-            img.alt = 'Blog Image';
-            img.className = 'blog-photo';
+    //         img.alt = 'Blog Image';
+    //         img.className = 'blog-photo';
             
-            fetch(`actions/count-files.php?blog_id=${table.blog_id}`)
-                .then(response => response.json())
-                .then(data => {
-                    const fileCount = data.fileCount;
-                    if (fileCount > 1) {
-                        leftArrow.style.display = 'inline';
-                        rightArrow.style.display = 'inline';
-                    }
+    //         fetch(`actions/count-files.php?blog_id=${table.blog_id}`)
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 const fileCount = data.fileCount;
+    //                 if (fileCount > 1) {
+    //                     leftArrow.style.display = 'inline';
+    //                     rightArrow.style.display = 'inline';
+    //                 }
 
-                    let currentImageIndex = 0;
+    //                 let currentImageIndex = 0;
 
-                    // Left arrow click event
-                    leftArrow.addEventListener('click', () => {
-                        currentImageIndex--;
-                        if (currentImageIndex < 0) {
-                            currentImageIndex = fileCount - 1;
-                            img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
-                        } else if (currentImageIndex == 0) {
-                            img.src = `${images.dir}${images.img_names[0]}`;
-                        } else {
-                            img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
-                        }
-                    });
+    //                 // Left arrow click event
+    //                 leftArrow.addEventListener('click', () => {
+    //                     currentImageIndex--;
+    //                     if (currentImageIndex < 0) {
+    //                         currentImageIndex = fileCount - 1;
+    //                         img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+    //                     } else if (currentImageIndex == 0) {
+    //                         img.src = `${images.dir}${images.img_names[0]}`;
+    //                     } else {
+    //                         img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+    //                     }
+    //                 });
 
-                    // Right arrow click event
-                    rightArrow.addEventListener('click', () => {
-                        currentImageIndex++;
-                        if (currentImageIndex == fileCount) {
-                            currentImageIndex = 0; // Reset to zero if it reaches fileCount
-                            img.src = `${images.dir}${images.img_names[0]}`;
-                        } else {
-                            img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
-                        }
-                    });
-                })
-                .catch(error => console.error('Error fetching file count:', error));
+    //                 // Right arrow click event
+    //                 rightArrow.addEventListener('click', () => {
+    //                     currentImageIndex++;
+    //                     if (currentImageIndex == fileCount) {
+    //                         currentImageIndex = 0; // Reset to zero if it reaches fileCount
+    //                         img.src = `${images.dir}${images.img_names[0]}`;
+    //                     } else {
+    //                         img.src = `${images.dir}${images.img_names[currentImageIndex]}`;
+    //                     }
+    //                 });
+    //             })
+    //             .catch(error => console.error('Error fetching file count:', error));
 
-            const blogDescription = document.createElement('p');
-            blogDescription.className = 'blog-description';
-            blogDescription.textContent = table.description;
+    //         const blogDescription = document.createElement('p');
+    //         blogDescription.className = 'blog-description';
+    //         blogDescription.textContent = table.description;
 
-            const blogSeparator = document.createElement('hr');
-            blogSeparator.className = 'blog-separator';
+    //         const blogSeparator = document.createElement('hr');
+    //         blogSeparator.className = 'blog-separator';
 
-            blogUserContainer.appendChild(userImage);
-            blogUserContainer.appendChild(username);
-            blogUserContainer.appendChild(creationDate);
+    //         blogUserContainer.appendChild(userImage);
+    //         blogUserContainer.appendChild(username);
+    //         blogUserContainer.appendChild(creationDate);
 
-            imageContainer.appendChild(leftArrow);
-            imageContainer.appendChild(img);
-            imageContainer.appendChild(rightArrow);
+    //         imageContainer.appendChild(leftArrow);
+    //         imageContainer.appendChild(img);
+    //         imageContainer.appendChild(rightArrow);
 
-            const videoContainer = document.createElement('div');
-            videoContainer.classList.add('video-container');
+    //         const videoContainer = document.createElement('div');
+    //         videoContainer.classList.add('video-container');
 
-            // If there is a video, add it in
-            const videoUrl = validateVidUrl();
-            if (videoUrl !== null) {
-                const blogVideo = document.createElement('iframe');
-                blogVideo.src = videoUrl;
-                blogVideo.classList.add('video');
-                videoContainer.appendChild(blogVideo);
-            }
+    //         // If there is a video, add it in
+    //         const videoUrl = validateVidUrl();
+    //         if (videoUrl !== null) {
+    //             const blogVideo = document.createElement('iframe');
+    //             blogVideo.src = videoUrl;
+    //             blogVideo.classList.add('video');
+    //             videoContainer.appendChild(blogVideo);
+    //         }
 
-            blogContainer.appendChild(blogUserContainer);
-            blogContainer.appendChild(blogTitle);
+    //         blogContainer.appendChild(blogUserContainer);
+    //         blogContainer.appendChild(blogTitle);
 
-            if (img_src !== 'images/photoABCDLogo.png') {
-                blogContainer.appendChild(imageContainer);
-            }
+    //         if (img_src !== logo) {
+    //             blogContainer.appendChild(imageContainer);
+    //         }
 
-            if (videoUrl === null) {
-                blogContainer.appendChild(imageContainer);
-            }
+    //         if (videoUrl === null) {
+    //             blogContainer.appendChild(imageContainer);
+    //         }
             
-            blogContainer.appendChild(videoContainer);
+    //         blogContainer.appendChild(videoContainer);
 
-            blogContainer.appendChild(blogDescription);
-            postsContainer.appendChild(blogContainer);
-            postsContainer.appendChild(blogSeparator);
-        });
-    }
+    //         blogContainer.appendChild(blogDescription);
+    //         postsContainer.appendChild(blogContainer);
+    //         postsContainer.appendChild(blogSeparator);
+    //     });
+    // }
 
     // Function to display photo-only view
     function displaySortedBlogs(sortOrder = 'asc', blogModular, blogPosts) {
@@ -849,7 +861,7 @@ include ('view-profile-modal.php');
 
             // define path for default image if none is uploaded
             if (images.img_names.length === 0) {
-                img_src = 'images/photoABCDLogo.png';
+                img_src = logo;
             } else {
                 img_src = `${images.dir}${images.img_names[0]}`;
             }
@@ -906,7 +918,7 @@ include ('view-profile-modal.php');
 
             // Image Array
             const images = pair.images;
-            let img_src = images.img_names.length === 0 ? 'images/photoABCDLogo.png' :
+            let img_src = images.img_names.length === 0 ? logo :
                 `${images.dir}${images.img_names[0]}`;
 
             // Create profile cards in grid format
@@ -995,7 +1007,7 @@ include ('view-profile-modal.php');
 
         // define path for default image if none is uploaded
         if (images.img_names.length === 0) {
-            img_src = 'images/photoABCDLogo.png';
+            img_src = logo;
         } else {
             img_src = `${images.dir}${images.img_names[0]}`;
         }
